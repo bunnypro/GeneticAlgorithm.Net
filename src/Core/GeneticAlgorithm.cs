@@ -65,8 +65,6 @@ namespace Bunnypro.GeneticAlgorithm.Core
             if (GenerationNumber == 0)
             {
                 await Reset();
-//                await Stop();
-//                await resetting;
                 Population.Initialize();
             }
             
