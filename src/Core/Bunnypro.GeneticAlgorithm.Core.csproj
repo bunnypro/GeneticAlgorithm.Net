@@ -9,4 +9,10 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageId>Bunnypro.GeneticAlgorithm.Core</PackageId>
+    <Authors>Mubarrid Albar</Authors>
+    <PackageLicenseUrl>https://github.com/bunnypro/GeneticAlgorithm.Net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/bunnypro/GeneticAlgorithm.Net</PackageProjectUrl>
+  </PropertyGroup>
 </Project>
