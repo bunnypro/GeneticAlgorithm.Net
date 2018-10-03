@@ -1,17 +1,12 @@
-using Bunnypro.GeneticAlgorithm.Standard;
+using System.Collections.Generic;
+using Bunnypro.GeneticAlgorithm.Core.Chromosomes;
 
 namespace Bunnypro.GeneticAlgorithm.Examples.Simple
 {
-    public class SimpleChromosome : IChromosome
+    public class SimpleChromosome : Chromosome
     {
-        public int CompareTo(IChromosome other)
+        public SimpleChromosome(IEnumerable<object> genes) : base(genes)
         {
-            throw new System.NotImplementedException();
-        }
-
-        public bool Equals(IChromosome other)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

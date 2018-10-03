@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
+using Bunnypro.GeneticAlgorithm.Core.Exceptions;
 using Bunnypro.GeneticAlgorithm.Core.Termination;
 using Bunnypro.GeneticAlgorithm.Standard;
 
@@ -16,7 +16,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
             get
             {
                 var evolvingObjectCanBeAcquired = Monitor.TryEnter(_evolving);
-                
+
                 if (evolvingObjectCanBeAcquired)
                 {
                     Monitor.Exit(_evolving);
@@ -25,16 +25,15 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 return !evolvingObjectCanBeAcquired;
             }
         }
-        
+
         public IPopulation Population { get; }
         public IEvolutionStrategy EvolutionStrategy { get; }
-        
-        public ITermination Termination { get; set; }
+
+        public ITerminationCondition TerminationCondition { get; set; }
 
         private readonly object _evolving = new object();
-        
-        private Task _evolution;
-        private CancellationTokenSource _evolutionTokenSource;
+
+        private CancellationTokenSource _evolutionCts;
 
         public GeneticAlgorithm(IPopulation population, IEvolutionStrategy evolutionStrategy)
         {
@@ -44,71 +43,83 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public async Task Evolve()
         {
-            await EvolveUntil(Termination ?? new FunctionTermination(() => false));
+            await EvolveUntil(TerminationCondition ?? new FunctionTerminationCondition(() => false));
         }
 
         public async Task EvolveUntil(Func<bool> fulfilled)
         {
-            await EvolveUntil(new FunctionTermination(fulfilled));
+            await EvolveUntil(new FunctionTerminationCondition(fulfilled));
         }
 
-        public async Task EvolveUntil(ITermination termination)
+        public async Task EvolveUntil(ITerminationCondition terminationCondition)
         {
-            Termination = termination;
-            
-            if (Termination.Fulfilled())
-            {
-                _evolutionTokenSource.Dispose();
-                return;
-            }
-            
+            TerminationCondition = terminationCondition;
+
             if (GenerationNumber == 0)
             {
-                await Reset();
+                Reset();
                 Population.Initialize();
             }
-            
-            Termination.Start();
 
-            using (_evolutionTokenSource = new CancellationTokenSource())
+            if (TerminationCondition.Fulfilled)
             {
-                _evolution = Task.Factory.StartNew(() =>
+                return;
+            }
+
+            TerminationCondition.Start();
+
+            using (_evolutionCts = new CancellationTokenSource())
+            {
+                await Task.Factory.StartNew(() =>
                 {
                     lock (_evolving)
                     {
                         do
                         {
                             Population.StoreOffspring(GenerationNumber++, EvolutionStrategy.Execute(Population));
-                        } while (!(Termination.Fulfilled() || _evolutionTokenSource.Token.IsCancellationRequested));
+                        } while (!(_evolutionCts.Token.IsCancellationRequested || TerminationCondition.Fulfilled));
 
-                        if (_evolutionTokenSource.Token.IsCancellationRequested)
+                        if (_evolutionCts.Token.IsCancellationRequested)
                         {
-                            Termination.Pause();
+                            TerminationCondition.Pause();
                         }
                     }
-                }, _evolutionTokenSource.Token);
-
-                await _evolution;
+                }, _evolutionCts.Token);
             }
         }
 
-        public async Task Stop()
+        public void Stop()
         {
-            _evolutionTokenSource?.Cancel();
-            await _evolution;
+            _evolutionCts?.Cancel();
         }
 
-        public async Task Reset()
+        public bool TryReset()
         {
-            if (Evolving) await Task.Run(() => { Monitor.Wait(_evolving); });
-            
+            try
+            {
+                Reset();
+            }
+            catch (EvolutionRunningException)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public void Reset()
+        {
+            if (Evolving)
+            {
+                throw new EvolutionRunningException();
+            }
+
             lock (_evolving)
             {
                 GenerationNumber = 0;
-                _evolution = null;
-                _evolutionTokenSource = null;
+                _evolutionCts = null;
 
-                Termination.Reset();
+                TerminationCondition.Reset();
                 Population.Reset();
             }
         }

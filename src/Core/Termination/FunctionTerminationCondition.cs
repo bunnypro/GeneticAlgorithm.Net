@@ -3,18 +3,15 @@ using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Termination
 {
-    public class FunctionTermination : ITermination
+    public class FunctionTerminationCondition : ITerminationCondition
     {
         private readonly Func<bool> _fulfilled;
 
-        public FunctionTermination(Func<bool> fulfilled)
+        public bool Fulfilled => _fulfilled();
+
+        public FunctionTerminationCondition(Func<bool> fulfilled)
         {
             _fulfilled = fulfilled;
-        }
-
-        public bool Fulfilled()
-        {
-            return _fulfilled();
         }
 
         public void Start()

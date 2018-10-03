@@ -21,7 +21,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
 
             var evolving = ga.Evolve();
             await Task.Delay(2000);
-            await ga.Stop();
+            ga.Stop();
             await evolving;
             
             Assert.True(ga.GenerationNumber > 0);
@@ -34,7 +34,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
 
             var evolving = ga.Evolve();
             await Task.Delay(1000);
-            await ga.Stop();
+            ga.Stop();
             await evolving;
             
             Assert.True(ga.GenerationNumber > 0);
@@ -42,7 +42,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             
             var continued = ga.Evolve();
             await Task.Delay(1000);
-            await ga.Stop();
+            ga.Stop();
             await continued;
             
             Assert.True(ga.GenerationNumber > gn);
@@ -75,7 +75,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             });
 
             await Task.Delay(1000);
-            await ga.Stop();
+            ga.Stop();
             await evolution;
             
             Assert.True(maxGenerationNumber > ga.GenerationNumber);
@@ -100,7 +100,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             const int maxGenerationNumber = 10;
             var ga = CreateGeneticAlgorithm();
-            await ga.EvolveUntil(new FunctionTermination(() => ga.GenerationNumber >= maxGenerationNumber));
+            await ga.EvolveUntil(new FunctionTerminationCondition(() => ga.GenerationNumber >= maxGenerationNumber));
             
             Assert.Equal(maxGenerationNumber, ga.GenerationNumber);
             await ga.Evolve();
@@ -112,7 +112,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             const double timeLimit = 1000;
             var ga = CreateGeneticAlgorithm();
-            await ga.EvolveUntil(new TimeLimitTermination(timeLimit));
+            await ga.EvolveUntil(new TimeLimitTerminationCondition(timeLimit));
             Assert.True(ga.GenerationNumber > 0);
             var gn = ga.GenerationNumber;
             await ga.Evolve();
@@ -124,9 +124,9 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             const double timeLimit = 1000;
             var ga = CreateGeneticAlgorithm();
-            var evolving = ga.EvolveUntil(new TimeLimitTermination(timeLimit));
+            var evolving = ga.EvolveUntil(new TimeLimitTerminationCondition(timeLimit));
             await Task.Delay(200);
-            await ga.Stop();
+            ga.Stop();
             await evolving;
             Assert.True(ga.GenerationNumber > 0);
             var gn = ga.GenerationNumber;
@@ -138,7 +138,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         public async Task Should_not_evolve_after_time_span_limit_expected()
         {
             var ga = CreateGeneticAlgorithm();
-            await ga.EvolveUntil(new TimeLimitTermination(new TimeSpan(0, 0, 1)));
+            await ga.EvolveUntil(new TimeLimitTerminationCondition(new TimeSpan(0, 0, 1)));
             Assert.True(ga.GenerationNumber > 0);
             var gn = ga.GenerationNumber;
             await ga.Evolve();
@@ -149,9 +149,9 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         public async Task Should_continue_evolve_after_stopped_when_time_span_limit_not_exceed()
         {
             var ga = CreateGeneticAlgorithm();
-            var evolving = ga.EvolveUntil(new TimeLimitTermination(new TimeSpan(0, 0, 1)));
+            var evolving = ga.EvolveUntil(new TimeLimitTerminationCondition(new TimeSpan(0, 0, 1)));
             await Task.Delay(100);
-            await ga.Stop();
+            ga.Stop();
             await evolving;
             Assert.True(ga.GenerationNumber > 0);
             var gn = ga.GenerationNumber;
@@ -166,7 +166,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             var evolving = ga.Evolve();
             await Task.Delay(100);
             Assert.True(ga.Evolving);
-            await ga.Stop();
+            ga.Stop();
             await evolving;
             Assert.False(ga.Evolving);
         }
