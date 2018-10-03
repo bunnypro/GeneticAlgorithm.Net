@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Bunnypro.GeneticAlgorithm.Core.Exceptions;
 using Bunnypro.GeneticAlgorithm.Core.Termination;
 using Bunnypro.GeneticAlgorithm.Examples.Simple;
 using Bunnypro.GeneticAlgorithm.Standard;
@@ -169,6 +170,34 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             ga.Stop();
             await evolving;
             Assert.False(ga.Evolving);
+        }
+
+        [Fact]
+        public async Task Should_not_evolve_while_being_evolving()
+        {
+            var ga = CreateGeneticAlgorithm();
+            var evolution = ga.Evolve();
+            Assert.True(ga.Evolving);
+            await Assert.ThrowsAsync<EvolutionRunningException>(async () =>
+            {
+                await ga.Evolve();
+            });
+            ga.Stop();
+            await evolution;
+        }
+
+        [Fact]
+        public async Task Can_not_be_reseted_while_being_evolving()
+        {
+            var ga = CreateGeneticAlgorithm();
+            var evolution = ga.Evolve();
+            Assert.True(ga.Evolving);
+            Assert.Throws<EvolutionRunningException>(() =>
+            {
+                ga.Reset();
+            });
+            ga.Stop();
+            await evolution;
         }
     }
 }

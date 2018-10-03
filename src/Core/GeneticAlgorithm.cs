@@ -10,28 +10,12 @@ namespace Bunnypro.GeneticAlgorithm.Core
     public class GeneticAlgorithm : IGeneticAlgorithm
     {
         public int GenerationNumber { get; private set; }
-
-        public bool Evolving
-        {
-            get
-            {
-                var evolvingObjectCanBeAcquired = Monitor.TryEnter(_evolving);
-
-                if (evolvingObjectCanBeAcquired)
-                {
-                    Monitor.Exit(_evolving);
-                }
-
-                return !evolvingObjectCanBeAcquired;
-            }
-        }
+        public bool Evolving { get; private set; }
 
         public IPopulation Population { get; }
         public IEvolutionStrategy EvolutionStrategy { get; }
 
         public ITerminationCondition TerminationCondition { get; set; }
-
-        private readonly object _evolving = new object();
 
         private CancellationTokenSource _evolutionCts;
 
@@ -66,26 +50,32 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 return;
             }
 
-            TerminationCondition.Start();
+            if (Evolving)
+            {
+                throw new EvolutionRunningException();
+            }
+
+            Evolving = true;
 
             using (_evolutionCts = new CancellationTokenSource())
             {
+                TerminationCondition.Start();
+
                 await Task.Factory.StartNew(() =>
                 {
-                    lock (_evolving)
+                    do
                     {
-                        do
-                        {
-                            Population.StoreOffspring(GenerationNumber++, EvolutionStrategy.Execute(Population));
-                        } while (!(_evolutionCts.Token.IsCancellationRequested || TerminationCondition.Fulfilled));
+                        Population.StoreOffspring(GenerationNumber++, EvolutionStrategy.Execute(Population));
+                    } while (!(_evolutionCts.Token.IsCancellationRequested || TerminationCondition.Fulfilled));
 
-                        if (_evolutionCts.Token.IsCancellationRequested)
-                        {
-                            TerminationCondition.Pause();
-                        }
+                    if (_evolutionCts.Token.IsCancellationRequested)
+                    {
+                        TerminationCondition.Pause();
                     }
                 }, _evolutionCts.Token);
             }
+
+            Evolving = false;
         }
 
         public void Stop()
@@ -114,14 +104,11 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 throw new EvolutionRunningException();
             }
 
-            lock (_evolving)
-            {
-                GenerationNumber = 0;
-                _evolutionCts = null;
+            GenerationNumber = 0;
+            _evolutionCts = null;
 
-                TerminationCondition.Reset();
-                Population.Reset();
-            }
+            TerminationCondition.Reset();
+            Population.Reset();
         }
     }
 }
