@@ -10,8 +10,8 @@ namespace Bunnypro.GeneticAlgorithm.Standard
         
         Task Evolve();
         Task EvolveUntil(Func<bool> fulfilled);
-        Task Stop();
-        Task Reset();
         Task EvolveUntil(ITerminationCondition terminationCondition);
+        void Stop();
+        void Reset();
     }
 }
