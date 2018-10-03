@@ -1,6 +1,6 @@
 namespace Bunnypro.GeneticAlgorithm.Standard
 {
-    public interface ITermination
+    public interface ITerminationCondition
     {
         void Start();
         void Pause();
