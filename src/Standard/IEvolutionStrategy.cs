@@ -1,9 +1,9 @@
-using System.Collections.Immutable;
+using System.Collections.Generic;
 
 namespace Bunnypro.GeneticAlgorithm.Standard
 {
     public interface IEvolutionStrategy
     {
-        ImmutableHashSet<IChromosome> Execute(IPopulation population);
+        IEnumerable<IChromosome> Execute(IPopulation population);
     }
 }
