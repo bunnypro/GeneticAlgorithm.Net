@@ -9,7 +9,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
 {
     public class GeneticAlgorithm : IGeneticAlgorithm
     {
-        public int GenerationNumber { get; private set; }
+        public int EvolutionNumber { get; private set; }
         public bool Evolving { get; private set; }
 
         public IPopulation Population { get; }
@@ -39,7 +39,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
         {
             TerminationCondition = terminationCondition;
 
-            if (GenerationNumber == 0)
+            if (EvolutionNumber == 0)
             {
                 Reset();
                 Population.Initialize();
@@ -65,7 +65,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 {
                     do
                     {
-                        Population.StoreOffspring(GenerationNumber++, EvolutionStrategy.Execute(Population));
+                        Population.StoreOffspring(EvolutionNumber++, EvolutionStrategy.Execute(Population));
                     } while (!(_evolutionCts.Token.IsCancellationRequested || TerminationCondition.Fulfilled));
 
                     if (_evolutionCts.Token.IsCancellationRequested)
@@ -104,7 +104,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 throw new EvolutionRunningException();
             }
 
-            GenerationNumber = 0;
+            EvolutionNumber = 0;
             _evolutionCts = null;
 
             TerminationCondition.Reset();

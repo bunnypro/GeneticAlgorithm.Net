@@ -5,7 +5,7 @@ namespace Bunnypro.GeneticAlgorithm.Standard
 {
     public interface IGeneticAlgorithm
     {
-        int GenerationNumber { get; }
+        int EvolutionNumber { get; }
         bool Evolving { get; }
         
         Task Evolve();
