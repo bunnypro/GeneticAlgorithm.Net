@@ -12,7 +12,7 @@ namespace Bunnypro.GeneticAlgorithm.Examples.Simple
         {
         }
 
-        public void StoreOffspring(int generationNumber, IEnumerable<IChromosome> offspring)
+        public void StoreOffspring(int evolutionNumber, IEnumerable<IChromosome> offspring)
         {
         }
 

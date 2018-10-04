@@ -18,9 +18,9 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
             Chromosomes = CreatePopulation();
         }
 
-        public void StoreOffspring(int generationNumber, IEnumerable<IChromosome> offspring)
+        public void StoreOffspring(int evolutionNumber, IEnumerable<IChromosome> offspring)
         {
-            GenerationNumber = generationNumber;
+            GenerationNumber = evolutionNumber;
             Chromosomes = FilterOffspring(offspring.Cast<T>());
         }
 
