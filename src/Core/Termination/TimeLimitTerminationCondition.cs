@@ -7,10 +7,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Termination
     public class TimeLimitTerminationCondition : ITerminationCondition
     {
         private readonly double _timeLimit;
-        private Timer _timer;
         private bool _disposed;
-
-        public bool Fulfilled { get; private set; }
+        private Timer _timer;
 
         public TimeLimitTerminationCondition(TimeSpan timeSpan) : this(timeSpan.TotalMilliseconds)
         {
@@ -21,6 +19,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Termination
             _timeLimit = timeLimit;
             Prepare();
         }
+
+        public bool Fulfilled { get; private set; }
 
         public void Start()
         {
@@ -34,10 +34,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Termination
 
         public void Reset()
         {
-            if (!_disposed)
-            {
-                _timer.Dispose();
-            }
+            if (!_disposed) _timer.Dispose();
 
             Prepare();
         }

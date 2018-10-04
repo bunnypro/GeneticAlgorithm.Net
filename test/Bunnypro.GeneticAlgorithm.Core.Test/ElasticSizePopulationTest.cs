@@ -21,7 +21,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             {
                 new {Min = 10, Max = 20},
                 new {Min = 19, Max = 20},
-                new {Min = 1, Max = 20},
+                new {Min = 1, Max = 20}
             };
 
             foreach (var range in ranges)

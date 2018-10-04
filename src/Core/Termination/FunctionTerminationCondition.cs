@@ -7,12 +7,12 @@ namespace Bunnypro.GeneticAlgorithm.Core.Termination
     {
         private readonly Func<bool> _fulfilled;
 
-        public bool Fulfilled => _fulfilled();
-
         public FunctionTerminationCondition(Func<bool> fulfilled)
         {
             _fulfilled = fulfilled;
         }
+
+        public bool Fulfilled => _fulfilled();
 
         public void Start()
         {

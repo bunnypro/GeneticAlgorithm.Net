@@ -18,10 +18,7 @@ namespace Bunnypro.GeneticAlgorithm.Examples.Simple
         {
             var chromosomes = new HashSet<SimpleChromosome>();
 
-            while (chromosomes.Count < count)
-            {
-                chromosomes.Add(Create());
-            }
+            while (chromosomes.Count < count) chromosomes.Add(Create());
 
             return chromosomes;
         }

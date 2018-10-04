@@ -7,24 +7,24 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
 {
     public class Chromosome : IChromosome
     {
-        public IReadOnlyCollection<object> Genes { get; }
-        public IComparable Fitness { get; set; }
-
         protected Chromosome(IEnumerable<object> genes)
         {
             Genes = genes.ToList();
         }
 
-        public override bool Equals(object obj)
-        {
-            return Equals((IChromosome) obj);
-        }
+        public IReadOnlyCollection<object> Genes { get; }
+        public IComparable Fitness { get; set; }
 
         public bool Equals(IChromosome other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
             return other.GetType() == GetType() && Equals((Chromosome) other);
+        }
+
+        public override bool Equals(object obj)
+        {
+            return Equals((IChromosome) obj);
         }
 
         protected virtual bool Equals(Chromosome other)
