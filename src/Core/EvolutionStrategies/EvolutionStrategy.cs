@@ -10,6 +10,6 @@ namespace Bunnypro.GeneticAlgorithm.Core.EvolutionStrategies
             population.Initialize();
         }
 
-        public abstract IEnumerable<IChromosome> Execute(IPopulation population);
+        public abstract IEnumerable<IChromosome> Execute();
     }
 }

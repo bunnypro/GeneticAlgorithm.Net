@@ -63,7 +63,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 {
                     do
                     {
-                        Population.StoreOffspring(EvolutionNumber++, EvolutionStrategy.Execute(Population));
+                        Population.StoreOffspring(EvolutionNumber++, EvolutionStrategy.Execute());
                     } while (!(_evolutionCts.Token.IsCancellationRequested || TerminationCondition.Fulfilled));
 
                     if (_evolutionCts.Token.IsCancellationRequested) TerminationCondition.Pause();
