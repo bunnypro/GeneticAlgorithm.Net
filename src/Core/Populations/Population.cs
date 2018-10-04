@@ -10,7 +10,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
         public int GenerationNumber { get; private set; }
 
         ImmutableHashSet<IChromosome> IPopulation.Chromosomes => Chromosomes.Cast<IChromosome>().ToImmutableHashSet();
-        public ImmutableHashSet<T> Chromosomes { get; protected set; }
+        public ImmutableHashSet<T> Chromosomes { get; private set; }
 
         public virtual void Initialize()
         {
