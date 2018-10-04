@@ -9,6 +9,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
 {
     public class GeneticAlgorithm : IGeneticAlgorithm
     {
+        private readonly object _evolutionPreparation = new object();
         private CancellationTokenSource _evolutionCts;
 
         public GeneticAlgorithm(IPopulation population, IEvolutionStrategy evolutionStrategy)
@@ -36,19 +37,22 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public async Task EvolveUntil(ITerminationCondition terminationCondition)
         {
-            TerminationCondition = terminationCondition;
-
-            if (EvolutionNumber == 0)
+            lock (_evolutionPreparation)
             {
-                Reset();
-                Population.Initialize();
+                if (Evolving) throw new EvolutionRunningException();
+
+                TerminationCondition = terminationCondition;
+
+                if (EvolutionNumber == 0)
+                {
+                    Prepare();
+                    EvolutionStrategy.Prepare(Population);
+                }
+
+                if (TerminationCondition.Fulfilled) return;
+
+                Evolving = true;
             }
-
-            if (TerminationCondition.Fulfilled) return;
-
-            if (Evolving) throw new EvolutionRunningException();
-
-            Evolving = true;
 
             using (_evolutionCts = new CancellationTokenSource())
             {
@@ -77,6 +81,11 @@ namespace Bunnypro.GeneticAlgorithm.Core
         {
             if (Evolving) throw new EvolutionRunningException();
 
+            Prepare();
+        }
+
+        private void Prepare()
+        {
             EvolutionNumber = 0;
             _evolutionCts = null;
 
