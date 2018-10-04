@@ -1,7 +1,7 @@
 using System;
 using Bunnypro.GeneticAlgorithm.Standard;
 
-namespace Bunnypro.GeneticAlgorithm.Core.Termination
+namespace Bunnypro.GeneticAlgorithm.Core.Terminations
 {
     public class FunctionTerminationCondition : ITerminationCondition
     {

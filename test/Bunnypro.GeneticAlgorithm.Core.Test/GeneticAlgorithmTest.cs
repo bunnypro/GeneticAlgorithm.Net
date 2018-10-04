@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Bunnypro.GeneticAlgorithm.Core.Exceptions;
-using Bunnypro.GeneticAlgorithm.Core.Termination;
+using Bunnypro.GeneticAlgorithm.Core.Terminations;
 using Bunnypro.GeneticAlgorithm.Examples.Simple;
 using Bunnypro.GeneticAlgorithm.Standard;
 using Xunit;

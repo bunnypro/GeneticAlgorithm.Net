@@ -2,7 +2,7 @@ using System;
 using System.Timers;
 using Bunnypro.GeneticAlgorithm.Standard;
 
-namespace Bunnypro.GeneticAlgorithm.Core.Termination
+namespace Bunnypro.GeneticAlgorithm.Core.Terminations
 {
     public class TimeLimitTerminationCondition : ITerminationCondition
     {
