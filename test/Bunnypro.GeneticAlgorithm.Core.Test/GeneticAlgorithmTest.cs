@@ -196,6 +196,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             {
                 ga.Reset();
             });
+            Assert.False(((GeneticAlgorithm) ga).TryReset());
             ga.Stop();
             await evolution;
         }
