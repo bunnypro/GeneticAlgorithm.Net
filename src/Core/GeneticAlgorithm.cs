@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Bunnypro.GeneticAlgorithm.Core.EvolutionStrategies;
 using Bunnypro.GeneticAlgorithm.Core.Exceptions;
 using Bunnypro.GeneticAlgorithm.Core.Terminations;
 using Bunnypro.GeneticAlgorithm.Standard;
@@ -12,14 +13,14 @@ namespace Bunnypro.GeneticAlgorithm.Core
         private readonly object _evolutionPreparation = new object();
         private CancellationTokenSource _evolutionCts;
 
-        public GeneticAlgorithm(IPopulation population, IEvolutionStrategy evolutionStrategy)
+        public GeneticAlgorithm(IPopulation population, EvolutionStrategy evolutionStrategy)
         {
             Population = population;
             EvolutionStrategy = evolutionStrategy;
         }
 
         public IPopulation Population { get; }
-        public IEvolutionStrategy EvolutionStrategy { get; }
+        public EvolutionStrategy EvolutionStrategy { get; }
 
         public ITerminationCondition TerminationCondition { get; set; }
         public int EvolutionNumber { get; private set; }
