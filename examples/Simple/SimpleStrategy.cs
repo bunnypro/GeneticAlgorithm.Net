@@ -6,7 +6,7 @@ namespace Bunnypro.GeneticAlgorithm.Examples.Simple
 {
     public class SimpleStrategy : EvolutionStrategy
     {
-        public override IEnumerable<IChromosome> Execute()
+        protected override IEnumerable<IChromosome> GenerateOffspring()
         {
             return new List<IChromosome>();
         }

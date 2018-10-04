@@ -12,6 +12,6 @@ namespace Bunnypro.GeneticAlgorithm.Standard
         /// <param name="population"></param>
         void Prepare(IPopulation population);
         
-        IEnumerable<IChromosome> Execute();
+        void Execute(int evolutionNumber);
     }
 }

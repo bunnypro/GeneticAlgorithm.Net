@@ -6,13 +6,18 @@ namespace Bunnypro.GeneticAlgorithm.Core.EvolutionStrategies
     public abstract class EvolutionStrategy : IEvolutionStrategy
     {
         protected IPopulation Population { get; private set; }
-        
+
         public virtual void Prepare(IPopulation population)
         {
             Population = population;
             Population.Initialize();
         }
 
-        public abstract IEnumerable<IChromosome> Execute();
+        public virtual void Execute(int evolutionNumber)
+        {
+            Population.StoreOffspring(evolutionNumber, GenerateOffspring());
+        }
+
+        protected abstract IEnumerable<IChromosome> GenerateOffspring();
     }
 }
