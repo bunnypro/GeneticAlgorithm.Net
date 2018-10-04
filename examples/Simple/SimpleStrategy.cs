@@ -1,11 +1,12 @@
 using System.Collections.Generic;
+using Bunnypro.GeneticAlgorithm.Core.EvolutionStrategies;
 using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Examples.Simple
 {
-    public class SimpleStrategy : IEvolutionStrategy
+    public class SimpleStrategy : EvolutionStrategy
     {
-        public IEnumerable<IChromosome> Execute(IPopulation population)
+        public override IEnumerable<IChromosome> Execute(IPopulation population)
         {
             return new List<IChromosome>();
         }
