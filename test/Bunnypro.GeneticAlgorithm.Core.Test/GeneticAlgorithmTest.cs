@@ -187,7 +187,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         }
 
         [Fact]
-        public async Task Can_not_be_reseted_while_being_evolving()
+        public async Task Can_not_be_reset_while_being_evolving()
         {
             var ga = CreateGeneticAlgorithm();
             var evolution = ga.Evolve();
