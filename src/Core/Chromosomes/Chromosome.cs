@@ -36,13 +36,13 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
         {
             unchecked
             {
-                return Genes != null && Genes.Count > 0 ? 
+                return Genes != null && Genes.Count > 0 ?
                     Genes.Aggregate(0, (hashCode, gene) =>
                     {
                         if (hashCode == 0) return gene.GetHashCode();
                         return (hashCode * 397) ^ gene.GetHashCode();
-                    })
-                    : 0;
+                    }) :
+                    0;
             }
         }
     }

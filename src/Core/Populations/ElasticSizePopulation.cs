@@ -11,7 +11,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
     {
         public int MinSize { get; }
         public int MaxSize { get; }
-        
+
         protected IChromosomeFactory<T> ChromosomeFactory { get; }
 
         public ElasticSizePopulation(int minSize, int maxSize, IChromosomeFactory<T> chromosomeFactory)
@@ -30,7 +30,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
         protected override ImmutableHashSet<T> FilterOffspring(IEnumerable<T> offspring)
         {
             // ensure distinction
-            
+
             return offspring.Take(new Random().Next(MinSize, MaxSize)).ToImmutableHashSet();
         }
     }

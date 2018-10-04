@@ -10,17 +10,14 @@ namespace Bunnypro.GeneticAlgorithm.Examples.Simple
 
         public void Initialize()
         {
-            
         }
 
         public void StoreOffspring(int generationNumber, IEnumerable<IChromosome> offspring)
         {
-            
         }
 
         public void Reset()
         {
-            
         }
     }
 }

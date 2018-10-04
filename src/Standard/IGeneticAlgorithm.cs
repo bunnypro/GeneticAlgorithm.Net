@@ -7,7 +7,7 @@ namespace Bunnypro.GeneticAlgorithm.Standard
     {
         int EvolutionNumber { get; }
         bool Evolving { get; }
-        
+
         Task Evolve();
         Task EvolveUntil(Func<bool> fulfilled);
         Task EvolveUntil(ITerminationCondition terminationCondition);

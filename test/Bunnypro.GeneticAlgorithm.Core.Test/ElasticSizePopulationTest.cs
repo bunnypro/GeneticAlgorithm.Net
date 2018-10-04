@@ -11,12 +11,12 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             return new ElasticSizePopulation<SimpleChromosome>(min, max, new SimpleChromosomeFactory());
         }
-        
+
         [Fact]
         public void Should_initialize_with_correct_size()
         {
             const int testLength = 10;
-            
+
             var ranges = new[]
             {
                 new {Min = 10, Max = 20},
@@ -30,7 +30,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                 for (var i = 0; i < testLength; i++)
                 {
                     population.Initialize();
-            
+
                     Assert.True(population.Chromosomes.Count >= range.Min && population.Chromosomes.Count <= range.Max);
                 }
             }

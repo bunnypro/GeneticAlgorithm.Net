@@ -9,6 +9,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
     public class FixedSizePopulation<T> : Population<T> where T : IChromosome
     {
         public int Size { get; }
+        
         protected IChromosomeFactory<T> ChromosomeFactory { get; }
 
         public FixedSizePopulation(int size, IChromosomeFactory<T> chromosomeFactory)
