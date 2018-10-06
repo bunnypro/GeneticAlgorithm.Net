@@ -10,7 +10,7 @@ namespace Bunnypro.GeneticAlgorithm.Examples.Simple
         {
         }
 
-        public ImmutableHashSet<IChromosome> GenerateOffspring(IEnumerable<IChromosome> parents)
+        public IEnumerable<IChromosome> GenerateOffspring(IEnumerable<IChromosome> parents)
         {
             return parents.ToImmutableHashSet();
         }

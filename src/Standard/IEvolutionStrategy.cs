@@ -7,6 +7,6 @@ namespace Bunnypro.GeneticAlgorithm.Standard
     {
         void Prepare(IEnumerable<IChromosome> initialParents);
 
-        ImmutableHashSet<IChromosome> GenerateOffspring(IEnumerable<IChromosome> parents);
+        IEnumerable<IChromosome> GenerateOffspring(IEnumerable<IChromosome> parents);
     }
 }
