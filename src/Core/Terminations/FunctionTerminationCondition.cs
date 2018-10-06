@@ -12,6 +12,9 @@ namespace Bunnypro.GeneticAlgorithm.Core.Terminations
             _fulfilled = fulfilled;
         }
 
-        public bool Fulfilled(IEvolutionState state) => _fulfilled(state);
+        public bool Fulfilled(IEvolutionState state)
+        {
+            return _fulfilled(state);
+        }
     }
 }

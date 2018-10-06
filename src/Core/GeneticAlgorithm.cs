@@ -9,22 +9,6 @@ namespace Bunnypro.GeneticAlgorithm.Core
 {
     public class GeneticAlgorithm : IGeneticAlgorithm
     {
-        private struct EvolutionState : IEvolutionState
-        {
-            public int EvolutionNumber { get; set; }
-
-            public TimeSpan EvolutionTime { get; set; }
-
-            public bool Evolving { get; set; }
-
-            public void Reset()
-            {
-                EvolutionNumber = 0;
-                EvolutionTime = TimeSpan.Zero;
-                Evolving = false;
-            }
-        }
-
         private readonly object _evolutionPreparation = new object();
         private CancellationTokenSource _evolutionCts;
         private EvolutionState _state;
@@ -45,7 +29,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public async Task Evolve()
         {
-            await EvolveUntil(TerminationCondition ?? new FunctionTerminationCondition((state) => false));
+            await EvolveUntil(TerminationCondition ?? new FunctionTerminationCondition(state => false));
         }
 
         public async Task EvolveUntil(Func<IEvolutionState, bool> fulfilled)
@@ -120,6 +104,22 @@ namespace Bunnypro.GeneticAlgorithm.Core
             }
 
             return true;
+        }
+
+        private struct EvolutionState : IEvolutionState
+        {
+            public int EvolutionNumber { get; set; }
+
+            public TimeSpan EvolutionTime { get; set; }
+
+            public bool Evolving { get; set; }
+
+            public void Reset()
+            {
+                EvolutionNumber = 0;
+                EvolutionTime = TimeSpan.Zero;
+                Evolving = false;
+            }
         }
     }
 }

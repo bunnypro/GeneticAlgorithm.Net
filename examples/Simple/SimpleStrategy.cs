@@ -8,7 +8,6 @@ namespace Bunnypro.GeneticAlgorithm.Examples.Simple
     {
         public void Prepare(IEnumerable<IChromosome> initialParents)
         {
-
         }
 
         public ImmutableHashSet<IChromosome> GenerateOffspring(IEnumerable<IChromosome> parents)
