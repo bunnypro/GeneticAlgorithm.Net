@@ -5,28 +5,13 @@ namespace Bunnypro.GeneticAlgorithm.Core.Terminations
 {
     public class FunctionTerminationCondition : ITerminationCondition
     {
-        private readonly Func<bool> _fulfilled;
+        private readonly Func<IEvolutionState, bool> _fulfilled;
 
-        public FunctionTerminationCondition(Func<bool> fulfilled)
+        public FunctionTerminationCondition(Func<IEvolutionState, bool> fulfilled)
         {
             _fulfilled = fulfilled;
         }
 
-        public bool Fulfilled => _fulfilled();
-
-        public void Start()
-        {
-            // Method is Not Needed
-        }
-
-        public void Pause()
-        {
-            // Method is Not Needed
-        }
-
-        public void Reset()
-        {
-            // Method is Not Needed
-        }
+        public bool Fulfilled(IEvolutionState state) => _fulfilled(state);
     }
 }

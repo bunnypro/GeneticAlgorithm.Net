@@ -6,51 +6,20 @@ namespace Bunnypro.GeneticAlgorithm.Core.Terminations
 {
     public class TimeLimitTerminationCondition : ITerminationCondition
     {
-        private readonly double _timeLimit;
-        private bool _disposed;
-        private Timer _timer;
+        private readonly TimeSpan _timeLimit;
 
-        public TimeLimitTerminationCondition(TimeSpan timeSpan) : this(timeSpan.TotalMilliseconds)
+        public TimeLimitTerminationCondition(double milliseconds) : this(TimeSpan.FromMilliseconds(milliseconds))
         {
         }
 
-        public TimeLimitTerminationCondition(double timeLimit)
+        public TimeLimitTerminationCondition(TimeSpan timeLimit)
         {
             _timeLimit = timeLimit;
-            Prepare();
         }
 
-        public bool Fulfilled { get; private set; }
-
-        public void Start()
+        public bool Fulfilled(IEvolutionState state)
         {
-            _timer.Start();
-        }
-
-        public void Pause()
-        {
-            _timer.Stop();
-        }
-
-        public void Reset()
-        {
-            if (!_disposed) _timer.Dispose();
-
-            Prepare();
-        }
-
-        private void Prepare()
-        {
-            Fulfilled = false;
-            _disposed = false;
-            _timer = new Timer(_timeLimit);
-            _timer.Disposed += (o, e) => { _disposed = true; };
-            _timer.Elapsed += (s, o) =>
-            {
-                _timer.Stop();
-                _timer.Dispose();
-                Fulfilled = true;
-            };
+            return state.EvolutionTime >= _timeLimit;
         }
     }
 }

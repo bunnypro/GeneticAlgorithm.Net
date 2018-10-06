@@ -1,23 +1,21 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using Bunnypro.GeneticAlgorithm.Core.Populations;
 using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Examples.Simple
 {
-    public class SimplePopulation : IPopulation
+    public class SimplePopulation : Population<SimpleChromosome>
     {
-        public ImmutableHashSet<IChromosome> Chromosomes { get; }
-
-        public void Initialize()
+        protected override ImmutableHashSet<SimpleChromosome> CreatePopulation()
         {
+            return new List<SimpleChromosome> {new SimpleChromosome(new List<object> {new Random().Next(100)})}.ToImmutableHashSet();
         }
 
-        public void StoreOffspring(int evolutionNumber, IEnumerable<IChromosome> offspring)
+        protected override ImmutableHashSet<SimpleChromosome> FilterOffspring(IEnumerable<SimpleChromosome> offspring)
         {
-        }
-
-        public void Reset()
-        {
+            return offspring.ToImmutableHashSet();
         }
     }
 }

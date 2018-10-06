@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Bunnypro.GeneticAlgorithm.Core.EvolutionStrategies;
 using Bunnypro.GeneticAlgorithm.Core.Exceptions;
 using Bunnypro.GeneticAlgorithm.Core.Terminations;
 using Bunnypro.GeneticAlgorithm.Standard;
@@ -10,28 +9,46 @@ namespace Bunnypro.GeneticAlgorithm.Core
 {
     public class GeneticAlgorithm : IGeneticAlgorithm
     {
+        private struct EvolutionState : IEvolutionState
+        {
+            public int EvolutionNumber { get; set; }
+
+            public TimeSpan EvolutionTime { get; set; }
+
+            public bool Evolving { get; set; }
+
+            public void Reset()
+            {
+                EvolutionNumber = 0;
+                EvolutionTime = TimeSpan.Zero;
+                Evolving = false;
+            }
+        }
+
         private readonly object _evolutionPreparation = new object();
         private CancellationTokenSource _evolutionCts;
+        private EvolutionState _state;
 
-        public GeneticAlgorithm(IPopulation population, EvolutionStrategy evolutionStrategy)
+        public GeneticAlgorithm(IPopulation population, IEvolutionStrategy evolutionStrategy)
         {
             Population = population;
             EvolutionStrategy = evolutionStrategy;
+            _state = new EvolutionState();
         }
 
         public IPopulation Population { get; }
-        public EvolutionStrategy EvolutionStrategy { get; }
+        public IEvolutionStrategy EvolutionStrategy { get; }
 
         public ITerminationCondition TerminationCondition { get; set; }
-        public int EvolutionNumber { get; private set; }
-        public bool Evolving { get; private set; }
+
+        public IEvolutionState State => _state;
 
         public async Task Evolve()
         {
-            await EvolveUntil(TerminationCondition ?? new FunctionTerminationCondition(() => false));
+            await EvolveUntil(TerminationCondition ?? new FunctionTerminationCondition((state) => false));
         }
 
-        public async Task EvolveUntil(Func<bool> fulfilled)
+        public async Task EvolveUntil(Func<IEvolutionState, bool> fulfilled)
         {
             await EvolveUntil(new FunctionTerminationCondition(fulfilled));
         }
@@ -40,37 +57,36 @@ namespace Bunnypro.GeneticAlgorithm.Core
         {
             lock (_evolutionPreparation)
             {
-                if (Evolving) throw new EvolutionRunningException();
+                if (_state.Evolving) throw new EvolutionRunningException();
 
                 TerminationCondition = terminationCondition;
 
-                if (EvolutionNumber == 0)
+                if (State.EvolutionNumber == 0)
                 {
                     Prepare();
-                    EvolutionStrategy.Prepare(Population);
+                    Population.Initialize();
+                    EvolutionStrategy.Prepare(Population.Chromosomes);
                 }
 
-                if (TerminationCondition.Fulfilled) return;
+                if (TerminationCondition.Fulfilled(State)) return;
 
-                Evolving = true;
+                _state.Evolving = true;
             }
 
             using (_evolutionCts = new CancellationTokenSource())
             {
-                TerminationCondition.Start();
-
                 await Task.Factory.StartNew(() =>
                 {
                     do
                     {
-                        EvolutionStrategy.Execute(EvolutionNumber++);
-                    } while (!(_evolutionCts.Token.IsCancellationRequested || TerminationCondition.Fulfilled));
-
-                    if (_evolutionCts.Token.IsCancellationRequested) TerminationCondition.Pause();
+                        var startTime = DateTime.Now;
+                        Population.StoreOffspring(_state.EvolutionNumber++, EvolutionStrategy.GenerateOffspring(Population.Chromosomes));
+                        _state.EvolutionTime += DateTime.Now - startTime;
+                    } while (!(_evolutionCts.Token.IsCancellationRequested || TerminationCondition.Fulfilled(State)));
                 }, _evolutionCts.Token);
             }
 
-            Evolving = false;
+            _state.Evolving = false;
         }
 
         public void Stop()
@@ -80,17 +96,15 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public void Reset()
         {
-            if (Evolving) throw new EvolutionRunningException();
+            if (_state.Evolving) throw new EvolutionRunningException();
 
             Prepare();
         }
 
         private void Prepare()
         {
-            EvolutionNumber = 0;
             _evolutionCts = null;
-
-            TerminationCondition.Reset();
+            _state.Reset();
             Population.Reset();
         }
 

@@ -1,14 +1,19 @@
 using System.Collections.Generic;
-using Bunnypro.GeneticAlgorithm.Core.EvolutionStrategies;
+using System.Collections.Immutable;
 using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Examples.Simple
 {
-    public class SimpleStrategy : EvolutionStrategy
+    public class SimpleStrategy : IEvolutionStrategy
     {
-        protected override IEnumerable<IChromosome> GenerateOffspring()
+        public void Prepare(IEnumerable<IChromosome> initialParents)
         {
-            return new List<IChromosome>();
+
+        }
+
+        public ImmutableHashSet<IChromosome> GenerateOffspring(IEnumerable<IChromosome> parents)
+        {
+            return parents.ToImmutableHashSet();
         }
     }
 }
