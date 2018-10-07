@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -24,9 +25,27 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
 
         protected override ImmutableHashSet<T> FilterOffspring(IEnumerable<T> offspring)
         {
-            // ensure distinction
+            var uniqueOffspring = new HashSet<T>(offspring.ToArray());
 
-            return offspring.Take(Size).ToImmutableHashSet();
+            if (uniqueOffspring.Count >= Size)
+            {
+                return uniqueOffspring.Take(Size).ToImmutableHashSet();
+            }
+
+            foreach (var parent in Chromosomes)
+            {
+                if (uniqueOffspring.Add(parent) && uniqueOffspring.Count == Size)
+                {
+                    break;
+                }
+            }
+
+            if (uniqueOffspring.Count == Size)
+            {
+                return uniqueOffspring.ToImmutableHashSet();
+            }
+            
+            throw new Exception($"Population Size is not Reached. Expected {Size}, Actual {uniqueOffspring.Count}");
         }
     }
 }
