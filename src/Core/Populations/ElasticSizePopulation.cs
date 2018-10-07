@@ -21,7 +21,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
 
         protected IChromosomeFactory<T> ChromosomeFactory { get; }
 
-        protected override ImmutableHashSet<T> CreatePopulation()
+        protected override ImmutableHashSet<T> CreateInitialChromosomes()
         {
             return ChromosomeFactory.Create(new Random().Next(MinSize, MaxSize)).ToImmutableHashSet();
         }

@@ -15,7 +15,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
         public virtual void Initialize()
         {
             GenerationNumber = 0;
-            Chromosomes = CreatePopulation();
+            Chromosomes = CreateInitialChromosomes();
         }
 
         public void StoreOffspring(int evolutionNumber, IEnumerable<IChromosome> offspring)
@@ -30,7 +30,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
             Chromosomes = null;
         }
 
-        protected abstract ImmutableHashSet<T> CreatePopulation();
+        protected abstract ImmutableHashSet<T> CreateInitialChromosomes();
 
         protected abstract ImmutableHashSet<T> FilterOffspring(IEnumerable<T> offspring);
     }

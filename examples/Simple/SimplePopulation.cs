@@ -7,7 +7,7 @@ namespace Bunnypro.GeneticAlgorithm.Examples.Simple
 {
     public class SimplePopulation : Population<SimpleChromosome>
     {
-        protected override ImmutableHashSet<SimpleChromosome> CreatePopulation()
+        protected override ImmutableHashSet<SimpleChromosome> CreateInitialChromosomes()
         {
             return new List<SimpleChromosome> {new SimpleChromosome(new List<object> {new Random().Next(100)})}.ToImmutableHashSet();
         }
