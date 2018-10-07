@@ -59,7 +59,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             const double timeLimit = 1000;
             var ga = CreateGeneticAlgorithm();
-            var evolving = ga.EvolveUntil(new TimeLimitTerminationCondition(timeLimit));
+            var evolving = ga.Evolve(new TimeLimitTerminationCondition(timeLimit));
             await Task.Delay(200);
             ga.Stop();
             await evolving;
@@ -73,7 +73,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         public async Task Should_continue_evolve_after_stopped_when_time_span_limit_not_exceed()
         {
             var ga = CreateGeneticAlgorithm();
-            var evolving = ga.EvolveUntil(new TimeLimitTerminationCondition(new TimeSpan(0, 0, 1)));
+            var evolving = ga.Evolve(new TimeLimitTerminationCondition(new TimeSpan(0, 0, 1)));
             await Task.Delay(100);
             ga.Stop();
             await evolving;
@@ -88,7 +88,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             const int maxGenerationNumber = 10;
             var ga = CreateGeneticAlgorithm();
-            var evolution = ga.EvolveUntil(state =>
+            var evolution = ga.Evolve(state =>
             {
                 Task.Delay(500).Wait();
                 return state.EvolutionNumber >= maxGenerationNumber;
@@ -108,12 +108,12 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             const int maxGenerationNumber = 20;
             var ga = CreateGeneticAlgorithm();
-            await ga.EvolveUntil(state => state.EvolutionNumber >= maxGenerationNumber);
+            await ga.Evolve(state => state.EvolutionNumber >= maxGenerationNumber);
 
             Assert.Equal(maxGenerationNumber, ga.State.EvolutionNumber);
 
             const int nextMaxGenerationNumber = maxGenerationNumber + 10;
-            await ga.EvolveUntil(state => state.EvolutionNumber >= nextMaxGenerationNumber);
+            await ga.Evolve(state => state.EvolutionNumber >= nextMaxGenerationNumber);
 
             Assert.Equal(nextMaxGenerationNumber, ga.State.EvolutionNumber);
         }
@@ -148,7 +148,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             const double timeLimit = 1000;
             var ga = CreateGeneticAlgorithm();
-            await ga.EvolveUntil(new TimeLimitTerminationCondition(timeLimit));
+            await ga.Evolve(new TimeLimitTerminationCondition(timeLimit));
             Assert.True(ga.State.EvolutionNumber > 0);
             var gn = ga.State.EvolutionNumber;
             await ga.Evolve();
@@ -159,7 +159,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         public async Task Should_not_evolve_after_time_span_limit_expected()
         {
             var ga = CreateGeneticAlgorithm();
-            await ga.EvolveUntil(new TimeLimitTerminationCondition(new TimeSpan(0, 0, 1)));
+            await ga.Evolve(new TimeLimitTerminationCondition(new TimeSpan(0, 0, 1)));
             Assert.True(ga.State.EvolutionNumber > 0);
             var gn = ga.State.EvolutionNumber;
             await ga.Evolve();
@@ -171,7 +171,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             const int maxGenerationNumber = 10;
             var ga = CreateGeneticAlgorithm();
-            await ga.EvolveUntil(state => state.EvolutionNumber >= maxGenerationNumber);
+            await ga.Evolve(state => state.EvolutionNumber >= maxGenerationNumber);
 
             Assert.Equal(maxGenerationNumber, ga.State.EvolutionNumber);
             await ga.Evolve();
@@ -183,7 +183,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             const int maxGenerationNumber = 10;
             var ga = CreateGeneticAlgorithm();
-            await ga.EvolveUntil(new FunctionTerminationCondition(state => state.EvolutionNumber >= maxGenerationNumber));
+            await ga.Evolve(new FunctionTerminationCondition(state => state.EvolutionNumber >= maxGenerationNumber));
 
             Assert.Equal(maxGenerationNumber, ga.State.EvolutionNumber);
             await ga.Evolve();

@@ -29,15 +29,15 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public async Task Evolve()
         {
-            await EvolveUntil(TerminationCondition ?? new FunctionTerminationCondition(state => false));
+            await Evolve(TerminationCondition ?? new FunctionTerminationCondition(state => false));
         }
 
-        public async Task EvolveUntil(Func<IEvolutionState, bool> terminationCondition)
+        public async Task Evolve(Func<IEvolutionState, bool> terminationCondition)
         {
-            await EvolveUntil(new FunctionTerminationCondition(terminationCondition));
+            await Evolve(new FunctionTerminationCondition(terminationCondition));
         }
 
-        public async Task EvolveUntil(ITerminationCondition terminationCondition)
+        public async Task Evolve(ITerminationCondition terminationCondition)
         {
             lock (_evolutionPreparation)
             {
