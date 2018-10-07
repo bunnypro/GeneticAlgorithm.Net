@@ -6,6 +6,7 @@ namespace Bunnypro.GeneticAlgorithm.Standard
     public interface IGeneticAlgorithm
     {
         IEvolutionState State { get; }
+        IPopulation Population { get; }
 
         Task Evolve();
         Task EvolveUntil(Func<IEvolutionState, bool> fulfilled);
