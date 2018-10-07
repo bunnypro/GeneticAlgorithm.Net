@@ -64,8 +64,11 @@ namespace Bunnypro.GeneticAlgorithm.Core
                     do
                     {
                         var startTime = DateTime.Now;
-                        Population.StoreOffspring(EvolutionStrategy.GenerateOffspring(Population.Chromosomes));
+                        var offspring = EvolutionStrategy.GenerateOffspring(Population.Chromosomes);
                         _state.EvolutionTime += DateTime.Now - startTime;
+                        _state.EvolutionNumber++;
+                        
+                        Population.StoreOffspring(offspring);
                     } while (!(_evolutionCts.Token.IsCancellationRequested || TerminationCondition.Fulfilled(State)));
                 }, _evolutionCts.Token);
 
