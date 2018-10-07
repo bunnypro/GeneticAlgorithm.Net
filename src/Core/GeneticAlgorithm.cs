@@ -68,9 +68,9 @@ namespace Bunnypro.GeneticAlgorithm.Core
                         _state.EvolutionTime += DateTime.Now - startTime;
                     } while (!(_evolutionCts.Token.IsCancellationRequested || TerminationCondition.Fulfilled(State)));
                 }, _evolutionCts.Token);
-            }
 
-            _state.Evolving = false;
+                _state.Evolving = false;
+            }
         }
 
         public void Stop()
