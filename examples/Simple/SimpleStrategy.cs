@@ -6,7 +6,7 @@ namespace Bunnypro.GeneticAlgorithm.Examples.Simple
 {
     public class SimpleStrategy : IEvolutionStrategy
     {
-        public void Prepare(IEnumerable<IChromosome> initialParents)
+        public void Prepare(IEnumerable<IChromosome> initialChromosomes)
         {
         }
 
