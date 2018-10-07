@@ -5,16 +5,16 @@ namespace Bunnypro.GeneticAlgorithm.Core.Terminations
 {
     public class FunctionTerminationCondition : ITerminationCondition
     {
-        private readonly Func<IEvolutionState, bool> _fulfilled;
+        private readonly Func<IEvolutionState, bool> _function;
 
-        public FunctionTerminationCondition(Func<IEvolutionState, bool> fulfilled)
+        public FunctionTerminationCondition(Func<IEvolutionState, bool> function)
         {
-            _fulfilled = fulfilled;
+            _function = function;
         }
 
         public bool Fulfilled(IEvolutionState state)
         {
-            return _fulfilled(state);
+            return _function(state);
         }
     }
 }
