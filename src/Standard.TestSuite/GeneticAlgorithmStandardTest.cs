@@ -3,8 +3,14 @@ using Xunit;
 
 namespace Bunnypro.GeneticAlgorithm.Standard.TestSuite
 {
-    public partial class GeneticAlgorithmStandardTest
+    public abstract class GeneticAlgorithmStandardTest
     {
+        /// <summary>
+        /// This method returns a fresh instance implementation of IGeneticAlgorithm
+        /// </summary>
+        /// <returns></returns>
+        protected abstract IGeneticAlgorithm GeneticAlgorithm();
+        
         [Fact]
         public void Should_have_correct_initial_state()
         {

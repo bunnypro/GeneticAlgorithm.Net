@@ -2,8 +2,10 @@ using Xunit;
 
 namespace Bunnypro.GeneticAlgorithm.Standard.TestSuite
 {
-    public partial class PopulationStandardTest
+    public abstract class PopulationStandardTest
     {
+        protected abstract IPopulation Population();
+        
         [Fact]
         public void Should_have_default_null_chromosomes()
         {
