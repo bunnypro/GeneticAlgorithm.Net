@@ -22,7 +22,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
             return other.GetType() == GetType() && Equals((Chromosome) other);
         }
 
-        public override bool Equals(object obj)
+        public sealed override bool Equals(object obj)
         {
             return Equals((IChromosome) obj);
         }
