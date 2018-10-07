@@ -4,15 +4,21 @@ using Bunnypro.GeneticAlgorithm.Core.Exceptions;
 using Bunnypro.GeneticAlgorithm.Core.Terminations;
 using Bunnypro.GeneticAlgorithm.Examples.Simple;
 using Bunnypro.GeneticAlgorithm.Standard;
+using Bunnypro.GeneticAlgorithm.Standard.TestSuite;
 using Xunit;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Test
 {
-    public class GeneticAlgorithmTest
+    public class GeneticAlgorithmTest : GeneticAlgorithmStandardTest
     {
-        private static IGeneticAlgorithm CreateGeneticAlgorithm()
+        private static GeneticAlgorithm CreateGeneticAlgorithm()
         {
             return new GeneticAlgorithm(new SimplePopulation(), new SimpleStrategy());
+        }
+        
+        protected override IGeneticAlgorithm GeneticAlgorithm()
+        {
+            return CreateGeneticAlgorithm();
         }
 
         [Fact]
