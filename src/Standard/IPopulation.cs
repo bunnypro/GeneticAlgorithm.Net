@@ -8,7 +8,7 @@ namespace Bunnypro.GeneticAlgorithm.Standard
         ImmutableHashSet<IChromosome> Chromosomes { get; }
 
         void Initialize();
-        void StoreOffspring(int evolutionNumber, IEnumerable<IChromosome> offspring);
+        void StoreOffspring(IEnumerable<IChromosome> offspring);
         void Reset();
     }
 }
