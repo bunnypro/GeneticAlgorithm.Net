@@ -75,6 +75,8 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public void Stop()
         {
+            if (!_state.Evolving) return;
+            
             _evolutionCts?.Cancel();
         }
 
