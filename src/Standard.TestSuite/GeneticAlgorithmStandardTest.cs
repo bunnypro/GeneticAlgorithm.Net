@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Moq;
 using Xunit;
 
 namespace Bunnypro.GeneticAlgorithm.Standard.TestSuite
@@ -82,24 +83,12 @@ namespace Bunnypro.GeneticAlgorithm.Standard.TestSuite
 
             foreach (var evolutionNumberLimit in evolutionNumberLimits)
             {
+                var terminationMock = new Mock<ITerminationCondition>();
+                terminationMock.Setup(t => t.Fulfilled(It.IsAny<IEvolutionState>())).Returns((IEvolutionState state) => state.EvolutionNumber >= evolutionNumberLimit);
+                
                 var ga = GeneticAlgorithm();
-                await ga.Evolve(new EvolutionNumberLimitTerminationCondition(evolutionNumberLimit));
+                await ga.Evolve(terminationMock.Object);
                 Assert.True(ga.State.EvolutionNumber == evolutionNumberLimit);
-            }
-        }
-
-        private sealed class EvolutionNumberLimitTerminationCondition : ITerminationCondition
-        {
-            private readonly int _evolutionNumberLimit;
-
-            public EvolutionNumberLimitTerminationCondition(int evolutionNumberLimit)
-            {
-                _evolutionNumberLimit = evolutionNumberLimit;
-            }
-
-            public bool Fulfilled(IEvolutionState state)
-            {
-                return state.EvolutionNumber >= _evolutionNumberLimit;
             }
         }
     }
