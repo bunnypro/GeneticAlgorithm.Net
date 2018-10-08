@@ -8,10 +8,7 @@ namespace Bunnypro.GeneticAlgorithm.Standard
         IEvolutionState State { get; }
         IPopulation Population { get; }
 
-        Task Evolve();
         Task Evolve(Func<IEvolutionState, bool> terminationCondition);
         Task Evolve(ITerminationCondition terminationCondition);
-        void Stop();
-        void Reset();
     }
 }

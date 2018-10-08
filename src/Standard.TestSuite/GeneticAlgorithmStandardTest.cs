@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -11,51 +12,95 @@ namespace Bunnypro.GeneticAlgorithm.Standard.TestSuite
         /// </summary>
         /// <returns></returns>
         protected abstract IGeneticAlgorithm GeneticAlgorithm();
-        
+
         [Fact]
-        public void Should_have_correct_initial_state()
+        public async Task Should_have_correct_evolution_state_management()
         {
+            var timeLimit = 50;
             var ga = GeneticAlgorithm();
-            
+
             Assert.Equal(0, ga.State.EvolutionNumber);
             Assert.Equal(TimeSpan.Zero, ga.State.EvolutionTime);
             Assert.False(ga.State.Evolving);
-        }
 
-        [Fact]
-        public async Task Can_evolve_and_stop_and_also_have_correct_evolving_state()
-        {
-            var ga = GeneticAlgorithm();
+            var evolution = ga.Evolve(state => state.EvolutionTime > TimeSpan.FromMilliseconds(timeLimit));
+            while (!ga.State.Evolving)
+            {
+                timeLimit += 10;
+                await Task.Delay(10);
+            }
 
-            var evolving = ga.Evolve();
             Assert.True(ga.State.Evolving);
-            ga.Stop();
-            await evolving;
-            Assert.False(ga.State.Evolving);
-        }
-        
-        [Fact]
-        public async Task Should_have_correct_state_after_evolving()
-        {
-            var ga = GeneticAlgorithm();
-            
-            await ga.EvolveUntil(state => state.EvolutionNumber >= 1);
-            Assert.Equal(1, ga.State.EvolutionNumber);
+
+            while (ga.State.EvolutionNumber == 0)
+            {
+                await Task.Delay(1);
+            }
+
+            Assert.True(ga.State.EvolutionNumber > 0);
             Assert.True(ga.State.EvolutionTime > TimeSpan.Zero);
+
+            await evolution;
+
             Assert.False(ga.State.Evolving);
         }
-        
+
         [Fact]
-        public async Task Can_be_reset_and_have_correct_state_after_reset()
+        public async Task Should_have_population_chromosomes_after_evolving()
         {
+            const int evolutionNumberLimit = 1;
+
             var ga = GeneticAlgorithm();
-            
-            await ga.EvolveUntil(state => state.EvolutionNumber >= 1);
-            ga.Reset();
-            
-            Assert.Equal(0, ga.State.EvolutionNumber);
-            Assert.Equal(TimeSpan.Zero, ga.State.EvolutionTime);
-            Assert.False(ga.State.Evolving);
+            Assert.Null(ga.Population.Chromosomes);
+            var evolution = ga.Evolve(state => state.EvolutionNumber >= evolutionNumberLimit);
+            while (ga.State.EvolutionNumber == 0)
+            {
+                await Task.Delay(1);
+            }
+
+            Assert.NotNull(ga.Population.Chromosomes);
+
+            await evolution;
+
+            Assert.NotNull(ga.Population.Chromosomes);
+        }
+
+        [Fact]
+        public async Task Can_terminate_evolution_incorrect_condition()
+        {
+            var evolutionNumberLimits = new[]
+            {
+                1, 5, 10, 100, 1000
+            };
+
+            foreach (var evolutionNumberLimit in evolutionNumberLimits)
+            {
+                var ga = GeneticAlgorithm();
+                await ga.Evolve(state => state.EvolutionNumber == evolutionNumberLimit);
+                Assert.True(ga.State.EvolutionNumber == evolutionNumberLimit);
+            }
+
+            foreach (var evolutionNumberLimit in evolutionNumberLimits)
+            {
+                var ga = GeneticAlgorithm();
+                await ga.Evolve(new EvolutionNumberLimitTerminationCondition(evolutionNumberLimit));
+                Assert.True(ga.State.EvolutionNumber == evolutionNumberLimit);
+            }
+        }
+
+        private sealed class EvolutionNumberLimitTerminationCondition : ITerminationCondition
+        {
+            private readonly int _evolutionNumberLimit;
+
+            public EvolutionNumberLimitTerminationCondition(int evolutionNumberLimit)
+            {
+                _evolutionNumberLimit = evolutionNumberLimit;
+            }
+
+            public bool Fulfilled(IEvolutionState state)
+            {
+                return state.EvolutionNumber >= _evolutionNumberLimit;
+            }
         }
     }
 }
