@@ -67,7 +67,7 @@ namespace Bunnypro.GeneticAlgorithm.Standard.TestSuite
         }
 
         [Fact]
-        public async Task Can_terminate_evolution_incorrect_condition()
+        public async Task Can_terminate_evolution_in_correct_condition()
         {
             var evolutionNumberLimits = new[]
             {
