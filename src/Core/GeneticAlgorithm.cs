@@ -13,15 +13,15 @@ namespace Bunnypro.GeneticAlgorithm.Core
         private CancellationTokenSource _evolutionCts;
         private EvolutionState _state;
 
-        public GeneticAlgorithm(IPopulation population, IEvolutionStrategy evolutionStrategy)
+        public GeneticAlgorithm(IPopulation population, IEvolutionStrategy strategy)
         {
             Population = population;
-            EvolutionStrategy = evolutionStrategy;
+            Strategy = strategy;
             _state = new EvolutionState();
         }
 
         public IPopulation Population { get; }
-        public IEvolutionStrategy EvolutionStrategy { get; }
+        public IEvolutionStrategy Strategy { get; }
 
         public ITerminationCondition TerminationCondition { get; set; }
 
@@ -49,7 +49,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 {
                     _state.Reset();
                     Population.Initialize();
-                    EvolutionStrategy.Prepare(Population.Chromosomes);
+                    Strategy.Prepare(Population.Chromosomes);
                 } else if (TerminationCondition.Fulfilled(State)) return;
 
                 _state.Evolving = true;
@@ -62,7 +62,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
                     do
                     {
                         var startTime = DateTime.Now;
-                        var offspring = EvolutionStrategy.GenerateOffspring(Population.Chromosomes);
+                        var offspring = Strategy.GenerateOffspring(Population.Chromosomes);
                         _state.EvolutionTime += DateTime.Now - startTime;
                         _state.EvolutionNumber++;
                         
