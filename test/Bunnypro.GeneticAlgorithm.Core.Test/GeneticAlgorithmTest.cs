@@ -26,6 +26,10 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             var ga = CreateGeneticAlgorithm();
             var evolution = ga.Evolve();
+            while (!ga.State.Evolving)
+            {
+                await Task.Delay(10);
+            }
             Assert.True(ga.State.Evolving);
             Assert.Throws<EvolutionRunningException>(() => { ga.Reset(); });
             Assert.False(ga.TryReset());
