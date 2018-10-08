@@ -15,7 +15,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             return new GeneticAlgorithm(new SimplePopulation(), new SimpleStrategy());
         }
-        
+
         protected override IGeneticAlgorithm GeneticAlgorithm()
         {
             return CreateGeneticAlgorithm();
@@ -26,10 +26,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             var ga = CreateGeneticAlgorithm();
             var evolution = ga.Evolve();
-            while (!ga.State.Evolving)
-            {
-                await Task.Delay(10);
-            }
+            while (!ga.State.Evolving) await Task.Delay(10);
+
             Assert.True(ga.State.Evolving);
             Assert.Throws<EvolutionRunningException>(ga.Reset);
             Assert.False(ga.TryReset());
