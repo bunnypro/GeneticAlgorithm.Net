@@ -9,6 +9,5 @@ namespace Bunnypro.GeneticAlgorithm.Standard
 
         void Initialize();
         void StoreOffspring(IEnumerable<IChromosome> offspring);
-        void Reset();
     }
 }

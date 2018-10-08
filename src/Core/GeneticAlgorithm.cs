@@ -94,7 +94,6 @@ namespace Bunnypro.GeneticAlgorithm.Core
         {
             _evolutionCts = null;
             _state.Reset();
-            Population.Reset();
         }
 
         public bool TryReset()
