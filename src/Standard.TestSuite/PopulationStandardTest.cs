@@ -30,7 +30,6 @@ namespace Bunnypro.GeneticAlgorithm.Standard.TestSuite
             population.Initialize();
             dummy.Initialize();
 
-            var initialChromosomes = population.Chromosomes;
             population.StoreOffspring(dummy.Chromosomes);
             
             Assert.NotNull(population.Chromosomes);
