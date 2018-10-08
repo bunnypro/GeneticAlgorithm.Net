@@ -24,12 +24,6 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
             Chromosomes = FilterOffspring(offspring.Cast<T>());
         }
 
-        public virtual void Reset()
-        {
-            GenerationNumber = 0;
-            Chromosomes = null;
-        }
-
         protected abstract ImmutableHashSet<T> CreateInitialChromosomes();
 
         protected abstract ImmutableHashSet<T> FilterOffspring(IEnumerable<T> offspring);
