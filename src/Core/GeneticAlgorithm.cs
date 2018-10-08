@@ -20,12 +20,11 @@ namespace Bunnypro.GeneticAlgorithm.Core
             _state = new EvolutionState();
         }
 
+        public IEvolutionState State => _state;
         public IPopulation Population { get; }
         public IEvolutionStrategy Strategy { get; }
 
         public ITerminationCondition TerminationCondition { get; set; }
-
-        public IEvolutionState State => _state;
 
         public async Task Evolve()
         {
