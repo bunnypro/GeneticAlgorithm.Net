@@ -7,7 +7,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
 {
     public class Chromosome : IChromosome
     {
-        protected Chromosome(IEnumerable<object> genes)
+        public Chromosome(IEnumerable<object> genes)
         {
             Genes = genes.ToList();
         }
