@@ -67,7 +67,7 @@ namespace Bunnypro.GeneticAlgorithm.Standard.TestSuite
         }
 
         [Fact]
-        public async Task Can_terminate_evolution_in_correct_condition()
+        public async Task Can_terminate_evolution_with_evolution_number_limit()
         {
             var evolutionNumberLimits = new[]
             {
@@ -81,14 +81,46 @@ namespace Bunnypro.GeneticAlgorithm.Standard.TestSuite
                 Assert.True(ga.State.EvolutionNumber == evolutionNumberLimit);
             }
 
+            var limit = 0;
+            var terminationMock = new Mock<ITerminationCondition>();
+            terminationMock.Setup(t => t.Fulfilled(It.IsAny<IEvolutionState>())).Returns((IEvolutionState state) => state.EvolutionNumber >= limit);
+
             foreach (var evolutionNumberLimit in evolutionNumberLimits)
             {
-                var terminationMock = new Mock<ITerminationCondition>();
-                terminationMock.Setup(t => t.Fulfilled(It.IsAny<IEvolutionState>())).Returns((IEvolutionState state) => state.EvolutionNumber >= evolutionNumberLimit);
-                
+                limit = evolutionNumberLimit;
                 var ga = GeneticAlgorithm();
                 await ga.Evolve(terminationMock.Object);
                 Assert.True(ga.State.EvolutionNumber == evolutionNumberLimit);
+            }
+        }
+
+        [Fact]
+        public async Task Can_terminate_evolution_with_evolution_time_limit()
+        {
+            var evolutionNumberLimits = new[]
+            {
+                TimeSpan.FromMilliseconds(100),
+                TimeSpan.FromMilliseconds(500),
+                TimeSpan.FromSeconds(1)
+            };
+
+            foreach (var evolutionNumberLimit in evolutionNumberLimits)
+            {
+                var ga = GeneticAlgorithm();
+                await ga.Evolve(state => state.EvolutionTime >= evolutionNumberLimit);
+                Assert.True(ga.State.EvolutionTime >= evolutionNumberLimit);
+            }
+
+            var limit = TimeSpan.Zero;
+            var terminationMock = new Mock<ITerminationCondition>();
+            terminationMock.Setup(t => t.Fulfilled(It.IsAny<IEvolutionState>())).Returns((IEvolutionState state) => state.EvolutionTime >= limit);
+            
+            foreach (var evolutionNumberLimit in evolutionNumberLimits)
+            {
+                limit = evolutionNumberLimit;
+                var ga = GeneticAlgorithm();
+                await ga.Evolve(terminationMock.Object);
+                Assert.True(ga.State.EvolutionTime >= evolutionNumberLimit);
             }
         }
     }
