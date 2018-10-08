@@ -47,7 +47,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
                 if (State.EvolutionNumber == 0)
                 {
-                    Prepare();
+                    _state.Reset();
                     Population.Initialize();
                     EvolutionStrategy.Prepare(Population.Chromosomes);
                 }
@@ -87,12 +87,6 @@ namespace Bunnypro.GeneticAlgorithm.Core
         {
             if (_state.Evolving) throw new EvolutionRunningException();
 
-            Prepare();
-        }
-
-        private void Prepare()
-        {
-            _evolutionCts = null;
             _state.Reset();
         }
 
