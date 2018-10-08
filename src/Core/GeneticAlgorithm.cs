@@ -50,9 +50,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
                     _state.Reset();
                     Population.Initialize();
                     EvolutionStrategy.Prepare(Population.Chromosomes);
-                }
-
-                if (TerminationCondition.Fulfilled(State)) return;
+                } else if (TerminationCondition.Fulfilled(State)) return;
 
                 _state.Evolving = true;
             }
