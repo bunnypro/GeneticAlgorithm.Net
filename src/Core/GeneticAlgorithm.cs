@@ -10,8 +10,8 @@ namespace Bunnypro.GeneticAlgorithm.Core
     public class GeneticAlgorithm : IGeneticAlgorithm
     {
         private readonly object _evolutionPreparation = new object();
-        private CancellationTokenSource _evolutionCts;
         private EvolutionState _state;
+        private bool _evolutionCanceled;
 
         public GeneticAlgorithm(IPopulation population, IEvolutionStrategy strategy)
         {
@@ -43,6 +43,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
             {
                 if (_state.Evolving) throw new EvolutionRunningException();
 
+                _evolutionCanceled = false;
                 TerminationCondition = terminationCondition;
 
                 if (State.EvolutionNumber == 0)
@@ -50,35 +51,33 @@ namespace Bunnypro.GeneticAlgorithm.Core
                     _state.Reset();
                     Population.Initialize();
                     Strategy.Prepare(Population.Chromosomes);
-                } else if (TerminationCondition.Fulfilled(State)) return;
+                }
+                else if (TerminationCondition.Fulfilled(State)) return;
 
                 _state.Evolving = true;
             }
 
-            using (_evolutionCts = new CancellationTokenSource())
+            await Task.Run(() =>
             {
-                await Task.Factory.StartNew(() =>
+                do
                 {
-                    do
-                    {
-                        var startTime = DateTime.Now;
-                        var offspring = Strategy.GenerateOffspring(Population.Chromosomes);
-                        _state.EvolutionTime += DateTime.Now - startTime;
-                        _state.EvolutionNumber++;
-                        
-                        Population.StoreOffspring(offspring);
-                    } while (!(_evolutionCts.Token.IsCancellationRequested || TerminationCondition.Fulfilled(State)));
-                }, _evolutionCts.Token);
+                    var startTime = DateTime.Now;
+                    var offspring = Strategy.GenerateOffspring(Population.Chromosomes);
+                    _state.EvolutionTime += DateTime.Now - startTime;
+                    _state.EvolutionNumber++;
 
-                _state.Evolving = false;
-            }
+                    Population.StoreOffspring(offspring);
+                } while (!(_evolutionCanceled || TerminationCondition.Fulfilled(State)));
+            });
+
+            _state.Evolving = false;
         }
 
         public void Stop()
         {
             if (!_state.Evolving) return;
-            
-            _evolutionCts.Cancel();
+
+            _evolutionCanceled = true;
         }
 
         public void Reset()
