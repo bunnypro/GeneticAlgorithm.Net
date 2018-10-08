@@ -22,15 +22,6 @@ namespace Bunnypro.GeneticAlgorithm.Standard.TestSuite
         }
 
         [Fact]
-        public void Should_have_null_chromosomes_after_population_reset()
-        {
-            var population = Population();
-            population.Initialize();
-            population.Reset();
-            Assert.Null(population.Chromosomes);
-        }
-
-        [Fact]
         public void Can_store_offspring()
         {
             var population = Population();
