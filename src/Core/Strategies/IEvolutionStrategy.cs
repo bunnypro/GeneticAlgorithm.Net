@@ -1,6 +1,7 @@
 using System.Collections.Generic;
+using Bunnypro.GeneticAlgorithm.Standard;
 
-namespace Bunnypro.GeneticAlgorithm.Standard
+namespace Bunnypro.GeneticAlgorithm.Core.Strategies
 {
     public interface IEvolutionStrategy
     {

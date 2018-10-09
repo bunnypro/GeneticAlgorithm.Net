@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using Bunnypro.GeneticAlgorithm.Core.Populations;
+using Bunnypro.GeneticAlgorithm.Core.Strategies;
 using Bunnypro.GeneticAlgorithm.Standard;
 using Moq;
 using Moq.Protected;
