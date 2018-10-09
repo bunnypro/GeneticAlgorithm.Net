@@ -3,15 +3,15 @@ using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Terminations
 {
-    public class TimeLimitTerminationCondition : ITerminationCondition
+    public class EvolutionTimeLimitTerminationCondition : ITerminationCondition
     {
         private readonly TimeSpan _timeLimit;
 
-        public TimeLimitTerminationCondition(double milliseconds) : this(TimeSpan.FromMilliseconds(milliseconds))
+        public EvolutionTimeLimitTerminationCondition(double milliseconds) : this(TimeSpan.FromMilliseconds(milliseconds))
         {
         }
 
-        public TimeLimitTerminationCondition(TimeSpan timeLimit)
+        public EvolutionTimeLimitTerminationCondition(TimeSpan timeLimit)
         {
             _timeLimit = timeLimit;
         }

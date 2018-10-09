@@ -69,7 +69,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             const double timeLimit = 1000;
             var ga = CreateGeneticAlgorithm();
-            var evolving = ga.Evolve(new TimeLimitTerminationCondition(timeLimit));
+            var evolving = ga.Evolve(new EvolutionTimeLimitTerminationCondition(timeLimit));
             await Task.Delay(200);
             ga.Stop();
             await evolving;
@@ -83,7 +83,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         public async Task Should_continue_evolve_after_stopped_when_time_span_limit_not_exceed()
         {
             var ga = CreateGeneticAlgorithm();
-            var evolving = ga.Evolve(new TimeLimitTerminationCondition(new TimeSpan(0, 0, 1)));
+            var evolving = ga.Evolve(new EvolutionTimeLimitTerminationCondition(new TimeSpan(0, 0, 1)));
             await Task.Delay(100);
             ga.Stop();
             await evolving;
@@ -158,7 +158,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             const double timeLimit = 1000;
             var ga = CreateGeneticAlgorithm();
-            await ga.Evolve(new TimeLimitTerminationCondition(timeLimit));
+            await ga.Evolve(new EvolutionTimeLimitTerminationCondition(timeLimit));
             Assert.True(ga.State.EvolutionNumber > 0);
             var gn = ga.State.EvolutionNumber;
             await ga.Evolve();
@@ -169,7 +169,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         public async Task Should_not_evolve_after_time_span_limit_expected()
         {
             var ga = CreateGeneticAlgorithm();
-            await ga.Evolve(new TimeLimitTerminationCondition(new TimeSpan(0, 0, 1)));
+            await ga.Evolve(new EvolutionTimeLimitTerminationCondition(new TimeSpan(0, 0, 1)));
             Assert.True(ga.State.EvolutionNumber > 0);
             var gn = ga.State.EvolutionNumber;
             await ga.Evolve();
