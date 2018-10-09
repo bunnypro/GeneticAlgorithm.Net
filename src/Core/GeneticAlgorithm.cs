@@ -10,13 +10,15 @@ namespace Bunnypro.GeneticAlgorithm.Core
     {
         private readonly object _evolutionPreparation = new object();
         private bool _evolutionCanceled;
-        private EvolutionState _state;
+        
         private IPopulation _population;
+        private IEvolutionStrategy _strategy;
+        private EvolutionState _state;
 
         public GeneticAlgorithm(IPopulation population, IEvolutionStrategy strategy)
         {
             _population = population;
-            Strategy = strategy;
+            _strategy = strategy;
             _state = new EvolutionState();
         }
 
@@ -24,7 +26,6 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public IEvolutionState State => _state;
         public IReadOnlyPopulation Population => _population;
-        public IEvolutionStrategy Strategy { get; }
 
         public async Task Evolve(Func<IEvolutionState, bool> terminationCondition)
         {
@@ -44,7 +45,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 {
                     _state.Reset();
                     _population.Initialize();
-                    Strategy.Prepare(_population.Chromosomes);
+                    _strategy.Prepare(_population.Chromosomes);
                 }
                 else if (TerminationCondition.Fulfilled(State))
                 {
@@ -59,7 +60,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 do
                 {
                     var startTime = DateTime.Now;
-                    var offspring = Strategy.GenerateOffspring(_population.Chromosomes);
+                    var offspring = _strategy.GenerateOffspring(_population.Chromosomes);
                     _state.EvolutionTime += DateTime.Now - startTime;
                     _state.EvolutionNumber++;
 
