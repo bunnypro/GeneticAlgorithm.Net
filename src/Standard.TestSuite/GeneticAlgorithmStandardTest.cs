@@ -107,6 +107,7 @@ namespace Bunnypro.GeneticAlgorithm.Standard.TestSuite
 
             var ga = GeneticAlgorithm();
             Assert.Null(ga.Population.Chromosomes);
+            
             var evolution = ga.Evolve(state => state.EvolutionNumber >= evolutionNumberLimit);
             while (ga.State.EvolutionNumber == 0) await Task.Delay(1);
 

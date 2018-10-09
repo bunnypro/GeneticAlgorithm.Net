@@ -107,9 +107,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
         private struct EvolutionState : IEvolutionState
         {
             public int EvolutionNumber { get; set; }
-
             public TimeSpan EvolutionTime { get; set; }
-
             public bool Evolving { get; set; }
 
             public void Reset()
