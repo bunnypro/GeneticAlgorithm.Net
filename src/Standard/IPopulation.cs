@@ -3,10 +3,8 @@ using System.Collections.Immutable;
 
 namespace Bunnypro.GeneticAlgorithm.Standard
 {
-    public interface IPopulation
+    public interface IPopulation : IReadOnlyPopulation
     {
-        ImmutableHashSet<IChromosome> Chromosomes { get; }
-
         void Initialize();
         void StoreOffspring(IEnumerable<IChromosome> offspring);
     }
