@@ -11,10 +11,11 @@ namespace Bunnypro.GeneticAlgorithm.Core
         private readonly object _evolutionPreparation = new object();
         private bool _evolutionCanceled;
         private EvolutionState _state;
+        private IPopulation _population;
 
         public GeneticAlgorithm(IPopulation population, IEvolutionStrategy strategy)
         {
-            Population = population;
+            _population = population;
             Strategy = strategy;
             _state = new EvolutionState();
         }
@@ -22,7 +23,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
         public ITerminationCondition TerminationCondition { get; set; }
 
         public IEvolutionState State => _state;
-        public IPopulation Population { get; }
+        public IReadOnlyPopulation Population => _population;
         public IEvolutionStrategy Strategy { get; }
 
         public async Task Evolve(Func<IEvolutionState, bool> terminationCondition)
@@ -42,8 +43,8 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 if (State.EvolutionNumber == 0)
                 {
                     _state.Reset();
-                    Population.Initialize();
-                    Strategy.Prepare(Population.Chromosomes);
+                    _population.Initialize();
+                    Strategy.Prepare(_population.Chromosomes);
                 }
                 else if (TerminationCondition.Fulfilled(State))
                 {
@@ -58,11 +59,11 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 do
                 {
                     var startTime = DateTime.Now;
-                    var offspring = Strategy.GenerateOffspring(Population.Chromosomes);
+                    var offspring = Strategy.GenerateOffspring(_population.Chromosomes);
                     _state.EvolutionTime += DateTime.Now - startTime;
                     _state.EvolutionNumber++;
 
-                    Population.StoreOffspring(offspring);
+                    _population.StoreOffspring(offspring);
                 } while (!(_evolutionCanceled || TerminationCondition.Fulfilled(State)));
             });
 
