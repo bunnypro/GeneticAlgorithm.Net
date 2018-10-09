@@ -1,5 +1,6 @@
+using System;
+using Bunnypro.GeneticAlgorithm.Core.Chromosomes;
 using Bunnypro.GeneticAlgorithm.Core.Populations;
-using Bunnypro.GeneticAlgorithm.Examples.Simple;
 using Bunnypro.GeneticAlgorithm.Standard;
 using Bunnypro.GeneticAlgorithm.Standard.TestSuite;
 using Xunit;
@@ -11,9 +12,11 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         private const int MinSize = 10;
         private const int MaxSize = 10;
         
-        private static IPopulation CreatePopulation(int min, int max)
+        private static ElasticSizePopulation<Chromosome> CreatePopulation(int min, int max)
         {
-            return new ElasticSizePopulation<SimpleChromosome>(min, max, new SimpleChromosomeFactory());
+            return new ElasticSizePopulation<Chromosome>(
+                min, max, MockObject.ChromosomeFactory(() => new Chromosome(new object[] {new Random().Next(0, 100)}))
+            );
         }
 
         protected override IPopulation Population()

@@ -1,5 +1,6 @@
+using System;
+using Bunnypro.GeneticAlgorithm.Core.Chromosomes;
 using Bunnypro.GeneticAlgorithm.Core.Populations;
-using Bunnypro.GeneticAlgorithm.Examples.Simple;
 using Bunnypro.GeneticAlgorithm.Standard;
 using Bunnypro.GeneticAlgorithm.Standard.TestSuite;
 using Xunit;
@@ -9,10 +10,12 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
     public class FixedSizePopulationTest : PopulationStandardTest
     {
         private const int DefaultSize = 20;
-        
-        private static IPopulation CreatePopulation(int size)
+
+        private static FixedSizePopulation<Chromosome> CreatePopulation(int size)
         {
-            return new FixedSizePopulation<SimpleChromosome>(size, new SimpleChromosomeFactory());
+            return new FixedSizePopulation<Chromosome>(
+                size, MockObject.ChromosomeFactory(() => new Chromosome(new object[] {new Random().Next(0, 100)}))
+            );
         }
 
         protected override IPopulation Population()
