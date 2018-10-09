@@ -25,16 +25,16 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
 
         public static Population<T> Population<T>(HashSet<T> chromosomes) where T : IChromosome
         {
-            var population = new Mock<Population<T>>{ CallBase = true };
+            var population = new Mock<Population<T>> {CallBase = true};
             population.Protected().Setup<ImmutableHashSet<T>>("CreateInitialChromosomes").Returns(chromosomes.ToImmutableHashSet());
-            
+
             population.Protected()
                 .Setup<ImmutableHashSet<T>>("FilterOffspring", chromosomes)
                 .Returns((IEnumerable<T> offspring) => offspring.ToImmutableHashSet());
-            
+
             return population.Object;
         }
-        
+
         public static IEvolutionStrategy EvolutionStrategy()
         {
             var evolutionStrategy = new Mock<IEvolutionStrategy>();

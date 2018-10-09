@@ -11,7 +11,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
     {
         private const int MinSize = 10;
         private const int MaxSize = 10;
-        
+
         private static ElasticSizePopulation<Chromosome> CreatePopulation(int min, int max)
         {
             return new ElasticSizePopulation<Chromosome>(

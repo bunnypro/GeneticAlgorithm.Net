@@ -30,24 +30,14 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
         {
             var uniqueOffspring = new HashSet<T>(offspring.ToArray());
 
-            if (uniqueOffspring.Count >= MinSize)
-            {
-                return uniqueOffspring.Take(new Random().Next(MinSize, Math.Min(MaxSize, uniqueOffspring.Count))).ToImmutableHashSet();
-            }
+            if (uniqueOffspring.Count >= MinSize) return uniqueOffspring.Take(new Random().Next(MinSize, Math.Min(MaxSize, uniqueOffspring.Count))).ToImmutableHashSet();
 
             foreach (var parent in Chromosomes)
-            {
                 if (uniqueOffspring.Add(parent) && uniqueOffspring.Count == MinSize)
-                {
                     break;
-                }
-            }
-            
-            if (uniqueOffspring.Count == MinSize)
-            {
-                return uniqueOffspring.ToImmutableHashSet();
-            }
-            
+
+            if (uniqueOffspring.Count == MinSize) return uniqueOffspring.ToImmutableHashSet();
+
             throw new Exception($"Population Size is not Reached. Expected Size: {MinSize}, Actual Size: {uniqueOffspring.Count}");
         }
     }

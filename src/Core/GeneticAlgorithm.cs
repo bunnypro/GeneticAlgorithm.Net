@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Bunnypro.GeneticAlgorithm.Core.Exceptions;
 using Bunnypro.GeneticAlgorithm.Core.Terminations;
@@ -10,8 +9,8 @@ namespace Bunnypro.GeneticAlgorithm.Core
     public class GeneticAlgorithm : IGeneticAlgorithm
     {
         private readonly object _evolutionPreparation = new object();
-        private EvolutionState _state;
         private bool _evolutionCanceled;
+        private EvolutionState _state;
 
         public GeneticAlgorithm(IPopulation population, IEvolutionStrategy strategy)
         {
@@ -20,16 +19,11 @@ namespace Bunnypro.GeneticAlgorithm.Core
             _state = new EvolutionState();
         }
 
+        public ITerminationCondition TerminationCondition { get; set; }
+
         public IEvolutionState State => _state;
         public IPopulation Population { get; }
         public IEvolutionStrategy Strategy { get; }
-
-        public ITerminationCondition TerminationCondition { get; set; }
-
-        public async Task Evolve()
-        {
-            await Evolve(TerminationCondition ?? new FunctionTerminationCondition(state => false));
-        }
 
         public async Task Evolve(Func<IEvolutionState, bool> terminationCondition)
         {
@@ -51,7 +45,10 @@ namespace Bunnypro.GeneticAlgorithm.Core
                     Population.Initialize();
                     Strategy.Prepare(Population.Chromosomes);
                 }
-                else if (TerminationCondition.Fulfilled(State)) return;
+                else if (TerminationCondition.Fulfilled(State))
+                {
+                    return;
+                }
 
                 _state.Evolving = true;
             }
@@ -70,6 +67,11 @@ namespace Bunnypro.GeneticAlgorithm.Core
             });
 
             _state.Evolving = false;
+        }
+
+        public async Task Evolve()
+        {
+            await Evolve(TerminationCondition ?? new FunctionTerminationCondition(state => false));
         }
 
         public void Stop()

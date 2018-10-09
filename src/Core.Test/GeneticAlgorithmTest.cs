@@ -20,7 +20,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                 new Chromosome(new object[] {1}),
                 new Chromosome(new object[] {2})
             };
-            
+
             return new GeneticAlgorithm(MockObject.Population(chromosomes), MockObject.EvolutionStrategy());
         }
 

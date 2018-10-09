@@ -5,7 +5,21 @@ namespace Bunnypro.GeneticAlgorithm.Standard.TestSuite
     public abstract class PopulationStandardTest
     {
         protected abstract IPopulation Population();
-        
+
+        [Fact]
+        public void Can_store_offspring()
+        {
+            var population = Population();
+            var dummy = Population();
+
+            population.Initialize();
+            dummy.Initialize();
+
+            population.StoreOffspring(dummy.Chromosomes);
+
+            Assert.NotNull(population.Chromosomes);
+        }
+
         [Fact]
         public void Should_have_default_null_chromosomes()
         {
@@ -18,20 +32,6 @@ namespace Bunnypro.GeneticAlgorithm.Standard.TestSuite
         {
             var population = Population();
             population.Initialize();
-            Assert.NotNull(population.Chromosomes);
-        }
-
-        [Fact]
-        public void Can_store_offspring()
-        {
-            var population = Population();
-            var dummy = Population();
-            
-            population.Initialize();
-            dummy.Initialize();
-
-            population.StoreOffspring(dummy.Chromosomes);
-            
             Assert.NotNull(population.Chromosomes);
         }
     }
