@@ -1,19 +1,52 @@
 using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Threading.Tasks;
+using Bunnypro.GeneticAlgorithm.Core.Chromosomes;
 using Bunnypro.GeneticAlgorithm.Core.Exceptions;
+using Bunnypro.GeneticAlgorithm.Core.Populations;
 using Bunnypro.GeneticAlgorithm.Core.Terminations;
 using Bunnypro.GeneticAlgorithm.Examples.Simple;
 using Bunnypro.GeneticAlgorithm.Standard;
 using Bunnypro.GeneticAlgorithm.Standard.TestSuite;
+using Moq;
+using Moq.Protected;
 using Xunit;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Test
 {
     public class GeneticAlgorithmTest : GeneticAlgorithmStandardTest
     {
+        private static IEvolutionStrategy CreateEvolutionStrategy()
+        {
+            var evolutionStrategy = new Mock<IEvolutionStrategy>();
+            evolutionStrategy.Setup(e => e.Prepare(new IChromosome[] { new Chromosome(new object[] {0}) }));
+            evolutionStrategy.Setup(e => e.GenerateOffspring(It.IsAny<IEnumerable<IChromosome>>())).Returns((IEnumerable<IChromosome> parent) => parent);
+            return evolutionStrategy.Object;
+        }
+        
+        private static Population<Chromosome> CreatePopulation()
+        {
+            var chromosomes = new HashSet<Chromosome>
+            {
+                new Chromosome(new object[] {0}),
+                new Chromosome(new object[] {1}),
+                new Chromosome(new object[] {2})
+            };
+
+            var population = new Mock<Population<Chromosome>>{ CallBase = true };
+            population.Protected().Setup<ImmutableHashSet<Chromosome>>("CreateInitialChromosomes").Returns(chromosomes.ToImmutableHashSet());
+            
+            population.Protected()
+                .Setup<ImmutableHashSet<Chromosome>>("FilterOffspring", chromosomes)
+                .Returns((IEnumerable<Chromosome> offspring) => offspring.ToImmutableHashSet());
+            
+            return population.Object;
+        }
+
         private static GeneticAlgorithm CreateGeneticAlgorithm()
         {
-            return new GeneticAlgorithm(new SimplePopulation(), new SimpleStrategy());
+            return new GeneticAlgorithm(CreatePopulation(), CreateEvolutionStrategy());
         }
 
         protected override IGeneticAlgorithm GeneticAlgorithm()
