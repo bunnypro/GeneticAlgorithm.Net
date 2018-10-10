@@ -21,8 +21,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             const int size = 10;
             var population = CreatePopulation(size);
+            Assert.Equal(size, population.Size);
             population.Initialize();
-
             Assert.Equal(size, population.Chromosomes.Count);
         }
     }

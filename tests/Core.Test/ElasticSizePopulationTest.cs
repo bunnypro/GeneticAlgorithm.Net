@@ -31,10 +31,11 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             foreach (var range in ranges)
             {
                 var population = CreatePopulation(range.Min, range.Max);
+                Assert.Equal(range.Min, population.MinSize);
+                Assert.Equal(range.Max, population.MaxSize);
                 for (var i = 0; i < testLength; i++)
                 {
                     population.Initialize();
-
                     Assert.True(population.Chromosomes.Count >= range.Min && population.Chromosomes.Count <= range.Max);
                 }
             }
