@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Bunnypro.GeneticAlgorithm.Core.Exceptions;
+using Bunnypro.GeneticAlgorithm.Core.Populations;
 using Bunnypro.GeneticAlgorithm.Core.Strategies;
 using Bunnypro.GeneticAlgorithm.Core.Terminations;
 using Bunnypro.GeneticAlgorithm.Standard;
@@ -12,11 +13,11 @@ namespace Bunnypro.GeneticAlgorithm.Core
         private readonly object _evolutionPreparation = new object();
         private bool _evolutionCanceled;
         
-        private readonly IPopulation _population;
+        private readonly ICorePopulation _population;
         private readonly IEvolutionStrategy _strategy;
         private EvolutionState _state;
 
-        public GeneticAlgorithm(IPopulation population, IEvolutionStrategy strategy)
+        public GeneticAlgorithm(ICorePopulation population, IEvolutionStrategy strategy)
         {
             _population = population;
             _strategy = strategy;
@@ -26,7 +27,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
         public ITerminationCondition TerminationCondition { get; set; }
 
         public IEvolutionState State => _state;
-        public IReadOnlyPopulation Population => _population;
+        public IPopulation Population => _population;
 
         public async Task Evolve(Func<IEvolutionState, bool> terminationCondition)
         {

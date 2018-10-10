@@ -7,21 +7,13 @@ using Xunit;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Test
 {
-    public class ElasticSizePopulationTest : PopulationStandardTest
+    public class ElasticSizePopulationTest
     {
-        private const int MinSize = 10;
-        private const int MaxSize = 10;
-
         private static ElasticSizePopulation<Chromosome> CreatePopulation(int min, int max)
         {
             return new ElasticSizePopulation<Chromosome>(
                 min, max, MockObject.ChromosomeFactory(() => new Chromosome(new object[] {new Random().Next(0, 100)}))
             );
-        }
-
-        protected override IPopulation Population()
-        {
-            return CreatePopulation(MinSize, MaxSize);
         }
 
         [Fact]

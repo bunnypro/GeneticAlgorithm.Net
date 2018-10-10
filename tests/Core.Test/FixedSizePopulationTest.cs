@@ -7,20 +7,13 @@ using Xunit;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Test
 {
-    public class FixedSizePopulationTest : PopulationStandardTest
+    public class FixedSizePopulationTest
     {
-        private const int DefaultSize = 20;
-
         private static FixedSizePopulation<Chromosome> CreatePopulation(int size)
         {
             return new FixedSizePopulation<Chromosome>(
                 size, MockObject.ChromosomeFactory(() => new Chromosome(new object[] {new Random().Next(0, 100)}))
             );
-        }
-
-        protected override IPopulation Population()
-        {
-            return CreatePopulation(DefaultSize);
         }
 
         [Fact]
