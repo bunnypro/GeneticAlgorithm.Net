@@ -8,19 +8,19 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
 {
     public class FixedSizePopulation<T> : Population<T> where T : IChromosome
     {
+        private readonly IChromosomeFactory<T> _chromosomeFactory;
+        
         public FixedSizePopulation(int size, IChromosomeFactory<T> chromosomeFactory)
         {
             Size = size;
-            ChromosomeFactory = chromosomeFactory;
+            _chromosomeFactory = chromosomeFactory;
         }
 
         public int Size { get; }
 
-        protected IChromosomeFactory<T> ChromosomeFactory { get; }
-
         protected override ImmutableHashSet<T> CreateInitialChromosomes()
         {
-            return ChromosomeFactory.Create(Size).ToImmutableHashSet();
+            return _chromosomeFactory.Create(Size).ToImmutableHashSet();
         }
 
         protected override ImmutableHashSet<T> FilterOffspring(IEnumerable<T> offspring)
