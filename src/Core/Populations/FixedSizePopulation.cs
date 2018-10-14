@@ -6,11 +6,11 @@ using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Populations
 {
-    public class FixedSizePopulation<T> : Population<T> where T : IChromosome
+    public class FixedSizePopulation : Population
     {
-        private readonly IChromosomeFactory<T> _chromosomeFactory;
-        
-        public FixedSizePopulation(int size, IChromosomeFactory<T> chromosomeFactory)
+        private readonly IChromosomeFactory _chromosomeFactory;
+
+        public FixedSizePopulation(int size, IChromosomeFactory chromosomeFactory)
         {
             Size = size;
             _chromosomeFactory = chromosomeFactory;
@@ -18,14 +18,14 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
 
         public int Size { get; }
 
-        protected override ImmutableHashSet<T> CreateInitialChromosomes()
+        protected override ImmutableHashSet<IChromosome> CreateInitialChromosomes()
         {
             return _chromosomeFactory.Create(Size).ToImmutableHashSet();
         }
 
-        protected override ImmutableHashSet<T> FilterOffspring(IEnumerable<T> offspring)
+        protected override ImmutableHashSet<IChromosome> FilterOffspring(IEnumerable<IChromosome> offspring)
         {
-            var uniqueOffspring = new HashSet<T>(offspring.ToArray());
+            var uniqueOffspring = new HashSet<IChromosome>(offspring.ToArray());
 
             if (uniqueOffspring.Count >= Size) return uniqueOffspring.Take(Size).ToImmutableHashSet();
 

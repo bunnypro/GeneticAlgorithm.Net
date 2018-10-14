@@ -1,18 +1,18 @@
 using System;
 using Bunnypro.GeneticAlgorithm.Core.Chromosomes;
-using Bunnypro.GeneticAlgorithm.Core.Populations;
+using Bunnypro.GeneticAlgorithm.Core.Populations.Generic;
 using Bunnypro.GeneticAlgorithm.Standard;
 using Bunnypro.GeneticAlgorithm.Standard.TestSuite;
 using Xunit;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Test
 {
-    public class ElasticSizePopulationTest
+    public class GenericElasticSizePopulationTest
     {
         private static ElasticSizePopulation<Chromosome> CreatePopulation(int min, int max)
         {
             return new ElasticSizePopulation<Chromosome>(
-                min, max, MockObject.ChromosomeFactory(() => new Chromosome(new object[] {new Random().Next(0, 100)}))
+                min, max, MockObject.ChromosomeFactory(() => new Chromosome(new object[] { new Random().Next(0, 100) }))
             );
         }
 

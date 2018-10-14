@@ -6,11 +6,11 @@ using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Populations
 {
-    public class ElasticSizePopulation<T> : Population<T> where T : IChromosome
+    public class ElasticSizePopulation : Population
     {
-        private readonly IChromosomeFactory<T> _chromosomeFactory;
-        
-        public ElasticSizePopulation(int minSize, int maxSize, IChromosomeFactory<T> chromosomeFactory)
+        private readonly IChromosomeFactory _chromosomeFactory;
+
+        public ElasticSizePopulation(int minSize, int maxSize, IChromosomeFactory chromosomeFactory)
         {
             MinSize = minSize;
             MaxSize = maxSize;
@@ -21,14 +21,14 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
         public int MinSize { get; }
         public int MaxSize { get; }
 
-        protected override ImmutableHashSet<T> CreateInitialChromosomes()
+        protected override ImmutableHashSet<IChromosome> CreateInitialChromosomes()
         {
             return _chromosomeFactory.Create(new Random().Next(MinSize, MaxSize)).ToImmutableHashSet();
         }
 
-        protected override ImmutableHashSet<T> FilterOffspring(IEnumerable<T> offspring)
+        protected override ImmutableHashSet<IChromosome> FilterOffspring(IEnumerable<IChromosome> offspring)
         {
-            var uniqueOffspring = new HashSet<T>(offspring.ToArray());
+            var uniqueOffspring = new HashSet<IChromosome>(offspring.ToArray());
 
             if (uniqueOffspring.Count >= MinSize) return uniqueOffspring.Take(new Random().Next(MinSize, Math.Min(MaxSize, uniqueOffspring.Count))).ToImmutableHashSet();
 

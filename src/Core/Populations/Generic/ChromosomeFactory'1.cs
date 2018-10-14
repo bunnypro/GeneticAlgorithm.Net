@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Bunnypro.GeneticAlgorithm.Standard;
 
-namespace Bunnypro.GeneticAlgorithm.Core.Populations
+namespace Bunnypro.GeneticAlgorithm.Core.Populations.Generic
 {
     public abstract class ChromosomeFactory<T> : IChromosomeFactory<T> where T : IChromosome
     {
