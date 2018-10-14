@@ -38,7 +38,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
 
             if (uniqueOffspring.Count == MinSize) return uniqueOffspring.ToImmutableHashSet();
 
-            throw new Exception($"Population Size is not Reached. Expected Size: {MinSize}, Actual Size: {uniqueOffspring.Count}");
+            throw new Exception($"Population Size is not Reached. Expected Size: {MinSize}, Filtered Size: {uniqueOffspring.Count}.");
         }
     }
 }
