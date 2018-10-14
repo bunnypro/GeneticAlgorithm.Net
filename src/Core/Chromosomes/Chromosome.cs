@@ -15,16 +15,16 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
         public IReadOnlyCollection<object> Genes { get; }
         public IComparable Fitness { get; set; }
 
+        public sealed override bool Equals(object obj)
+        {
+            return Equals((IChromosome)obj);
+        }
+
         public bool Equals(IChromosome other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return other.GetType() == GetType() && Equals((Chromosome) other);
-        }
-
-        public sealed override bool Equals(object obj)
-        {
-            return Equals((IChromosome) obj);
+            return other.GetType() == GetType() && Equals((Chromosome)other);
         }
 
         protected virtual bool Equals(Chromosome other)
