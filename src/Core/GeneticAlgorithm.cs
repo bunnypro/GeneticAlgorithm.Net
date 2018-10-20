@@ -12,6 +12,8 @@ namespace Bunnypro.GeneticAlgorithm.Core
     {
         private readonly object _evolutionPreparation = new object();
         private bool _evolutionCanceled;
+
+        private ITerminationCondition _terminationCondition;
         
         private readonly IEvolvablePopulation _population;
         private readonly IEvolutionStrategy _strategy;
@@ -23,8 +25,6 @@ namespace Bunnypro.GeneticAlgorithm.Core
             _strategy = strategy;
             _state = new EvolutionState();
         }
-
-        public ITerminationCondition TerminationCondition { get; set; }
 
         public IEvolutionState State => _state;
         public IPopulation Population => _population;
@@ -41,7 +41,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 if (_state.Evolving) throw new EvolutionRunningException();
 
                 _evolutionCanceled = false;
-                TerminationCondition = terminationCondition;
+                _terminationCondition = terminationCondition;
 
                 if (State.EvolutionNumber == 0)
                 {
@@ -49,7 +49,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
                     _population.Initialize();
                     _strategy.Prepare(_population.Chromosomes);
                 }
-                else if (TerminationCondition.Fulfilled(State))
+                else if (_terminationCondition.Fulfilled(State))
                 {
                     return;
                 }
@@ -67,7 +67,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
                     _state.EvolutionNumber++;
 
                     _population.StoreOffspring(offspring);
-                } while (!(_evolutionCanceled || TerminationCondition.Fulfilled(State)));
+                } while (!(_evolutionCanceled || _terminationCondition.Fulfilled(State)));
             });
 
             _state.Evolving = false;
@@ -75,7 +75,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public async Task Evolve()
         {
-            await Evolve(TerminationCondition ?? new FunctionTerminationCondition(state => false));
+            await Evolve(_terminationCondition ?? new FunctionTerminationCondition(state => false));
         }
 
         public void Stop()
