@@ -3,7 +3,7 @@ using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Populations
 {
-    public interface ICorePopulation : IPopulation
+    public interface IEvolvablePopulation : IPopulation
     {
         int GenerationNumber { get; }
 

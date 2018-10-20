@@ -13,11 +13,11 @@ namespace Bunnypro.GeneticAlgorithm.Core
         private readonly object _evolutionPreparation = new object();
         private bool _evolutionCanceled;
         
-        private readonly ICorePopulation _population;
+        private readonly IEvolvablePopulation _population;
         private readonly IEvolutionStrategy _strategy;
         private EvolutionState _state;
 
-        public GeneticAlgorithm(ICorePopulation population, IEvolutionStrategy strategy)
+        public GeneticAlgorithm(IEvolvablePopulation population, IEvolutionStrategy strategy)
         {
             _population = population;
             _strategy = strategy;

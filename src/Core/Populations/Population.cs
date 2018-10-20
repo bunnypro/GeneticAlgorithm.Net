@@ -4,7 +4,7 @@ using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Populations
 {
-    public abstract class Population : ICorePopulation
+    public abstract class Population : IEvolvablePopulation
     {
         public int GenerationNumber { get; private set; }
         public ImmutableHashSet<IChromosome> Chromosomes { get; private set; }
