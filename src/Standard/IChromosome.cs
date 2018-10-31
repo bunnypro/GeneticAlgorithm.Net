@@ -1,11 +1,11 @@
 using System;
-using System.Collections.Generic;
+using System.Collections.Immutable;
 
 namespace Bunnypro.GeneticAlgorithm.Standard
 {
     public interface IChromosome : IEquatable<IChromosome>
     {
-        IReadOnlyCollection<object> Genes { get; }
+        ImmutableList<object> Genes { get; }
         IComparable Fitness { get; }
     }
 }

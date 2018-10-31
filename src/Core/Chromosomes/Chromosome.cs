@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using Bunnypro.GeneticAlgorithm.Standard;
 
@@ -10,10 +11,10 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
     {
         public Chromosome(IEnumerable<object> genes)
         {
-            Genes = genes.ToList();
+            Genes = genes.ToImmutableList();
         }
 
-        public IReadOnlyCollection<object> Genes { get; }
+        public ImmutableList<object> Genes { get; }
         public IComparable Fitness { get; set; }
 
         public sealed override bool Equals(object obj)
