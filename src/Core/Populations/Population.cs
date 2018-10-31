@@ -7,12 +7,13 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
     public abstract class Population : IEvolvablePopulation
     {
         public int GenerationNumber { get; private set; }
+        public ImmutableHashSet<IChromosome> InitialChromosomes { get; private set; }
         public ImmutableHashSet<IChromosome> Chromosomes { get; private set; }
 
         public void Initialize()
         {
             GenerationNumber = 0;
-            Chromosomes = CreateInitialChromosomes();
+            Chromosomes = InitialChromosomes = CreateInitialChromosomes();
         }
 
         public void StoreOffspring(IEnumerable<IChromosome> offspring)
