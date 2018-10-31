@@ -10,7 +10,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
 {
     public class GeneticAlgorithm : IGeneticAlgorithm
     {
-        private readonly object _evolutionPreparation = new object();
+        private readonly object _evolution = new object();
         private bool _evolutionCanceled;
 
         private ITerminationCondition _terminationCondition;
@@ -36,7 +36,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public async Task Evolve(ITerminationCondition terminationCondition)
         {
-            lock (_evolutionPreparation)
+            lock (_evolution)
             {
                 if (_state.Evolving) throw new EvolutionRunningException();
 
