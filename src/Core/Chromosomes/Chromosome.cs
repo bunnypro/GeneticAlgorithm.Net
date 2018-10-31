@@ -1,11 +1,12 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
 {
-    public class Chromosome : IChromosome
+    public class Chromosome : IAssignableFitnessChromosome, IEnumerable<object>
     {
         public Chromosome(IEnumerable<object> genes)
         {
@@ -17,7 +18,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
 
         public sealed override bool Equals(object obj)
         {
-            return Equals((IChromosome)obj);
+            return Equals((IChromosome) obj);
         }
 
         public bool Equals(IChromosome other)
@@ -44,6 +45,16 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
                     }) :
                     0;
             }
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
+
+        public IEnumerator<object> GetEnumerator()
+        {
+            return Genes.GetEnumerator();
         }
     }
 }
