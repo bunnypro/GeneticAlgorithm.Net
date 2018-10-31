@@ -14,7 +14,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
         private bool _evolutionCanceled;
 
         private ITerminationCondition _terminationCondition;
-        
+
         private readonly IEvolvablePopulation _population;
         private readonly IEvolutionStrategy _strategy;
         private EvolutionState _state;
@@ -29,6 +29,11 @@ namespace Bunnypro.GeneticAlgorithm.Core
         public IEvolutionState State => _state;
         public IPopulation Population => _population;
 
+        public async Task Evolve()
+        {
+            await Evolve(_terminationCondition ?? new FunctionTerminationCondition(state => false));
+        }
+
         public async Task Evolve(Func<IEvolutionState, bool> terminationCondition)
         {
             await Evolve(new FunctionTerminationCondition(terminationCondition));
@@ -38,7 +43,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
         {
             lock (_evolution)
             {
-                if (_state.Evolving) throw new EvolutionRunningException();
+                if (_state.Evolving) throw new EvolutionLockedException();
 
                 _evolutionCanceled = false;
                 _terminationCondition = terminationCondition;
@@ -46,8 +51,13 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 if (State.EvolutionNumber == 0)
                 {
                     _state.Reset();
+
+                    // still confused about
+                    // 1. Which is responsible for population initialization
+                    // 2. Does evolution strategy really need after initialization hook
+                    // 3. Does evolution strategy really need initial chromosomes
                     _population.Initialize();
-                    _strategy.Prepare(_population.Chromosomes);
+                    _strategy.Prepare(_population.InitialChromosomes);
                 }
                 else if (_terminationCondition.Fulfilled(State))
                 {
@@ -59,37 +69,37 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
             await Task.Run(() =>
             {
-                do
+                lock (_population)
                 {
-                    var startTime = DateTime.Now;
-                    var offspring = _strategy.GenerateOffspring(_population.Chromosomes);
-                    _state.EvolutionTime += DateTime.Now - startTime;
-                    _state.EvolutionNumber++;
+                    do
+                    {
+                        var startTime = DateTime.Now;
+                        var offspring = _strategy.GenerateOffspring(_population.Chromosomes);
+                        _state.EvolutionTime += DateTime.Now - startTime;
+                        _state.EvolutionNumber++;
 
-                    _population.StoreOffspring(offspring);
-                } while (!(_evolutionCanceled || _terminationCondition.Fulfilled(State)));
+                        _population.StoreOffspring(offspring);
+                    } while (!(_evolutionCanceled || _terminationCondition.Fulfilled(State)));
+                }
             });
 
             _state.Evolving = false;
         }
 
-        public async Task Evolve()
-        {
-            await Evolve(_terminationCondition ?? new FunctionTerminationCondition(state => false));
-        }
-
         public void Stop()
         {
-            if (!_state.Evolving) return;
-
-            _evolutionCanceled = true;
+            lock (_evolution)
+                if (_state.Evolving)
+                    _evolutionCanceled = true;
         }
 
         public void Reset()
         {
-            if (_state.Evolving) throw new EvolutionRunningException();
-
-            _state.Reset();
+            lock (_evolution)
+            {
+                if (_state.Evolving) throw new EvolutionLockedException();
+                _state.Reset();
+            }
         }
 
         public bool TryReset()
@@ -98,7 +108,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
             {
                 Reset();
             }
-            catch (EvolutionRunningException)
+            catch (EvolutionLockedException)
             {
                 return false;
             }

@@ -2,7 +2,7 @@ using System;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Exceptions
 {
-    public class EvolutionRunningException : Exception
+    public class EvolutionLockedException : Exception
     {
     }
 }
