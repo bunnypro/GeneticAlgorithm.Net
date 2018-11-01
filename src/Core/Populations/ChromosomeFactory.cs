@@ -11,10 +11,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
         {
             var chromosomes = new HashSet<IChromosome>();
 
-            while (chromosomes.Count < count)
-            {
-                chromosomes.Add(Create());
-            }
+            while (chromosomes.Count < count) chromosomes.Add(Create());
 
             return chromosomes;
         }

@@ -11,13 +11,13 @@ namespace Bunnypro.GeneticAlgorithm.Core
     public class GeneticAlgorithm : IGeneticAlgorithm
     {
         private readonly object _evolution = new object();
-        private bool _evolutionCanceled;
-
-        private ITerminationCondition _terminationCondition;
 
         private readonly IEvolvablePopulation _population;
         private readonly IEvolutionStrategy _strategy;
+        private bool _evolutionCanceled;
         private EvolutionState _state;
+
+        private ITerminationCondition _terminationCondition;
 
         public GeneticAlgorithm(IEvolvablePopulation population, IEvolutionStrategy strategy)
         {
@@ -89,8 +89,10 @@ namespace Bunnypro.GeneticAlgorithm.Core
         public void Stop()
         {
             lock (_evolution)
+            {
                 if (_state.Evolving)
                     _evolutionCanceled = true;
+            }
         }
 
         public void Reset()
