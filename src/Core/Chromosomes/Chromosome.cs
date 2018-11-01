@@ -7,15 +7,21 @@ using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
 {
-    public class Chromosome : IAssignableFitnessChromosome, IEnumerable<object>
+    public class Chromosome : IEvaluableFitnessChromosome, IEnumerable<object>
     {
         public Chromosome(IEnumerable<object> genes)
         {
             Genes = genes.ToImmutableArray();
         }
 
-        public IComparable Fitness { get; set; }
         public ImmutableArray<object> Genes { get; }
+        public IComparable Fitness { get; private set; }
+
+        public virtual bool EvaluateFitness(IFitnessEvaluator evaluator)
+        {
+            Fitness = evaluator.Evaluate(this);
+            return !ReferenceEquals(null, Fitness);
+        }
 
         public sealed override bool Equals(object obj)
         {
@@ -26,7 +32,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return other.GetType() == GetType() && Equals((Chromosome)other);
+            return other.GetType() == GetType() && Equals((Chromosome) other);
         }
 
         protected virtual bool Equals(Chromosome other)
