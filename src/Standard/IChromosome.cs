@@ -5,7 +5,7 @@ namespace Bunnypro.GeneticAlgorithm.Standard
 {
     public interface IChromosome : IEquatable<IChromosome>
     {
-        ImmutableList<object> Genes { get; }
+        ImmutableArray<object> Genes { get; }
         IComparable Fitness { get; }
     }
 }

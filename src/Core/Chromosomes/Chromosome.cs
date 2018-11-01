@@ -11,11 +11,11 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
     {
         public Chromosome(IEnumerable<object> genes)
         {
-            Genes = genes.ToImmutableList();
+            Genes = genes.ToImmutableArray();
         }
 
-        public ImmutableList<object> Genes { get; }
         public IComparable Fitness { get; set; }
+        public ImmutableArray<object> Genes { get; }
 
         public sealed override bool Equals(object obj)
         {
@@ -38,7 +38,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
         {
             unchecked
             {
-                return Genes != null && Genes.Count > 0 ?
+                return Genes != null && Genes.Length > 0 ?
                     Genes.Aggregate(0, (hashCode, gene) =>
                     {
                         if (hashCode == 0) return gene.GetHashCode();
@@ -55,7 +55,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
 
         public IEnumerator<object> GetEnumerator()
         {
-            return Genes.GetEnumerator();
+            return ((IEnumerable<object>) Genes).GetEnumerator();
         }
     }
 }
