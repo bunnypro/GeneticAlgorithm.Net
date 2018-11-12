@@ -37,7 +37,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             while (!ga.State.Evolving) await Task.Delay(10);
 
             Assert.True(ga.State.Evolving);
-            Assert.Throws<EvolutionRunningException>(ga.Reset);
+            Assert.Throws<EvolutionLockedException>(ga.Reset);
             Assert.False(ga.TryReset());
             ga.Stop();
             await evolution;
@@ -206,7 +206,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             var ga = CreateGeneticAlgorithm();
             var evolution = ga.Evolve();
             Assert.True(ga.State.Evolving);
-            await Assert.ThrowsAsync<EvolutionRunningException>(async () => { await ga.Evolve(); });
+            await Assert.ThrowsAsync<EvolutionLockedException>(async () => { await ga.Evolve(); });
             ga.Stop();
             await evolution;
         }
