@@ -10,14 +10,14 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
 {
     public static class MockObject
     {
-        public static Population Population<T>(HashSet<T> chromosomes) where T : IChromosome
+        public static Population Population(HashSet<IChromosome> chromosomes)
         {
             var population = new Mock<Population> { CallBase = true };
-            population.Protected().Setup<ImmutableHashSet<T>>("CreateInitialChromosomes").Returns(chromosomes.ToImmutableHashSet());
+            population.Protected().Setup<ImmutableHashSet<IChromosome>>("CreateInitialChromosomes").Returns(chromosomes.ToImmutableHashSet());
 
             population.Protected()
-                .Setup<ImmutableHashSet<T>>("FilterOffspring", chromosomes)
-                .Returns((IEnumerable<T> offspring) => offspring.ToImmutableHashSet());
+                .Setup<ImmutableHashSet<IChromosome>>("FilterOffspring", chromosomes)
+                .Returns((IEnumerable<IChromosome> offspring) => offspring.ToImmutableHashSet());
 
             return population.Object;
         }

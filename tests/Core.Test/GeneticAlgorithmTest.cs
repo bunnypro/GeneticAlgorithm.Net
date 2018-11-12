@@ -14,7 +14,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
     {
         private static GeneticAlgorithm CreateGeneticAlgorithm()
         {
-            var chromosomes = new HashSet<Chromosome>
+            var chromosomes = new HashSet<IChromosome>
             {
                 new Chromosome(new object[] {0}),
                 new Chromosome(new object[] {1}),
