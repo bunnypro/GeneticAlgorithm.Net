@@ -26,7 +26,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             var evolutionStrategy = new Mock<IEvolutionStrategy>();
             evolutionStrategy.Setup(e => e.Prepare(It.IsAny<IEnumerable<IChromosome>>()));
-            evolutionStrategy.Setup(e => e.GenerateOffspring(It.IsAny<IEnumerable<IChromosome>>())).Returns((IEnumerable<IChromosome> parent) => parent);
+            evolutionStrategy.Setup(e => e.GenerateOffspring(It.IsAny<IEnumerable<IChromosome>>(), It.IsAny<int>())).Returns((IEnumerable<IChromosome> parent, int size) => parent);
             return evolutionStrategy.Object;
         }
     }
