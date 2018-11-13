@@ -21,9 +21,11 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
         public int MinSize { get; }
         public int MaxSize { get; }
 
+        public override int OffspringGenerationSize => new Random().Next(MinSize, MaxSize);
+
         protected override ImmutableHashSet<IChromosome> CreateInitialChromosomes()
         {
-            return _chromosomeFactory.Create(new Random().Next(MinSize, MaxSize)).ToImmutableHashSet();
+            return _chromosomeFactory.Create(OffspringGenerationSize).ToImmutableHashSet();
         }
 
         protected override ImmutableHashSet<IChromosome> FilterOffspring(IEnumerable<IChromosome> offspring)

@@ -10,6 +10,9 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
         public ImmutableHashSet<IChromosome> InitialChromosomes { get; private set; }
         public ImmutableHashSet<IChromosome> Chromosomes { get; private set; }
 
+        // default offspring generation size
+        public virtual int OffspringGenerationSize => Chromosomes.Count;
+
         public void Initialize()
         {
             GenerationNumber = 0;

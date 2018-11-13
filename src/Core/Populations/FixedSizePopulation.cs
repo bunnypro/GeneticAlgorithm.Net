@@ -12,30 +12,30 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
 
         public FixedSizePopulation(int size, IChromosomeFactory chromosomeFactory)
         {
-            Size = size;
+            OffspringGenerationSize = size;
             _chromosomeFactory = chromosomeFactory;
         }
 
-        public int Size { get; }
+        public override int OffspringGenerationSize { get; }
 
         protected override ImmutableHashSet<IChromosome> CreateInitialChromosomes()
         {
-            return _chromosomeFactory.Create(Size).ToImmutableHashSet();
+            return _chromosomeFactory.Create(OffspringGenerationSize).ToImmutableHashSet();
         }
 
         protected override ImmutableHashSet<IChromosome> FilterOffspring(IEnumerable<IChromosome> offspring)
         {
             var uniqueOffspring = new HashSet<IChromosome>(offspring.ToArray());
 
-            if (uniqueOffspring.Count >= Size) return uniqueOffspring.Take(Size).ToImmutableHashSet();
+            if (uniqueOffspring.Count >= OffspringGenerationSize) return uniqueOffspring.Take(OffspringGenerationSize).ToImmutableHashSet();
 
             foreach (var parent in Chromosomes)
-                if (uniqueOffspring.Add(parent) && uniqueOffspring.Count == Size)
+                if (uniqueOffspring.Add(parent) && uniqueOffspring.Count == OffspringGenerationSize)
                     break;
 
-            if (uniqueOffspring.Count == Size) return uniqueOffspring.ToImmutableHashSet();
+            if (uniqueOffspring.Count == OffspringGenerationSize) return uniqueOffspring.ToImmutableHashSet();
 
-            throw new Exception($"Population Size is not Reached. Expected Size: {Size}, Filtered Size: {uniqueOffspring.Count}.");
+            throw new Exception($"Population Size is not Reached. Expected Size: {OffspringGenerationSize}, Filtered Size: {uniqueOffspring.Count}.");
         }
     }
 }

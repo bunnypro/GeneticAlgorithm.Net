@@ -7,6 +7,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
     public interface IEvolvablePopulation : IPopulation
     {
         int GenerationNumber { get; }
+        int OffspringGenerationSize { get; }
         ImmutableHashSet<IChromosome> InitialChromosomes { get; }
 
         void Initialize();
