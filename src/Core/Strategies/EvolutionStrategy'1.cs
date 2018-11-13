@@ -11,12 +11,12 @@ namespace Bunnypro.GeneticAlgorithm.Core.Strategies
             Prepare(initialChromosomes.Cast<T>());
         }
 
-        public IEnumerable<IChromosome> GenerateOffspring(IEnumerable<IChromosome> parents)
+        public IEnumerable<IChromosome> GenerateOffspring(IEnumerable<IChromosome> parents, int count)
         {
-            return GenerateOffspring(parents.Cast<T>()).Cast<IChromosome>();
+            return GenerateOffspring(parents.Cast<T>(), count).Cast<IChromosome>();
         }
 
         protected abstract void Prepare(IEnumerable<T> initialChromosomes);
-        protected abstract IEnumerable<T> GenerateOffspring(IEnumerable<T> parents);
+        protected abstract IEnumerable<T> GenerateOffspring(IEnumerable<T> parents, int count);
     }
 }

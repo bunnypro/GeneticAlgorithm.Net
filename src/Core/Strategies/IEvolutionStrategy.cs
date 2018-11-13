@@ -6,6 +6,6 @@ namespace Bunnypro.GeneticAlgorithm.Core.Strategies
     public interface IEvolutionStrategy
     {
         void Prepare(IEnumerable<IChromosome> initialChromosomes);
-        IEnumerable<IChromosome> GenerateOffspring(IEnumerable<IChromosome> parents);
+        IEnumerable<IChromosome> GenerateOffspring(IEnumerable<IChromosome> parents, int count);
     }
 }
