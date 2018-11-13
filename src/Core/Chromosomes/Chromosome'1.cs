@@ -39,7 +39,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
 
         protected virtual bool Equals(Chromosome<T> other)
         {
-            return !Genes.Except(other.Genes).Any();
+            return Genes.Length != other.Genes.Length && !Genes.Where((t, i) => !t.Equals(other.Genes[i])).Any();
         }
 
         public override int GetHashCode()
