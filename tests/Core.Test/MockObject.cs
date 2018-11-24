@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
+using Bunnypro.GeneticAlgorithm.Core.GeneticOperators.EvolutionStrategies;
 using Bunnypro.GeneticAlgorithm.Core.Populations;
-using Bunnypro.GeneticAlgorithm.Core.Strategies;
 using Bunnypro.GeneticAlgorithm.Standard;
 using Moq;
 using Moq.Protected;
@@ -22,11 +22,11 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             return population.Object;
         }
 
-        public static IEvolutionStrategy EvolutionStrategy()
+        public static IEvolutionStrategyOperator EvolutionStrategy()
         {
-            var evolutionStrategy = new Mock<IEvolutionStrategy>();
+            var evolutionStrategy = new Mock<IEvolutionStrategyOperator>();
             evolutionStrategy.Setup(e => e.Prepare(It.IsAny<IEnumerable<IChromosome>>()));
-            evolutionStrategy.Setup(e => e.GenerateOffspring(It.IsAny<IEnumerable<IChromosome>>(), It.IsAny<int>())).Returns((IEnumerable<IChromosome> parent, int size) => parent);
+            evolutionStrategy.Setup(e => e.Operate(It.IsAny<IEnumerable<IChromosome>>(), It.IsAny<int>())).Returns((IEnumerable<IChromosome> parent, int size) => parent);
             return evolutionStrategy.Object;
         }
     }
