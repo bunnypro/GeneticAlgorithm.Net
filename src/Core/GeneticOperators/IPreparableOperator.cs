@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Bunnypro.GeneticAlgorithm.Standard;
 
-namespace Bunnypro.GeneticAlgorithm.Core.GeneticOperators.EvolutionStrategies
+namespace Bunnypro.GeneticAlgorithm.Core.GeneticOperators
 {
-    public interface IEvolutionStrategyOperator : IGeneticOperator
+    public interface IPreparableOperator : IGeneticOperator
     {
         void Prepare(IEnumerable<IChromosome> initialChromosomes);
     }

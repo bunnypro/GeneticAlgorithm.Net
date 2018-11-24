@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Bunnypro.GeneticAlgorithm.Core.Exceptions;
-using Bunnypro.GeneticAlgorithm.Core.GeneticOperators.EvolutionStrategies;
+using Bunnypro.GeneticAlgorithm.Core.GeneticOperators;
 using Bunnypro.GeneticAlgorithm.Core.Populations;
 using Bunnypro.GeneticAlgorithm.Core.Terminations;
 using Bunnypro.GeneticAlgorithm.Standard;
@@ -13,16 +13,16 @@ namespace Bunnypro.GeneticAlgorithm.Core
         private readonly object _evolution = new object();
 
         private readonly IEvolvablePopulation _population;
-        private readonly IEvolutionStrategyOperator _strategyOperator;
+        private readonly IPreparableOperator _geneticOperator;
         private bool _evolutionCanceled;
         private EvolutionState _state;
 
         private ITerminationCondition _terminationCondition;
 
-        public GeneticAlgorithm(IEvolvablePopulation population, IEvolutionStrategyOperator strategyOperator)
+        public GeneticAlgorithm(IEvolvablePopulation population, IPreparableOperator geneticOperator)
         {
             _population = population;
-            _strategyOperator = strategyOperator;
+            _geneticOperator = geneticOperator;
             _state = new EvolutionState();
         }
 
@@ -57,7 +57,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
                     // 2. Does evolution strategy operation really need after initialization hook
                     // 3. Does evolution strategy operation really need initial chromosomes
                     _population.Initialize();
-                    _strategyOperator.Prepare(_population.InitialChromosomes);
+                    _geneticOperator.Prepare(_population.InitialChromosomes);
                 }
                 else if (_terminationCondition.Fulfilled(State))
                 {
@@ -74,7 +74,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
                     do
                     {
                         var startTime = DateTime.Now;
-                        var offspring = _strategyOperator.Operate(_population.Chromosomes, _population.OffspringGenerationSize);
+                        var offspring = _geneticOperator.Operate(_population.Chromosomes, _population.OffspringGenerationSize);
                         _state.EvolutionTime += DateTime.Now - startTime;
                         _state.EvolutionNumber++;
 

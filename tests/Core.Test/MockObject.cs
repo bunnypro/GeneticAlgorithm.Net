@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Collections.Immutable;
-using Bunnypro.GeneticAlgorithm.Core.GeneticOperators.EvolutionStrategies;
+using Bunnypro.GeneticAlgorithm.Core.GeneticOperators;
 using Bunnypro.GeneticAlgorithm.Core.Populations;
 using Bunnypro.GeneticAlgorithm.Standard;
 using Moq;
@@ -22,9 +22,9 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             return population.Object;
         }
 
-        public static IEvolutionStrategyOperator EvolutionStrategy()
+        public static IPreparableOperator EvolutionStrategy()
         {
-            var evolutionStrategy = new Mock<IEvolutionStrategyOperator>();
+            var evolutionStrategy = new Mock<IPreparableOperator>();
             evolutionStrategy.Setup(e => e.Prepare(It.IsAny<IEnumerable<IChromosome>>()));
             evolutionStrategy.Setup(e => e.Operate(It.IsAny<IEnumerable<IChromosome>>(), It.IsAny<int>())).Returns((IEnumerable<IChromosome> parent, int size) => parent);
             return evolutionStrategy.Object;
