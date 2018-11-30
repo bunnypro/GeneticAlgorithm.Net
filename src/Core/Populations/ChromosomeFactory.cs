@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+using System.Collections.Immutable;
 using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Populations
@@ -7,13 +7,11 @@ namespace Bunnypro.GeneticAlgorithm.Core.Populations
     {
         public abstract IChromosome Create();
 
-        public HashSet<IChromosome> Create(int count)
+        public ImmutableHashSet<IChromosome> Create(int count)
         {
-            var chromosomes = new HashSet<IChromosome>();
-
+            var chromosomes = ImmutableHashSet.CreateBuilder<IChromosome>();
             while (chromosomes.Count < count) chromosomes.Add(Create());
-
-            return chromosomes;
+            return chromosomes.ToImmutable();
         }
     }
 }
