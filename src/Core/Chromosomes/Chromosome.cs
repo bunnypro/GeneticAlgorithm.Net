@@ -7,7 +7,7 @@ using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
 {
-    public class Chromosome : IEvaluableFitnessChromosome, IEnumerable<object>
+    public class Chromosome : IChromosome, IEvaluableFitnessChromosome, IEnumerable<object>
     {
         public Chromosome(IEnumerable<object> genes)
         {

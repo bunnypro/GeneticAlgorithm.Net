@@ -1,8 +1,6 @@
-using Bunnypro.GeneticAlgorithm.Standard;
-
 namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
 {
-    public interface IEvaluableFitnessChromosome : IChromosome
+    public interface IEvaluableFitnessChromosome
     {
         bool EvaluateFitness(IFitnessEvaluator evaluator);
     }
