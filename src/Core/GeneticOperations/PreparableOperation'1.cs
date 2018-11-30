@@ -2,9 +2,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Bunnypro.GeneticAlgorithm.Standard;
 
-namespace Bunnypro.GeneticAlgorithm.Core.GeneticOperators
+namespace Bunnypro.GeneticAlgorithm.Core.GeneticOperations
 {
-    public abstract class PreparableOperator<T> : GeneticOperator<T>, IPreparableOperator where T : IChromosome
+    public abstract class PreparableOperation<T> : GeneticOperation<T>, IPreparableOperation where T : IChromosome
     {
         public void Prepare(IEnumerable<IChromosome> initialChromosomes)
         {
