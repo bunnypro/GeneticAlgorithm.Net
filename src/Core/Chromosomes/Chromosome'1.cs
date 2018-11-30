@@ -7,7 +7,7 @@ using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
 {
-    public class Chromosome<T> : IChromosome, IEvaluableFitnessChromosome, IEnumerable<T>
+    public class Chromosome<T> : IChromosome, IEnumerable<T>
     {
         public Chromosome(IEnumerable<T> genes)
         {
@@ -17,13 +17,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
         public ImmutableArray<T> Genes { get; }
 
         ImmutableArray<object> IChromosome.Genes => Genes.Cast<object>().ToImmutableArray();
-        public IComparable Fitness { get; private set; }
-
-        public virtual bool EvaluateFitness(IFitnessEvaluator evaluator)
-        {
-            Fitness = evaluator.Evaluate(this);
-            return !ReferenceEquals(null, Fitness);
-        }
+        public IComparable Fitness { get; protected set; }
 
         public sealed override bool Equals(object obj)
         {
