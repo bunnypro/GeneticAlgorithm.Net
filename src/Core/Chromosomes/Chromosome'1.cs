@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
@@ -7,7 +6,7 @@ using Bunnypro.GeneticAlgorithm.Standard;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
 {
-    public class Chromosome<T> : IChromosome, IEnumerable<T>
+    public class Chromosome<T> : IChromosome
     {
         public Chromosome(IEnumerable<T> genes)
         {
@@ -48,16 +47,6 @@ namespace Bunnypro.GeneticAlgorithm.Core.Chromosomes
                     }) :
                     0;
             }
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        public IEnumerator<T> GetEnumerator()
-        {
-            return ((IEnumerable<T>) Genes).GetEnumerator();
         }
     }
 }
