@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
@@ -10,14 +10,15 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.8.0" />
+    <PackageReference Include="Moq" Version="4.10.1" />
     <PackageReference Include="xunit" Version="2.3.1" />
     <PackageReference Include="xunit.runner.visualstudio" Version="2.3.1" />
     <PackageReference Include="XunitXML.TestLogger" Version="2.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Standard.TestSuite\Bunnypro.GeneticAlgorithm.Standard.TestSuite.csproj" />
     <ProjectReference Include="..\..\src\Core\Bunnypro.GeneticAlgorithm.Core.csproj" />
+    <ProjectReference Include="..\..\src\Core.Extensions\Bunnypro.GeneticAlgorithm.Core.Extensions.csproj" />
   </ItemGroup>
 
 </Project>
