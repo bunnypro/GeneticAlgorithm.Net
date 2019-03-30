@@ -1,0 +1,130 @@
+using System;
+using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Threading;
+using System.Threading.Tasks;
+using Moq;
+using Xunit;
+
+namespace Bunnypro.GeneticAlgorithm.Core.Test
+{
+    public class GeneticAlgorithm_Test
+    {
+        // system clock accuracy error (approximately)
+        private const int SYSTEM_CLOCK_ACCURACY_ERROR = 15;
+
+        [Fact]
+        public async Task Can_EvolveOnce()
+        {
+            var population = CreatePopulation(10);
+            var genetic = new GeneticAlgorithm(CreateStrategy());
+            var evolutionCount = genetic.States.EvolutionCount;
+            var result = await genetic.EvolveOnce(population);
+            Assert.Equal(evolutionCount + 1, genetic.States.EvolutionCount);
+            Assert.Equal(1, result.EvolutionCount);
+        }
+
+        [Fact]
+        public async Task Can_Cancel_EvolveOnce()
+        {
+            using (var cts = new CancellationTokenSource())
+            {
+                var population = CreatePopulation(10);
+                var genetic = new GeneticAlgorithm(CreateStrategy(delay: 500));
+                var evolution = genetic.EvolveOnce(population, cts.Token);
+                cts.Cancel();
+                await Assert.ThrowsAnyAsync<OperationCanceledException>(() => evolution);
+            }
+        }
+
+        [Fact]
+        public async Task Can_EvolveOnce_Without_Interruption_By_Another_Evolution_Cancellation()
+        {
+            using (var cts = new CancellationTokenSource())
+            {
+                var population = CreatePopulation(10);
+                var genetic = new GeneticAlgorithm(CreateStrategy(delay: 500));
+                var evolution1 = genetic.EvolveOnce(population);
+                var evolution2 = genetic.EvolveOnce(population, cts.Token);
+                cts.Cancel();
+                await Assert.ThrowsAnyAsync<OperationCanceledException>(() => evolution2);
+                var result = await evolution1;
+                Assert.True(result.EvolutionCount > 0);
+                Assert.True(result.EvolutionTime > TimeSpan.Zero);
+            }
+        }
+
+        [Fact]
+        public async Task Can_Handle_Internal_Operation_States_When_Canceled()
+        {
+            using (var cts = new CancellationTokenSource())
+            {
+                const int delay = 100;
+                var population = CreatePopulation(10);
+                var genetic = new GeneticAlgorithm(CreateStrategy(delay: 500));
+                var time = genetic.States.EvolutionTime;
+                var evolution = genetic.EvolveOnce(population, cts.Token);
+                await Task.Delay(delay);
+                cts.Cancel();
+                await Assert.ThrowsAnyAsync<OperationCanceledException>(() => evolution);
+                Assert.True(genetic.States.EvolutionTime - time >= TimeSpan.FromMilliseconds(delay - SYSTEM_CLOCK_ACCURACY_ERROR));
+            }
+        }
+
+        [Fact]
+        public async Task Can_Return_Operation_Result_State()
+        {
+            const int delay = 500;
+            var population = CreatePopulation(10);
+            var genetic = new GeneticAlgorithm(CreateStrategy(delay));
+            var result = await genetic.EvolveOnce(population);
+            Assert.Equal(1, result.EvolutionCount);
+            Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - SYSTEM_CLOCK_ACCURACY_ERROR));
+            Assert.True(genetic.States.EvolutionCount >= result.EvolutionCount);
+            Assert.True(genetic.States.EvolutionTime >= result.EvolutionTime);
+        }
+
+        [Fact]
+        public async Task Can_Handle_Operation_Result_When_Canceled()
+        {
+            using (var cts = new CancellationTokenSource())
+            {
+                const int delay = 100;
+                var population = CreatePopulation(10);
+                var result = new GeneticOperationStates();
+                var genetic = new GeneticAlgorithm(CreateStrategy(delay: 500));
+                var evolution = genetic.TryEvolveOnce(population, result, cts.Token);
+                await Task.Delay(delay);
+                cts.Cancel();
+                Assert.False(await evolution);
+                Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - SYSTEM_CLOCK_ACCURACY_ERROR));
+            }
+        }
+
+        private static IPopulation CreatePopulation(int count)
+        {
+            var populationMock = new Mock<IPopulation>();
+            populationMock.Setup(p => p.Chromosomes).Returns(CreateChromosome(count).ToImmutableHashSet());
+            return populationMock.Object;
+        }
+
+        private static IGeneticOperation CreateStrategy(int delay = 1)
+        {
+            var strategyMock = new Mock<IGeneticOperation>();
+            strategyMock.Setup(o => o.Operate(It.IsAny<ImmutableHashSet<IChromosome>>(), It.IsAny<CancellationToken>()))
+                .Returns<ImmutableHashSet<IChromosome>, CancellationToken>(async (chromosomes, token) =>
+                {
+                    await Task.Delay(delay, token);
+                    return new HashSet<IChromosome>(chromosomes);
+                });
+            return strategyMock.Object;
+        }
+
+        private static HashSet<IChromosome> CreateChromosome(int count)
+        {
+            var chromosomes = new HashSet<IChromosome>();
+            while (chromosomes.Count < count) chromosomes.Add(new Mock<IChromosome>().Object);
+            return chromosomes;
+        }
+    }
+}
