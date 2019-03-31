@@ -45,9 +45,9 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             return populationMock.Object;
         }
 
-        private static IGeneticOperator CreateStrategy(int delay = 0)
+        private static IGeneticOperation CreateStrategy(int delay = 0)
         {
-            var strategyMock = new Mock<IGeneticOperator>();
+            var strategyMock = new Mock<IGeneticOperation>();
             strategyMock.Setup(o => o.Operate(It.IsAny<ImmutableHashSet<IChromosome>>(), new CancellationToken()))
                 .Returns<ImmutableHashSet<IChromosome>, CancellationToken>(async (chromosomes, token) =>
                 {

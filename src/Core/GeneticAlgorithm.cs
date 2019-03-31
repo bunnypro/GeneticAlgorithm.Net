@@ -7,10 +7,10 @@ namespace Bunnypro.GeneticAlgorithm.Core
     {
         private readonly GeneticAlgorithmStates _states;
         private readonly IPopulation _population;
-        private readonly IGeneticOperator _strategy;
+        private readonly IGeneticOperation _strategy;
         private readonly Mutex _evolution = new Mutex();
 
-        public GeneticAlgorithm(IPopulation population, IGeneticOperator strategy)
+        public GeneticAlgorithm(IPopulation population, IGeneticOperation strategy)
         {
             _states = new GeneticAlgorithmStates();
             _population = population;

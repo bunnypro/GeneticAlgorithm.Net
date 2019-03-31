@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Bunnypro.GeneticAlgorithm.Core
 {
-    public interface IGeneticOperator
+    public interface IGeneticOperation
     {
         Task<HashSet<IChromosome>> Operate(ImmutableHashSet<IChromosome> chromosomes, CancellationToken token = default);
     }
