@@ -1,6 +1,6 @@
 namespace Bunnypro.GeneticAlgorithm.Core
 {
-    public interface IGeneticAlgorithmState
+    public interface IGeneticAlgorithmStates
     {
         int EvolutionCount { get; }
     }

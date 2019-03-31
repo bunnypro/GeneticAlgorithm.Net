@@ -17,7 +17,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
             _strategy = strategy;
         }
 
-        public IGeneticAlgorithmState States => _states;
+        public IGeneticAlgorithmStates States => _states;
         public IReadOnlyPopulation Population => _population;
 
         public async Task EvolveOnce(CancellationToken token = default)
@@ -32,7 +32,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
             _evolution.ReleaseMutex();
         }
 
-        private class GeneticAlgorithmStates : IGeneticAlgorithmState
+        private class GeneticAlgorithmStates : IGeneticAlgorithmStates
         {
             public int EvolutionCount { get; set; }
         }
