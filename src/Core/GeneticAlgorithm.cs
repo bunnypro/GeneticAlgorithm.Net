@@ -6,14 +6,13 @@ namespace Bunnypro.GeneticAlgorithm.Core
 {
     public class GeneticAlgorithm
     {
-        private readonly GeneticAlgorithmStates _states;
+        private readonly GeneticAlgorithmStates _states = new GeneticAlgorithmStates();
         private readonly IPopulation _population;
         private readonly IGeneticOperation _strategy;
         private readonly SemaphoreSlim _evolutionLock = new SemaphoreSlim(1, 1);
 
         public GeneticAlgorithm(IPopulation population, IGeneticOperation strategy)
         {
-            _states = new GeneticAlgorithmStates();
             _population = population;
             _strategy = strategy;
         }
