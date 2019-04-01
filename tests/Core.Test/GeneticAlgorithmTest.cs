@@ -10,6 +10,9 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
 {
     public class GeneticAlgorithm
     {
+        // system clock accuracy error (approximately)
+        private const int SYSTEM_CLOCK_ACCURACY_ERROR = 15;
+
         [Fact]
         public async Task Can_EvolveOnce()
         {
@@ -24,7 +27,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             using (var cts = new CancellationTokenSource())
             {
-                var genetic = new Core.GeneticAlgorithm(CreatePopulation(10), CreateStrategy(delay: 1));
+                var genetic = new Core.GeneticAlgorithm(CreatePopulation(10), CreateStrategy(delay: 500));
                 Assert.False(genetic.States.IsCancelled);
                 await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
                 {
@@ -38,15 +41,16 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             using (var cts = new CancellationTokenSource())
             {
                 var genetic = new Core.GeneticAlgorithm(CreatePopulation(10), CreateStrategy(delay: 500));
+                var evolution1 = genetic.EvolveOnce();
                 await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
                 {
-                    var evolution1 = genetic.EvolveOnce();
                     var evolution2 = genetic.EvolveOnce(cts.Token);
-                    await Task.Delay(100);
                     cts.Cancel();
                     await evolution2;
-                    await evolution1;
                 });
+                var result = await evolution1;
+                Assert.True(result.EvolutionCount > 0);
+                Assert.True(result.EvolutionTime > TimeSpan.Zero);
             }
         }
 
@@ -54,12 +58,10 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         public async Task Can_Return_Evolution_Result_State()
         {
             const int delay = 500;
-            const int accuracyError = 15; // system clock accuracy error (approximately)
             var genetic = new Core.GeneticAlgorithm(CreatePopulation(10), CreateStrategy(delay));
             var result = await genetic.EvolveOnce();
             Assert.Equal(1, result.EvolutionCount);
-            Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - accuracyError));
-            Console.WriteLine(result.EvolutionTime);
+            Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - SYSTEM_CLOCK_ACCURACY_ERROR));
             Assert.True(genetic.States.EvolutionCount >= result.EvolutionCount);
             Assert.True(genetic.States.EvolutionTime >= result.EvolutionTime);
         }
