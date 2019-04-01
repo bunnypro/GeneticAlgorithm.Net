@@ -1,5 +1,7 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace Bunnypro.GeneticAlgorithm.Core
 {
@@ -8,7 +10,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
         private readonly GeneticAlgorithmStates _states;
         private readonly IPopulation _population;
         private readonly IGeneticOperation _strategy;
-        private readonly Mutex _evolution = new Mutex();
+        private readonly SemaphoreSlim _evolutionLock = new SemaphoreSlim(1, 1);
 
         public GeneticAlgorithm(IPopulation population, IGeneticOperation strategy)
         {
@@ -20,21 +22,58 @@ namespace Bunnypro.GeneticAlgorithm.Core
         public IGeneticAlgorithmStates States => _states;
         public IReadOnlyPopulation Population => _population;
 
-        public async Task EvolveOnce(CancellationToken token = default)
+        public async Task<IGeneticAlgorithmCountedStates> EvolveOnce(CancellationToken token = default)
         {
-            _evolution.WaitOne();
+            return await AttemptEvolve(async (GeneticAlgorithmCountedStates states) =>
             {
-                if (!_population.IsInitialized) _population.Initialize();
+                var startTime = DateTime.Now;
                 var offspring = await _strategy.Operate(_population.Chromosomes, token);
                 _population.RegisterOffspring(offspring);
-                _states.EvolutionCount++;
-            }
-            _evolution.ReleaseMutex();
+                states.EvolutionTime += DateTime.Now - startTime;
+                states.EvolutionCount++;
+            }, token);
         }
 
-        private class GeneticAlgorithmStates : IGeneticAlgorithmStates
+        private async Task<IGeneticAlgorithmCountedStates> AttemptEvolve(Func<GeneticAlgorithmCountedStates, Task> evolveAction, CancellationToken token)
+        {
+            try
+            {
+                await _evolutionLock.WaitAsync(token);
+                _states.IsCancelled = false;
+                if (!_population.IsInitialized) _population.Initialize();
+                var states = new GeneticAlgorithmCountedStates();
+                await evolveAction.Invoke(states);
+                _states.Merge(states);
+                token.ThrowIfCancellationRequested();
+                return states;
+            }
+            catch (OperationCanceledException)
+            {
+                _states.IsCancelled = true;
+                throw;
+            }
+            finally
+            {
+                _evolutionLock.Release();
+            }
+        }
+
+        private class GeneticAlgorithmStates : GeneticAlgorithmCountedStates, IGeneticAlgorithmStates
+        {
+            public bool IsCancelled { get; set; }
+        }
+
+        private class GeneticAlgorithmCountedStates : IGeneticAlgorithmCountedStates
         {
             public int EvolutionCount { get; set; }
+
+            public TimeSpan EvolutionTime { get; set; } = TimeSpan.Zero;
+
+            public void Merge(IGeneticAlgorithmCountedStates states)
+            {
+                EvolutionCount += states.EvolutionCount;
+                EvolutionTime += states.EvolutionTime;
+            }
         }
     }
 }
