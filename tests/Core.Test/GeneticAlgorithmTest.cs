@@ -28,14 +28,14 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             using (var cts = new CancellationTokenSource())
             {
                 var genetic = new Core.GeneticAlgorithm(CreatePopulation(10), CreateStrategy(delay: 500));
-                Assert.False(genetic.States.IsCancelled);
+                Assert.False(genetic.States.IsCanceled);
                 await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
                 {
                     var evolution = genetic.EvolveOnce(cts.Token);
                     cts.Cancel();
                     await evolution;
                 });
-                Assert.True(genetic.States.IsCancelled);
+                Assert.True(genetic.States.IsCanceled);
             }
 
             using (var cts = new CancellationTokenSource())
@@ -67,7 +67,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         }
 
         [Fact]
-        public async Task Can_Handle_EvolutionTime_When_Cancelled()
+        public async Task Can_Handle_EvolutionTime_When_Canceled()
         {
             using (var cts = new CancellationTokenSource())
             {
@@ -81,6 +81,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                     cts.Cancel();
                     await evolution;
                 });
+                Assert.True(genetic.States.IsCanceled);
                 Assert.True(genetic.States.EvolutionTime - time >= TimeSpan.FromMilliseconds(delay - SYSTEM_CLOCK_ACCURACY_ERROR));
             }
         }

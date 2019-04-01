@@ -52,13 +52,13 @@ namespace Bunnypro.GeneticAlgorithm.Core
             {
                 await _evolutionLock.WaitAsync(token);
                 lockAcquired = true;
-                _states.IsCancelled = false;
+                _states.IsCanceled = false;
                 if (!_population.IsInitialized) _population.Initialize();
                 await evolveAction.Invoke(states);
             }
             catch (OperationCanceledException)
             {
-                _states.IsCancelled = true;
+                _states.IsCanceled = true;
                 throw;
             }
             finally
@@ -71,7 +71,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         private class GeneticAlgorithmStates : GeneticAlgorithmCountedStates, IGeneticAlgorithmStates
         {
-            public bool IsCancelled { get; set; }
+            public bool IsCanceled { get; set; }
         }
 
         private class GeneticAlgorithmCountedStates : IGeneticAlgorithmCountedStates
