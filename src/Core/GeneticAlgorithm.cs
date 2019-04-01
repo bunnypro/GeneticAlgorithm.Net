@@ -30,10 +30,16 @@ namespace Bunnypro.GeneticAlgorithm.Core
         private async Task OperateStrategy(GeneticAlgorithmCountedStates states, CancellationToken token)
         {
             var startTime = DateTime.Now;
-            var offspring = await _strategy.Operate(_population.Chromosomes, token);
-            _population.RegisterOffspring(offspring);
-            states.EvolutionTime += DateTime.Now - startTime;
-            states.EvolutionCount++;
+            try
+            {
+                var offspring = await _strategy.Operate(_population.Chromosomes, token);
+                _population.RegisterOffspring(offspring);
+                states.EvolutionCount++;
+            }
+            finally
+            {
+                states.EvolutionTime += DateTime.Now - startTime;
+            }
         }
 
         private async Task<IGeneticAlgorithmCountedStates> AttemptEvolve(

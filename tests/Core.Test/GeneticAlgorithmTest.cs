@@ -66,6 +66,25 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             Assert.True(genetic.States.EvolutionTime >= result.EvolutionTime);
         }
 
+        [Fact]
+        public async Task Can_Handle_EvolutionTime_When_Cancelled()
+        {
+            using (var cts = new CancellationTokenSource())
+            {
+                const int delay = 100;
+                var genetic = new Core.GeneticAlgorithm(CreatePopulation(10), CreateStrategy(500));
+                var time = genetic.States.EvolutionTime;
+                await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
+                {
+                    var evolution = genetic.EvolveOnce(cts.Token);
+                    await Task.Delay(delay);
+                    cts.Cancel();
+                    await evolution;
+                });
+                Assert.True(genetic.States.EvolutionTime - time >= TimeSpan.FromMilliseconds(delay - SYSTEM_CLOCK_ACCURACY_ERROR));
+            }
+        }
+
         private static IPopulation CreatePopulation(int count)
         {
             var populationMock = new Mock<IPopulation>();
