@@ -24,14 +24,16 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public async Task<IGeneticAlgorithmCountedStates> EvolveOnce(CancellationToken token = default)
         {
-            return await AttemptEvolve(async (GeneticAlgorithmCountedStates states) =>
-            {
-                var startTime = DateTime.Now;
-                var offspring = await _strategy.Operate(_population.Chromosomes, token);
-                _population.RegisterOffspring(offspring);
-                states.EvolutionTime += DateTime.Now - startTime;
-                states.EvolutionCount++;
-            }, token);
+            return await AttemptEvolve(states => OperateStrategy(states, token), token);
+        }
+
+        private async Task OperateStrategy(GeneticAlgorithmCountedStates states, CancellationToken token)
+        {
+            var startTime = DateTime.Now;
+            var offspring = await _strategy.Operate(_population.Chromosomes, token);
+            _population.RegisterOffspring(offspring);
+            states.EvolutionTime += DateTime.Now - startTime;
+            states.EvolutionCount++;
         }
 
         private async Task<IGeneticAlgorithmCountedStates> AttemptEvolve(Func<GeneticAlgorithmCountedStates, Task> evolveAction, CancellationToken token)
@@ -66,7 +68,6 @@ namespace Bunnypro.GeneticAlgorithm.Core
         private class GeneticAlgorithmCountedStates : IGeneticAlgorithmCountedStates
         {
             public int EvolutionCount { get; set; }
-
             public TimeSpan EvolutionTime { get; set; } = TimeSpan.Zero;
 
             public void Merge(IGeneticAlgorithmCountedStates states)
