@@ -96,7 +96,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                 var genetic = new Core.GeneticAlgorithm(CreatePopulation(10), CreateStrategy());
                 await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
                 {
-                    var evolution = genetic.EvolveUntil(cts.Token);
+                    var evolution = genetic.Evolve(cts.Token);
                     await Task.Delay(cancellationDelay);
                     cts.Cancel();
                     var result = await evolution;

@@ -26,7 +26,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
             return await AttemptEvolve(states => OperateStrategy(states, token), token);
         }
 
-        public async Task<IGeneticAlgorithmCountedStates> EvolveUntil(CancellationToken token)
+        public async Task<IGeneticAlgorithmCountedStates> Evolve(CancellationToken token)
         {
             return await AttemptEvolve(async states =>
             {
