@@ -26,7 +26,23 @@ namespace Bunnypro.GeneticAlgorithm.Core
             return await AttemptEvolve(states => OperateStrategy(states, token), token);
         }
 
-        private async Task OperateStrategy(GeneticAlgorithmCountedStates states, CancellationToken token)
+        public async Task<IGeneticAlgorithmCountedStates> EvolveUntil(CancellationToken token)
+        {
+            return await AttemptEvolve(async states =>
+            {
+                while (true) await OperateStrategy(states, token);
+            }, token);
+        }
+
+        public async Task<IGeneticAlgorithmCountedStates> EvolveUntil(Func<IGeneticAlgorithmCountedStates, bool> termination)
+        {
+            return await AttemptEvolve(async states =>
+            {
+                while (!termination.Invoke(states)) await OperateStrategy(states);
+            });
+        }
+
+        private async Task OperateStrategy(GeneticAlgorithmCountedStates states, CancellationToken token = default)
         {
             var startTime = DateTime.Now;
             try
@@ -43,7 +59,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         private async Task<IGeneticAlgorithmCountedStates> AttemptEvolve(
             Func<GeneticAlgorithmCountedStates, Task> evolveAction,
-            CancellationToken token)
+            CancellationToken token = default)
         {
             var states = new GeneticAlgorithmCountedStates();
             var lockAcquired = false;

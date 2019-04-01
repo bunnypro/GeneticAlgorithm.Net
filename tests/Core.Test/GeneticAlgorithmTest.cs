@@ -86,6 +86,70 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             }
         }
 
+        [Fact]
+        public async Task Can_Evolve_Until_CancellationToken_Canceled()
+        {
+            const int cancellationDelay = 1000;
+            var cancellationDelayError = TimeSpan.FromMilliseconds(cancellationDelay - SYSTEM_CLOCK_ACCURACY_ERROR);
+            using (var cts = new CancellationTokenSource())
+            {
+                var genetic = new Core.GeneticAlgorithm(CreatePopulation(10), CreateStrategy());
+                await Assert.ThrowsAnyAsync<OperationCanceledException>(async () =>
+                {
+                    var evolution = genetic.EvolveUntil(cts.Token);
+                    await Task.Delay(cancellationDelay);
+                    cts.Cancel();
+                    var result = await evolution;
+                    Assert.True(genetic.States.IsCanceled);
+                    Assert.True(result.EvolutionCount > 0);
+                    Assert.True(result.EvolutionTime >= cancellationDelayError);
+                    Assert.True(genetic.States.EvolutionCount >= result.EvolutionCount);
+                    Assert.True(genetic.States.EvolutionTime >= result.EvolutionTime);
+                });
+            }
+        }
+
+        [Theory]
+        [MemberData(nameof(GetTerminationConditionData))]
+        public async Task Can_Evolve_Until_Termination_Condition_Fulfilled(
+            Func<IGeneticAlgorithmCountedStates, bool> termination,
+            Action<IGeneticAlgorithmStates, IGeneticAlgorithmCountedStates> assertion)
+        {
+            var genetic = new Core.GeneticAlgorithm(CreatePopulation(10), CreateStrategy());
+            var result = await genetic.EvolveUntil(termination);
+            assertion.Invoke(genetic.States, result);
+        }
+
+        public static IEnumerable<object[]> GetTerminationConditionData()
+        {
+            {
+                const int count = 10;
+                yield return new object[] {
+                    (Func<IGeneticAlgorithmCountedStates, bool>) (states => states.EvolutionCount >= count),
+                    (Action<IGeneticAlgorithmStates, IGeneticAlgorithmCountedStates>) (
+                        (states, result) => {
+                            Assert.True(result.EvolutionCount >= count);
+                            Assert.True(states.EvolutionCount >= result.EvolutionCount);
+                        }
+                    )
+                };
+            }
+            {
+                const int time = 1000;
+                var timeSpan = TimeSpan.FromMilliseconds(time);
+                var timeSpanError = TimeSpan.FromMilliseconds(time - SYSTEM_CLOCK_ACCURACY_ERROR);
+                yield return new object[] {
+                    (Func<IGeneticAlgorithmCountedStates, bool>) (states => states.EvolutionTime >= timeSpan),
+                    (Action<IGeneticAlgorithmStates, IGeneticAlgorithmCountedStates>) (
+                        (states, result) => {
+                            Assert.True(result.EvolutionTime >= timeSpanError);
+                            Assert.True(states.EvolutionTime >= result.EvolutionTime);
+                        }
+                    )
+                };
+            }
+        }
+
         private static IPopulation CreatePopulation(int count)
         {
             var populationMock = new Mock<IPopulation>();
@@ -96,7 +160,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             return populationMock.Object;
         }
 
-        private static IGeneticOperation CreateStrategy(int delay = 0)
+        private static IGeneticOperation CreateStrategy(int delay = 1)
         {
             var strategyMock = new Mock<IGeneticOperation>();
             strategyMock.Setup(o => o.Operate(It.IsAny<ImmutableHashSet<IChromosome>>(), It.IsAny<CancellationToken>()))
