@@ -36,16 +36,17 @@ namespace Bunnypro.GeneticAlgorithm.Core
             states.EvolutionCount++;
         }
 
-        private async Task<IGeneticAlgorithmCountedStates> AttemptEvolve(Func<GeneticAlgorithmCountedStates, Task> evolveAction, CancellationToken token)
+        private async Task<IGeneticAlgorithmCountedStates> AttemptEvolve(
+            Func<GeneticAlgorithmCountedStates, Task> evolveAction,
+            CancellationToken token)
         {
+            var states = new GeneticAlgorithmCountedStates();
             try
             {
                 await _evolutionLock.WaitAsync(token);
                 _states.IsCancelled = false;
                 if (!_population.IsInitialized) _population.Initialize();
-                var states = new GeneticAlgorithmCountedStates();
                 await evolveAction.Invoke(states);
-                _states.Merge(states);
                 token.ThrowIfCancellationRequested();
                 return states;
             }
@@ -56,6 +57,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
             }
             finally
             {
+                _states.Merge(states);
                 _evolutionLock.Release();
             }
         }
