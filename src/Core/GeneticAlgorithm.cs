@@ -60,8 +60,17 @@ namespace Bunnypro.GeneticAlgorithm.Core
             Func<IGeneticOperationStates, bool> termination)
         {
             var states = new GeneticOperationStates();
-            while (!termination.Invoke(states)) await OperateStrategy(population, states, new CancellationToken());
+            await EvolveUntil(population, states, termination, default);
             return states;
+        }
+
+        public async Task EvolveUntil(
+            IPopulation population,
+            GeneticOperationStates states,
+            Func<IGeneticOperationStates, bool> termination,
+            CancellationToken token)
+        {
+            while (!termination.Invoke(states)) await OperateStrategy(population, states, token);
         }
 
         private async Task OperateStrategy(

@@ -155,6 +155,37 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             assertion.Invoke(genetic.States, result);
         }
 
+        [Fact]
+        public async Task Can_Continuing_Evolve_Until_Canceled_Or_Termination_Callback_Fulfilled()
+        {
+            using (var cts = new CancellationTokenSource())
+            {
+                const int time = 500;
+                const int delay = 100;
+                bool Termination(IGeneticOperationStates states)
+                {
+                    return states.EvolutionTime >= TimeSpan.FromMilliseconds(time);
+                }
+                var genetic = new GeneticAlgorithm(CreateStrategy());
+                var population = CreatePopulation(10);
+                {
+                    var result = new GeneticOperationStates();
+                    var evolution = genetic.EvolveUntil(population, result, Termination, cts.Token);
+                    await Task.Delay(delay);
+                    cts.Cancel();
+                    await Assert.ThrowsAnyAsync<OperationCanceledException>(() => evolution);
+                    Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - SYSTEM_CLOCK_ACCURACY_ERROR));
+                    Assert.True(genetic.States.EvolutionTime >= result.EvolutionTime);
+                }
+                {
+                    var result = new GeneticOperationStates();
+                    await genetic.EvolveUntil(population, result, Termination, default);
+                    Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SYSTEM_CLOCK_ACCURACY_ERROR));
+                    Assert.True(genetic.States.EvolutionTime >= result.EvolutionTime);
+                }
+            }
+        }
+
         public static IEnumerable<object[]> GetTerminationCallbackData()
         {
             {
