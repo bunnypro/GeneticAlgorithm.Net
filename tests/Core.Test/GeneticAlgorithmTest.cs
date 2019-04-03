@@ -143,6 +143,48 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             }
         }
 
+        [Theory]
+        [MemberData(nameof(GetTerminationCallbackData))]
+        public async Task Can_Continuing_Evolve_Until_Termination_Callback_Fulfilled(
+            Func<IGeneticOperationStates, bool> termination,
+            Action<IGeneticOperationStates, IGeneticOperationStates> assertion)
+        {
+            var genetic = new GeneticAlgorithm(CreateStrategy());
+            var population = CreatePopulation(10);
+            var result = await genetic.EvolveUntil(population, termination);
+            assertion.Invoke(genetic.States, result);
+        }
+
+        public static IEnumerable<object[]> GetTerminationCallbackData()
+        {
+            {
+                const int count = 10;
+                yield return new object[]
+                {
+                    (Func<IGeneticOperationStates, bool>) (states => states.EvolutionCount >= count),
+                    (Action<IGeneticOperationStates, IGeneticOperationStates>) ((states, result) =>
+                    {
+                        Assert.Equal(count, result.EvolutionCount);
+                        Assert.True(states.EvolutionCount >= result.EvolutionCount);
+                    })
+                };
+            }
+
+            {
+                const int time = 100;
+                yield return new object[]
+                {
+                    (Func<IGeneticOperationStates, bool>) (states => states.EvolutionTime >= TimeSpan.FromMilliseconds(time)),
+                    (Action<IGeneticOperationStates, IGeneticOperationStates>) ((states, result) =>
+                    {
+                        Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SYSTEM_CLOCK_ACCURACY_ERROR));
+                        Assert.True(states.EvolutionTime >= result.EvolutionTime);
+                    })
+                };
+            }
+        }
+
+
         private static IPopulation CreatePopulation(int count)
         {
             var populationMock = new Mock<IPopulation>();
