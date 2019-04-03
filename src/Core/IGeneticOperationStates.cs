@@ -6,7 +6,5 @@ namespace Bunnypro.GeneticAlgorithm.Core
     {
         int EvolutionCount { get; }
         TimeSpan EvolutionTime { get; }
-
-        void Extend(IGeneticOperationStates states);
     }
 }

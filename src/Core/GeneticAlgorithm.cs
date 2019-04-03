@@ -27,7 +27,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public async Task<bool> TryEvolveOnce(
             IPopulation population,
-            IGeneticOperationStates states,
+            GeneticOperationStates states,
             CancellationToken token)
         {
             try
@@ -41,7 +41,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
             return true;
         }
 
-        public async Task Evolve(IPopulation population, IGeneticOperationStates states, CancellationToken token)
+        public async Task Evolve(IPopulation population, GeneticOperationStates states, CancellationToken token)
         {
             while(true) await OperateStrategy(population, states, token);
         }
@@ -57,7 +57,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         private async Task OperateStrategy(
             IPopulation population,
-            IGeneticOperationStates states,
+            GeneticOperationStates states,
             CancellationToken token)
         {
             var result = new GeneticOperationStates();
