@@ -20,9 +20,9 @@ namespace Bunnypro.GeneticAlgorithm.Core
             IPopulation population,
             CancellationToken token = default)
         {
-            var result = new GeneticOperationStates();
-            await OperateStrategy(population, result, token);
-            return result;
+            var states = new GeneticOperationStates();
+            await OperateStrategy(population, states, token);
+            return states;
         }
 
         public async Task<bool> TryEvolveOnce(
@@ -43,25 +43,25 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public async Task Evolve(IPopulation population, GeneticOperationStates states, CancellationToken token)
         {
-            while(true) await OperateStrategy(population, states, token);
+            while (true) await OperateStrategy(population, states, token);
         }
 
-        public async Task TryEvolve(IPopulation population, GeneticOperationStates result, CancellationToken token)
+        public async Task TryEvolve(IPopulation population, GeneticOperationStates states, CancellationToken token)
         {
             try
             {
-                await Evolve(population, result, token);
+                await Evolve(population, states, token);
             }
-            catch(OperationCanceledException) {}
+            catch (OperationCanceledException) { }
         }
 
         public async Task<IGeneticOperationStates> EvolveUntil(
             IPopulation population,
             Func<IGeneticOperationStates, bool> termination)
         {
-            var result = new GeneticOperationStates();
-            while(!termination.Invoke(result)) await OperateStrategy(population, result, new CancellationToken());
-            return result;
+            var states = new GeneticOperationStates();
+            while (!termination.Invoke(states)) await OperateStrategy(population, states, new CancellationToken());
+            return states;
         }
 
         private async Task OperateStrategy(
