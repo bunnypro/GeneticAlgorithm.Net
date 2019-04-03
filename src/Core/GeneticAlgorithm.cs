@@ -64,6 +64,19 @@ namespace Bunnypro.GeneticAlgorithm.Core
             return states;
         }
 
+        public async Task TryEvolveUntil(
+            IPopulation population,
+            GeneticOperationStates states,
+            Func<IGeneticOperationStates, bool> termination,
+            CancellationToken token)
+        {
+            try
+            {
+                await EvolveUntil(population, states, termination, token);
+            }
+            catch (OperationCanceledException) { }
+        }
+
         public async Task EvolveUntil(
             IPopulation population,
             GeneticOperationStates states,
