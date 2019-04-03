@@ -41,6 +41,11 @@ namespace Bunnypro.GeneticAlgorithm.Core
             return true;
         }
 
+        public async Task Evolve(IPopulation population, IGeneticOperationStates states, CancellationToken token)
+        {
+            while(true) await OperateStrategy(population, states, token);
+        }
+
         private async Task OperateStrategy(
             IPopulation population,
             IGeneticOperationStates states,
