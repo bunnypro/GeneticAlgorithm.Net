@@ -122,6 +122,27 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             }
         }
 
+        [Fact]
+        public async Task Can_Continuing_Evolve_Until_Canceled_Without_Throwing()
+        {
+            const int time = 500;
+            using (var cts = new CancellationTokenSource())
+            {
+                var genetic = new GeneticAlgorithm(CreateStrategy());
+                var population = CreatePopulation(10);
+                var states = GeneticOperationStates.From(genetic.States);
+                var result = new GeneticOperationStates();
+                var evolution = genetic.TryEvolve(population, result, cts.Token);
+                await Task.Delay(time);
+                cts.Cancel();
+                await evolution;
+                Assert.True(result.EvolutionCount > 0);
+                Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SYSTEM_CLOCK_ACCURACY_ERROR));
+                Assert.True(genetic.States.EvolutionCount - states.EvolutionCount >= result.EvolutionCount);
+                Assert.True(genetic.States.EvolutionTime - states.EvolutionTime >= result.EvolutionTime);
+            }
+        }
+
         private static IPopulation CreatePopulation(int count)
         {
             var populationMock = new Mock<IPopulation>();
