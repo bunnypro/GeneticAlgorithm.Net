@@ -12,7 +12,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
     public class GeneticAlgorithm_Test
     {
         // system clock accuracy error (approximately)
-        private const int SYSTEM_CLOCK_ACCURACY_ERROR = 15;
+        private const int SystemClockAccuracyError = 15;
 
         [Fact]
         public async Task Can_EvolveOnce()
@@ -68,7 +68,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                 await Task.Delay(delay);
                 cts.Cancel();
                 await Assert.ThrowsAnyAsync<OperationCanceledException>(() => evolution);
-                Assert.True(genetic.States.EvolutionTime - time >= TimeSpan.FromMilliseconds(delay - SYSTEM_CLOCK_ACCURACY_ERROR));
+                Assert.True(genetic.States.EvolutionTime - time >= TimeSpan.FromMilliseconds(delay - SystemClockAccuracyError));
             }
         }
 
@@ -80,7 +80,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             var genetic = new GeneticAlgorithm(CreateStrategy(delay));
             var result = await genetic.EvolveOnce(population);
             Assert.Equal(1, result.EvolutionCount);
-            Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - SYSTEM_CLOCK_ACCURACY_ERROR));
+            Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - SystemClockAccuracyError));
             Assert.True(genetic.States.EvolutionCount >= result.EvolutionCount);
             Assert.True(genetic.States.EvolutionTime >= result.EvolutionTime);
         }
@@ -98,7 +98,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                 await Task.Delay(delay);
                 cts.Cancel();
                 Assert.False(await evolution);
-                Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - SYSTEM_CLOCK_ACCURACY_ERROR));
+                Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - SystemClockAccuracyError));
             }
         }
 
@@ -117,7 +117,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                 cts.Cancel();
                 await Assert.ThrowsAnyAsync<OperationCanceledException>(() => evolution);
                 Assert.True(result.EvolutionCount > 0);
-                Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SYSTEM_CLOCK_ACCURACY_ERROR));
+                Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SystemClockAccuracyError));
                 Assert.True(genetic.States.EvolutionCount - states.EvolutionCount >= result.EvolutionCount);
                 Assert.True(genetic.States.EvolutionTime - states.EvolutionTime >= result.EvolutionTime);
             }
@@ -138,7 +138,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                 cts.Cancel();
                 Assert.False(await evolution);
                 Assert.True(result.EvolutionCount > 0);
-                Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SYSTEM_CLOCK_ACCURACY_ERROR));
+                Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SystemClockAccuracyError));
                 Assert.True(genetic.States.EvolutionCount - states.EvolutionCount >= result.EvolutionCount);
                 Assert.True(genetic.States.EvolutionTime - states.EvolutionTime >= result.EvolutionTime);
             }
@@ -175,13 +175,13 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                     await Task.Delay(delay);
                     cts.Cancel();
                     await Assert.ThrowsAnyAsync<OperationCanceledException>(() => evolution);
-                    Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - SYSTEM_CLOCK_ACCURACY_ERROR));
+                    Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - SystemClockAccuracyError));
                     Assert.True(genetic.States.EvolutionTime >= result.EvolutionTime);
                 }
                 {
                     var result = new GeneticOperationStates();
                     await genetic.EvolveUntil(population, result, Termination, default);
-                    Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SYSTEM_CLOCK_ACCURACY_ERROR));
+                    Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SystemClockAccuracyError));
                     Assert.True(genetic.States.EvolutionTime >= result.EvolutionTime);
                 }
             }
@@ -206,13 +206,13 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                     await Task.Delay(delay);
                     cts.Cancel();
                     Assert.False(await evolution);
-                    Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - SYSTEM_CLOCK_ACCURACY_ERROR));
+                    Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - SystemClockAccuracyError));
                     Assert.True(genetic.States.EvolutionTime >= result.EvolutionTime);
                 }
                 {
                     var result = new GeneticOperationStates();
                     Assert.True(await genetic.TryEvolveUntil(population, result, Termination, default));
-                    Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SYSTEM_CLOCK_ACCURACY_ERROR));
+                    Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SystemClockAccuracyError));
                     Assert.True(genetic.States.EvolutionTime >= result.EvolutionTime);
                 }
             }
@@ -240,7 +240,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                     (Func<IReadOnlyGeneticOperationStates, bool>) (states => states.EvolutionTime >= TimeSpan.FromMilliseconds(time)),
                     (Action<IReadOnlyGeneticOperationStates, IReadOnlyGeneticOperationStates>) ((states, result) =>
                     {
-                        Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SYSTEM_CLOCK_ACCURACY_ERROR));
+                        Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SystemClockAccuracyError));
                         Assert.True(states.EvolutionTime >= result.EvolutionTime);
                     })
                 };
