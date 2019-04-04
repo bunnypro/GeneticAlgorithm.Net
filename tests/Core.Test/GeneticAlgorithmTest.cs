@@ -135,7 +135,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                 var evolution = genetic.TryEvolve(population, result, cts.Token);
                 await Task.Delay(time);
                 cts.Cancel();
-                await evolution;
+                Assert.False(await evolution);
                 Assert.True(result.EvolutionCount > 0);
                 Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SYSTEM_CLOCK_ACCURACY_ERROR));
                 Assert.True(genetic.States.EvolutionCount - states.EvolutionCount >= result.EvolutionCount);
@@ -204,13 +204,13 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                     var evolution = genetic.TryEvolveUntil(population, result, Termination, cts.Token);
                     await Task.Delay(delay);
                     cts.Cancel();
-                    await evolution;
+                    Assert.False(await evolution);
                     Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - SYSTEM_CLOCK_ACCURACY_ERROR));
                     Assert.True(genetic.States.EvolutionTime >= result.EvolutionTime);
                 }
                 {
                     var result = new GeneticOperationStates();
-                    await genetic.TryEvolveUntil(population, result, Termination, default);
+                    Assert.True(await genetic.TryEvolveUntil(population, result, Termination, default));
                     Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SYSTEM_CLOCK_ACCURACY_ERROR));
                     Assert.True(genetic.States.EvolutionTime >= result.EvolutionTime);
                 }
@@ -245,7 +245,6 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                 };
             }
         }
-
 
         private static IPopulation CreatePopulation(int count)
         {

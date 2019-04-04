@@ -41,21 +41,31 @@ namespace Bunnypro.GeneticAlgorithm.Core
             return states;
         }
 
-        public async Task TryEvolve(IPopulation population, GeneticOperationStates states, CancellationToken token)
+        public async Task<bool> TryEvolve(
+            IPopulation population,
+            GeneticOperationStates states,
+            CancellationToken token)
         {
             try
             {
                 await Evolve(population, states, token);
             }
-            catch (OperationCanceledException) { }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
+            return true;
         }
 
-        public async Task Evolve(IPopulation population, GeneticOperationStates states, CancellationToken token)
+        public async Task Evolve(
+            IPopulation population,
+            GeneticOperationStates states,
+            CancellationToken token)
         {
             while (true) await OperateStrategy(population, states, token);
         }
 
-        public async Task TryEvolveUntil(
+        public async Task<bool> TryEvolveUntil(
             IPopulation population,
             GeneticOperationStates states,
             Func<IGeneticOperationStates, bool> termination,
@@ -65,7 +75,11 @@ namespace Bunnypro.GeneticAlgorithm.Core
             {
                 await EvolveUntil(population, states, termination, token);
             }
-            catch (OperationCanceledException) { }
+            catch (OperationCanceledException)
+            {
+                return false;
+            }
+            return true;
         }
 
         public async Task<IGeneticOperationStates> EvolveUntil(
