@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{CA9A30C4
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bunnypro.GeneticAlgorithm.Core.Test", "tests\Core.Test\Bunnypro.GeneticAlgorithm.Core.Test.csproj", "{53351164-C114-46C6-8C24-A2E3F20062B6}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bunnypro.GeneticAlgorithm.Core.Extensions", "src\Core.Extensions\Bunnypro.GeneticAlgorithm.Core.Extensions.csproj", "{48F0E473-46D3-4470-BDEA-928254F06A84}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,9 +50,22 @@ Global
 		{53351164-C114-46C6-8C24-A2E3F20062B6}.Release|x64.Build.0 = Release|Any CPU
 		{53351164-C114-46C6-8C24-A2E3F20062B6}.Release|x86.ActiveCfg = Release|Any CPU
 		{53351164-C114-46C6-8C24-A2E3F20062B6}.Release|x86.Build.0 = Release|Any CPU
+		{48F0E473-46D3-4470-BDEA-928254F06A84}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48F0E473-46D3-4470-BDEA-928254F06A84}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48F0E473-46D3-4470-BDEA-928254F06A84}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{48F0E473-46D3-4470-BDEA-928254F06A84}.Debug|x64.Build.0 = Debug|Any CPU
+		{48F0E473-46D3-4470-BDEA-928254F06A84}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{48F0E473-46D3-4470-BDEA-928254F06A84}.Debug|x86.Build.0 = Debug|Any CPU
+		{48F0E473-46D3-4470-BDEA-928254F06A84}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48F0E473-46D3-4470-BDEA-928254F06A84}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48F0E473-46D3-4470-BDEA-928254F06A84}.Release|x64.ActiveCfg = Release|Any CPU
+		{48F0E473-46D3-4470-BDEA-928254F06A84}.Release|x64.Build.0 = Release|Any CPU
+		{48F0E473-46D3-4470-BDEA-928254F06A84}.Release|x86.ActiveCfg = Release|Any CPU
+		{48F0E473-46D3-4470-BDEA-928254F06A84}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A79EED19-4290-49D1-A90A-AA397B3C8A2A} = {C53C800D-EBCB-4DCC-B84E-AA206FC5E930}
 		{53351164-C114-46C6-8C24-A2E3F20062B6} = {CA9A30C4-0141-4953-B794-53761C7EF6B1}
+		{48F0E473-46D3-4470-BDEA-928254F06A84} = {C53C800D-EBCB-4DCC-B84E-AA206FC5E930}
 	EndGlobalSection
 EndGlobal
