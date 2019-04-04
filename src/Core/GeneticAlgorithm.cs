@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Bunnypro.GeneticAlgorithm.Core
 {
-    public class GeneticAlgorithm
+    public class GeneticAlgorithm : IGeneticAlgorithm
     {
         private readonly GeneticOperationStates _states = new GeneticOperationStates();
         private readonly IGeneticOperation _strategy;
