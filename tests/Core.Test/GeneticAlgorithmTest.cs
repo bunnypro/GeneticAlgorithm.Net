@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Moq;
 using Xunit;
 using Bunnypro.GeneticAlgorithm.Abstractions;
-using Bunnypro.GeneticAlgorithm.Core.Extensions;
+using Bunnypro.GeneticAlgorithm.Extensions;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Test
 {

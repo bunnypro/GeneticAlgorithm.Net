@@ -2,9 +2,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Bunnypro.GeneticAlgorithm.Abstractions;
-using Bunnypro.GeneticAlgorithm.Core;
 
-namespace Bunnypro.GeneticAlgorithm.Core.Extensions
+namespace Bunnypro.GeneticAlgorithm.Extensions
 {
     public static class GeneticAlgorithmOperationExtensions
     {

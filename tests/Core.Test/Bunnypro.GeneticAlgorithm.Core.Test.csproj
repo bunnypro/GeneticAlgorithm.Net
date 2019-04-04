@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Core\Bunnypro.GeneticAlgorithm.Core.csproj" />
-    <ProjectReference Include="..\..\src\Core.Extensions\Bunnypro.GeneticAlgorithm.Core.Extensions.csproj" />
+    <ProjectReference Include="..\..\src\Extensions\Bunnypro.GeneticAlgorithm.Extensions.csproj" />
   </ItemGroup>
 
 </Project>
