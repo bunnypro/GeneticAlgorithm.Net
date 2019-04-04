@@ -116,7 +116,10 @@ namespace Bunnypro.GeneticAlgorithm.Core
             finally
             {
                 result.EvolutionTime += DateTime.Now - startTime;
-                _states.Extend(result);
+                lock (_states)
+                {
+                    _states.Extend(result);
+                }
                 states.Extend(result);
             }
         }
