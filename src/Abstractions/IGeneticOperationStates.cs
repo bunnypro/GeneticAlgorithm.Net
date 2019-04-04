@@ -1,4 +1,4 @@
-namespace Bunnypro.GeneticAlgorithm.Core
+namespace Bunnypro.GeneticAlgorithm.Abstractions
 {
     public interface IGeneticOperationStates : IReadOnlyGeneticOperationStates
     {

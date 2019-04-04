@@ -1,4 +1,5 @@
 using System;
+using Bunnypro.GeneticAlgorithm.Abstractions;
 
 namespace Bunnypro.GeneticAlgorithm.Core
 {

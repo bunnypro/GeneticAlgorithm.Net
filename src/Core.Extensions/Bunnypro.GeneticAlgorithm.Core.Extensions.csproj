@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\Core\Bunnypro.GeneticAlgorithm.Core.csproj" />
+    <ProjectReference Include="..\Abstractions\Bunnypro.GeneticAlgorithm.Abstractions.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Bunnypro.GeneticAlgorithm.Abstractions;
 
 namespace Bunnypro.GeneticAlgorithm.Core
 {

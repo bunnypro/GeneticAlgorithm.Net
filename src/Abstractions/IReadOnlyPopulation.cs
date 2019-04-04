@@ -1,6 +1,6 @@
 using System.Collections.Immutable;
 
-namespace Bunnypro.GeneticAlgorithm.Core
+namespace Bunnypro.GeneticAlgorithm.Abstractions
 {
     public interface IReadOnlyPopulation
     {

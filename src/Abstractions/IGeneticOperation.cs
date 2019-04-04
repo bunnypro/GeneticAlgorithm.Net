@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Bunnypro.GeneticAlgorithm.Core
+namespace Bunnypro.GeneticAlgorithm.Abstractions
 {
     public interface IGeneticOperation
     {
