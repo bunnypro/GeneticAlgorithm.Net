@@ -16,6 +16,24 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public IReadOnlyGeneticOperationStates States => _states;
 
+        public async Task<IReadOnlyGeneticOperationStates> EvolveOnce(
+            IPopulation population,
+            CancellationToken token = default)
+        {
+            var states = new GeneticOperationStates();
+            await EvolveUntil(population, states, s => s.EvolutionCount >= 1, token);
+            return states;
+        }
+
+        public async Task<IReadOnlyGeneticOperationStates> EvolveUntil(
+            IPopulation population,
+            Func<IReadOnlyGeneticOperationStates, bool> termination)
+        {
+            var states = new GeneticOperationStates();
+            await EvolveUntil(population, states, termination, default);
+            return states;
+        }
+
         public async Task EvolveUntil(
             IPopulation population,
             IGeneticOperationStates states,
