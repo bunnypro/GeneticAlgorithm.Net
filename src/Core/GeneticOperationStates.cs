@@ -4,7 +4,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
 {
     public class GeneticOperationStates : IGeneticOperationStates
     {
-        public static GeneticOperationStates From(IGeneticOperationStates source)
+        public static GeneticOperationStates From(IReadOnlyGeneticOperationStates source)
         {
             var states = new GeneticOperationStates();
             states.Extend(source);
@@ -14,10 +14,10 @@ namespace Bunnypro.GeneticAlgorithm.Core
         public int EvolutionCount { get; set; }
         public TimeSpan EvolutionTime { get; set; } = TimeSpan.Zero;
 
-        public void Extend(IGeneticOperationStates states)
+        public void Extend(IReadOnlyGeneticOperationStates source)
         {
-            EvolutionCount += states.EvolutionCount;
-            EvolutionTime += states.EvolutionTime;
+            EvolutionCount += source.EvolutionCount;
+            EvolutionTime += source.EvolutionTime;
         }
     }
 }

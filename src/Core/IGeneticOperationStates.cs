@@ -1,10 +1,7 @@
-using System;
-
 namespace Bunnypro.GeneticAlgorithm.Core
 {
-    public interface IGeneticOperationStates
+    public interface IGeneticOperationStates : IReadOnlyGeneticOperationStates
     {
-        int EvolutionCount { get; }
-        TimeSpan EvolutionTime { get; }
+        void Extend(IReadOnlyGeneticOperationStates source);
     }
 }

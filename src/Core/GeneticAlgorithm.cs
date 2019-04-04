@@ -6,7 +6,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
 {
     public class GeneticAlgorithm : IGeneticAlgorithm
     {
-        private readonly GeneticOperationStates _states = new GeneticOperationStates();
+        private readonly IGeneticOperationStates _states = new GeneticOperationStates();
         private readonly IGeneticOperation _strategy;
 
         public GeneticAlgorithm(IGeneticOperation strategy)
@@ -14,12 +14,12 @@ namespace Bunnypro.GeneticAlgorithm.Core
             _strategy = strategy;
         }
 
-        public IGeneticOperationStates States => _states;
+        public IReadOnlyGeneticOperationStates States => _states;
 
         public async Task EvolveUntil(
             IPopulation population,
-            GeneticOperationStates states,
-            Func<IGeneticOperationStates, bool> termination,
+            IGeneticOperationStates states,
+            Func<IReadOnlyGeneticOperationStates, bool> termination,
             CancellationToken token)
         {
             while (!termination.Invoke(states)) await OperateStrategy(population, states, token);
@@ -27,7 +27,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         private async Task OperateStrategy(
             IPopulation population,
-            GeneticOperationStates states,
+            IGeneticOperationStates states,
             CancellationToken token)
         {
             var result = new GeneticOperationStates();

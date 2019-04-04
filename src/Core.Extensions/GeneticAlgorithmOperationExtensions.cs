@@ -10,13 +10,13 @@ namespace Bunnypro.GeneticAlgorithm.Core.Extensions
         public static Task<bool> TryEvolveOnce(
             this IGeneticAlgorithm genetic,
             IPopulation population,
-            GeneticOperationStates states,
+            IGeneticOperationStates states,
             CancellationToken token)
         {
             return genetic.TryEvolveUntil(population, states, s => s.EvolutionCount >= 1, token);
         }
 
-        public static async Task<IGeneticOperationStates> EvolveOnce(
+        public static async Task<IReadOnlyGeneticOperationStates> EvolveOnce(
             this IGeneticAlgorithm genetic,
             IPopulation population,
             CancellationToken token = default)
@@ -29,7 +29,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Extensions
         public static async Task<bool> TryEvolve(
             this IGeneticAlgorithm genetic,
             IPopulation population,
-            GeneticOperationStates states,
+            IGeneticOperationStates states,
             CancellationToken token)
         {
             try
@@ -46,7 +46,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Extensions
         public static Task Evolve(
             this IGeneticAlgorithm genetic,
             IPopulation population,
-            GeneticOperationStates states,
+            IGeneticOperationStates states,
             CancellationToken token)
         {
             return genetic.EvolveUntil(population, states, _ => false, token);
@@ -55,8 +55,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Extensions
         public static async Task<bool> TryEvolveUntil(
             this IGeneticAlgorithm genetic,
             IPopulation population,
-            GeneticOperationStates states,
-            Func<IGeneticOperationStates, bool> termination,
+            IGeneticOperationStates states,
+            Func<IReadOnlyGeneticOperationStates, bool> termination,
             CancellationToken token)
         {
             try
@@ -70,10 +70,10 @@ namespace Bunnypro.GeneticAlgorithm.Core.Extensions
             return true;
         }
 
-        public static async Task<IGeneticOperationStates> EvolveUntil(
+        public static async Task<IReadOnlyGeneticOperationStates> EvolveUntil(
             this IGeneticAlgorithm genetic,
             IPopulation population,
-            Func<IGeneticOperationStates, bool> termination)
+            Func<IReadOnlyGeneticOperationStates, bool> termination)
         {
             var states = new GeneticOperationStates();
             await genetic.EvolveUntil(population, states, termination, default);

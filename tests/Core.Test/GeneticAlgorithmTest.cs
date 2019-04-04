@@ -147,8 +147,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         [Theory]
         [MemberData(nameof(GetTerminationCallbackData))]
         public async Task Can_Continuing_Evolve_Until_Termination_Callback_Fulfilled(
-            Func<IGeneticOperationStates, bool> termination,
-            Action<IGeneticOperationStates, IGeneticOperationStates> assertion)
+            Func<IReadOnlyGeneticOperationStates, bool> termination,
+            Action<IReadOnlyGeneticOperationStates, IReadOnlyGeneticOperationStates> assertion)
         {
             var genetic = new GeneticAlgorithm(CreateStrategy());
             var population = CreatePopulation(10);
@@ -163,7 +163,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             {
                 const int time = 500;
                 const int delay = 100;
-                bool Termination(IGeneticOperationStates states)
+                bool Termination(IReadOnlyGeneticOperationStates states)
                 {
                     return states.EvolutionTime >= TimeSpan.FromMilliseconds(time);
                 }
@@ -194,7 +194,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             {
                 const int time = 500;
                 const int delay = 100;
-                bool Termination(IGeneticOperationStates states)
+                bool Termination(IReadOnlyGeneticOperationStates states)
                 {
                     return states.EvolutionTime >= TimeSpan.FromMilliseconds(time);
                 }
@@ -224,8 +224,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                 const int count = 10;
                 yield return new object[]
                 {
-                    (Func<IGeneticOperationStates, bool>) (states => states.EvolutionCount >= count),
-                    (Action<IGeneticOperationStates, IGeneticOperationStates>) ((states, result) =>
+                    (Func<IReadOnlyGeneticOperationStates, bool>) (states => states.EvolutionCount >= count),
+                    (Action<IReadOnlyGeneticOperationStates, IReadOnlyGeneticOperationStates>) ((states, result) =>
                     {
                         Assert.Equal(count, result.EvolutionCount);
                         Assert.True(states.EvolutionCount >= result.EvolutionCount);
@@ -237,8 +237,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                 const int time = 100;
                 yield return new object[]
                 {
-                    (Func<IGeneticOperationStates, bool>) (states => states.EvolutionTime >= TimeSpan.FromMilliseconds(time)),
-                    (Action<IGeneticOperationStates, IGeneticOperationStates>) ((states, result) =>
+                    (Func<IReadOnlyGeneticOperationStates, bool>) (states => states.EvolutionTime >= TimeSpan.FromMilliseconds(time)),
+                    (Action<IReadOnlyGeneticOperationStates, IReadOnlyGeneticOperationStates>) ((states, result) =>
                     {
                         Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(time - SYSTEM_CLOCK_ACCURACY_ERROR));
                         Assert.True(states.EvolutionTime >= result.EvolutionTime);

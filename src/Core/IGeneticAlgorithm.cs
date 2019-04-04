@@ -6,12 +6,12 @@ namespace Bunnypro.GeneticAlgorithm.Core
 {
     public interface IGeneticAlgorithm
     {
-        IGeneticOperationStates States { get; }
+        IReadOnlyGeneticOperationStates States { get; }
 
         Task EvolveUntil(
             IPopulation population,
-            GeneticOperationStates states,
-            Func<IGeneticOperationStates, bool> termination,
+            IGeneticOperationStates states,
+            Func<IReadOnlyGeneticOperationStates, bool> termination,
             CancellationToken token);
     }
 }
