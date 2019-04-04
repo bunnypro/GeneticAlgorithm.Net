@@ -16,15 +16,6 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public IGeneticOperationStates States => _states;
 
-        public async Task<IGeneticOperationStates> EvolveOnce(
-            IPopulation population,
-            CancellationToken token = default)
-        {
-            var states = new GeneticOperationStates();
-            await OperateStrategy(population, states, token);
-            return states;
-        }
-
         public async Task<bool> TryEvolveOnce(
             IPopulation population,
             GeneticOperationStates states,
@@ -41,9 +32,13 @@ namespace Bunnypro.GeneticAlgorithm.Core
             return true;
         }
 
-        public async Task Evolve(IPopulation population, GeneticOperationStates states, CancellationToken token)
+        public async Task<IGeneticOperationStates> EvolveOnce(
+            IPopulation population,
+            CancellationToken token = default)
         {
-            while (true) await OperateStrategy(population, states, token);
+            var states = new GeneticOperationStates();
+            await OperateStrategy(population, states, token);
+            return states;
         }
 
         public async Task TryEvolve(IPopulation population, GeneticOperationStates states, CancellationToken token)
@@ -55,13 +50,9 @@ namespace Bunnypro.GeneticAlgorithm.Core
             catch (OperationCanceledException) { }
         }
 
-        public async Task<IGeneticOperationStates> EvolveUntil(
-            IPopulation population,
-            Func<IGeneticOperationStates, bool> termination)
+        public async Task Evolve(IPopulation population, GeneticOperationStates states, CancellationToken token)
         {
-            var states = new GeneticOperationStates();
-            await EvolveUntil(population, states, termination, default);
-            return states;
+            while (true) await OperateStrategy(population, states, token);
         }
 
         public async Task TryEvolveUntil(
@@ -75,6 +66,15 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 await EvolveUntil(population, states, termination, token);
             }
             catch (OperationCanceledException) { }
+        }
+
+        public async Task<IGeneticOperationStates> EvolveUntil(
+            IPopulation population,
+            Func<IGeneticOperationStates, bool> termination)
+        {
+            var states = new GeneticOperationStates();
+            await EvolveUntil(population, states, termination, default);
+            return states;
         }
 
         public async Task EvolveUntil(
