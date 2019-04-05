@@ -7,6 +7,6 @@ namespace Bunnypro.GeneticAlgorithm.Abstractions
 {
     public interface IGeneticOperation
     {
-        Task<HashSet<IChromosome>> Operate(ImmutableHashSet<IChromosome> chromosomes, CancellationToken token = default);
+        Task<ImmutableHashSet<IChromosome>> Operate(ImmutableHashSet<IChromosome> chromosomes, CancellationToken token = default);
     }
 }

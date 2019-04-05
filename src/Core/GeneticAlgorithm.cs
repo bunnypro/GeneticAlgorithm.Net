@@ -53,8 +53,7 @@ namespace Bunnypro.GeneticAlgorithm.Core
             var startTime = DateTime.Now;
             try
             {
-                var offspring = await _strategy.Operate(population.Chromosomes, token);
-                population.RegisterOffspring(offspring);
+                population.Chromosomes = await _strategy.Operate(population.Chromosomes, token);
                 result.EvolutionCount++;
             }
             finally
