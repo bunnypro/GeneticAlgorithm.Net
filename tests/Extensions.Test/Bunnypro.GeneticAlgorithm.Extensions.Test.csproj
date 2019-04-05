@@ -21,6 +21,7 @@
     <ProjectReference Include="..\..\src\Extensions\Bunnypro.GeneticAlgorithm.Extensions.csproj" />
     <ProjectReference Include="..\..\src\Core\Bunnypro.GeneticAlgorithm.Core.csproj" />
     <ProjectReference Include="..\..\src\Abstractions\Bunnypro.GeneticAlgorithm.Abstractions.csproj" />
+    <ProjectReference Include="..\Utils\Bunnypro.GeneticAlgorithm.TestUtils.csproj" />
   </ItemGroup>
 
 </Project>

@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Bunnypro.GeneticAlgorithm.Abstractions;
 using Bunnypro.GeneticAlgorithm.Core;
+using Bunnypro.GeneticAlgorithm.TestUtils;
 using Moq;
 using Xunit;
 
@@ -21,9 +22,9 @@ namespace Bunnypro.GeneticAlgorithm.Extensions.Test
             using (var cts = new CancellationTokenSource())
             {
                 const int delay = 100;
-                var population = CreatePopulation(10);
+                var population = MockingObject.CreatePopulation(10);
                 var result = new GeneticOperationStates();
-                var genetic = new Core.GeneticAlgorithm(CreateStrategy(delay: 500));
+                var genetic = new Core.GeneticAlgorithm(MockingObject.CreateStrategy(delay: 500));
                 var evolution = genetic.TryEvolveOnce(population, result, cts.Token);
                 await Task.Delay(delay);
                 cts.Cancel();
@@ -38,8 +39,8 @@ namespace Bunnypro.GeneticAlgorithm.Extensions.Test
             const int time = 500;
             using (var cts = new CancellationTokenSource())
             {
-                var genetic = new Core.GeneticAlgorithm(CreateStrategy());
-                var population = CreatePopulation(10);
+                var genetic = new Core.GeneticAlgorithm(MockingObject.CreateStrategy());
+                var population = MockingObject.CreatePopulation(10);
                 var states = GeneticOperationStates.From(genetic.States);
                 var result = new GeneticOperationStates();
                 var evolution = genetic.Evolve(population, result, cts.Token);
@@ -59,8 +60,8 @@ namespace Bunnypro.GeneticAlgorithm.Extensions.Test
             const int time = 500;
             using (var cts = new CancellationTokenSource())
             {
-                var genetic = new Core.GeneticAlgorithm(CreateStrategy());
-                var population = CreatePopulation(10);
+                var genetic = new Core.GeneticAlgorithm(MockingObject.CreateStrategy());
+                var population = MockingObject.CreatePopulation(10);
                 var states = GeneticOperationStates.From(genetic.States);
                 var result = new GeneticOperationStates();
                 var evolution = genetic.TryEvolve(population, result, cts.Token);
@@ -85,8 +86,8 @@ namespace Bunnypro.GeneticAlgorithm.Extensions.Test
                 {
                     return states.EvolutionTime >= TimeSpan.FromMilliseconds(time);
                 }
-                var genetic = new Core.GeneticAlgorithm(CreateStrategy());
-                var population = CreatePopulation(10);
+                var genetic = new Core.GeneticAlgorithm(MockingObject.CreateStrategy());
+                var population = MockingObject.CreatePopulation(10);
                 {
                     var result = new GeneticOperationStates();
                     var evolution = genetic.TryEvolveUntil(population, result, Termination, cts.Token);
@@ -103,32 +104,6 @@ namespace Bunnypro.GeneticAlgorithm.Extensions.Test
                     Assert.True(genetic.States.EvolutionTime >= result.EvolutionTime);
                 }
             }
-        }
-
-        private static IPopulation CreatePopulation(int count)
-        {
-            var populationMock = new Mock<IPopulation>();
-            populationMock.Setup(p => p.Chromosomes).Returns(CreateChromosome(count).ToImmutableHashSet());
-            return populationMock.Object;
-        }
-
-        private static IGeneticOperation CreateStrategy(int delay = 1)
-        {
-            var strategyMock = new Mock<IGeneticOperation>();
-            strategyMock.Setup(o => o.Operate(It.IsAny<ImmutableHashSet<IChromosome>>(), It.IsAny<CancellationToken>()))
-                .Returns<ImmutableHashSet<IChromosome>, CancellationToken>(async (chromosomes, token) =>
-                {
-                    await Task.Delay(delay, token);
-                    return new HashSet<IChromosome>(chromosomes);
-                });
-            return strategyMock.Object;
-        }
-
-        private static HashSet<IChromosome> CreateChromosome(int count)
-        {
-            var chromosomes = new HashSet<IChromosome>();
-            while (chromosomes.Count < count) chromosomes.Add(new Mock<IChromosome>().Object);
-            return chromosomes;
         }
     }
 }

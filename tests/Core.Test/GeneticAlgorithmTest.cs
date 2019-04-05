@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Moq;
 using Xunit;
 using Bunnypro.GeneticAlgorithm.Abstractions;
+using Bunnypro.GeneticAlgorithm.TestUtils;
 
 namespace Bunnypro.GeneticAlgorithm.Core.Test
 {
@@ -17,8 +18,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         [Fact]
         public async Task Can_EvolveOnce()
         {
-            var population = CreatePopulation(10);
-            var genetic = new GeneticAlgorithm(CreateStrategy());
+            var population = MockingObject.CreatePopulation(10);
+            var genetic = new GeneticAlgorithm(MockingObject.CreateStrategy());
             var evolutionCount = genetic.States.EvolutionCount;
             var result = await genetic.EvolveOnce(population);
             Assert.Equal(evolutionCount + 1, genetic.States.EvolutionCount);
@@ -30,8 +31,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             using (var cts = new CancellationTokenSource())
             {
-                var population = CreatePopulation(10);
-                var genetic = new GeneticAlgorithm(CreateStrategy(delay: 500));
+                var population = MockingObject.CreatePopulation(10);
+                var genetic = new GeneticAlgorithm(MockingObject.CreateStrategy(delay: 500));
                 var evolution = genetic.EvolveOnce(population, cts.Token);
                 cts.Cancel();
                 await Assert.ThrowsAnyAsync<OperationCanceledException>(() => evolution);
@@ -43,8 +44,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         {
             using (var cts = new CancellationTokenSource())
             {
-                var population = CreatePopulation(10);
-                var genetic = new GeneticAlgorithm(CreateStrategy(delay: 500));
+                var population = MockingObject.CreatePopulation(10);
+                var genetic = new GeneticAlgorithm(MockingObject.CreateStrategy(delay: 500));
                 var evolution1 = genetic.EvolveOnce(population);
                 var evolution2 = genetic.EvolveOnce(population, cts.Token);
                 cts.Cancel();
@@ -61,8 +62,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             using (var cts = new CancellationTokenSource())
             {
                 const int delay = 100;
-                var population = CreatePopulation(10);
-                var genetic = new GeneticAlgorithm(CreateStrategy(delay: 500));
+                var population = MockingObject.CreatePopulation(10);
+                var genetic = new GeneticAlgorithm(MockingObject.CreateStrategy(delay: 500));
                 var time = genetic.States.EvolutionTime;
                 var evolution = genetic.EvolveOnce(population, cts.Token);
                 await Task.Delay(delay);
@@ -76,8 +77,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
         public async Task Can_Return_Operation_Result_State()
         {
             const int delay = 500;
-            var population = CreatePopulation(10);
-            var genetic = new GeneticAlgorithm(CreateStrategy(delay));
+            var population = MockingObject.CreatePopulation(10);
+            var genetic = new GeneticAlgorithm(MockingObject.CreateStrategy(delay));
             var result = await genetic.EvolveOnce(population);
             Assert.Equal(1, result.EvolutionCount);
             Assert.True(result.EvolutionTime >= TimeSpan.FromMilliseconds(delay - SystemClockAccuracyError));
@@ -91,8 +92,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             Func<IReadOnlyGeneticOperationStates, bool> termination,
             Action<IReadOnlyGeneticOperationStates, IReadOnlyGeneticOperationStates> assertion)
         {
-            var genetic = new GeneticAlgorithm(CreateStrategy());
-            var population = CreatePopulation(10);
+            var genetic = new GeneticAlgorithm(MockingObject.CreateStrategy());
+            var population = MockingObject.CreatePopulation(10);
             var result = await genetic.EvolveUntil(population, termination);
             assertion.Invoke(genetic.States, result);
         }
@@ -108,8 +109,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                 {
                     return states.EvolutionTime >= TimeSpan.FromMilliseconds(time);
                 }
-                var genetic = new GeneticAlgorithm(CreateStrategy());
-                var population = CreatePopulation(10);
+                var genetic = new GeneticAlgorithm(MockingObject.CreateStrategy());
+                var population = MockingObject.CreatePopulation(10);
                 {
                     var result = new GeneticOperationStates();
                     var evolution = genetic.EvolveUntil(population, result, Termination, cts.Token);
@@ -155,32 +156,6 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                     })
                 };
             }
-        }
-
-        private static IPopulation CreatePopulation(int count)
-        {
-            var populationMock = new Mock<IPopulation>();
-            populationMock.Setup(p => p.Chromosomes).Returns(CreateChromosome(count).ToImmutableHashSet());
-            return populationMock.Object;
-        }
-
-        private static IGeneticOperation CreateStrategy(int delay = 1)
-        {
-            var strategyMock = new Mock<IGeneticOperation>();
-            strategyMock.Setup(o => o.Operate(It.IsAny<ImmutableHashSet<IChromosome>>(), It.IsAny<CancellationToken>()))
-                .Returns<ImmutableHashSet<IChromosome>, CancellationToken>(async (chromosomes, token) =>
-                {
-                    await Task.Delay(delay, token);
-                    return new HashSet<IChromosome>(chromosomes);
-                });
-            return strategyMock.Object;
-        }
-
-        private static HashSet<IChromosome> CreateChromosome(int count)
-        {
-            var chromosomes = new HashSet<IChromosome>();
-            while (chromosomes.Count < count) chromosomes.Add(new Mock<IChromosome>().Object);
-            return chromosomes;
         }
     }
 }
