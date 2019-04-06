@@ -48,10 +48,9 @@ namespace Bunnypro.GeneticAlgorithm.TestUtils
             return new FakeGeneticOperationState();
         }
 
-        public static IPopulation CreatePopulation(int count)
+        public static IPopulation CreatePopulation()
         {
             var populationMock = new Mock<IPopulation>();
-            populationMock.Setup(p => p.Chromosomes).Returns(CreateChromosome(count).ToImmutableHashSet());
             ImmutableHashSet<IChromosome> chromosomes = null;
             populationMock.SetupGet(p => p.Chromosomes).Returns(() => chromosomes);
             populationMock.SetupSet(p => p.Chromosomes = It.IsAny<ImmutableHashSet<IChromosome>>())

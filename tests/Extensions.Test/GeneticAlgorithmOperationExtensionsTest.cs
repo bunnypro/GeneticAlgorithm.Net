@@ -21,7 +21,7 @@ namespace Bunnypro.GeneticAlgorithm.Extensions.Test
             using (var cts = new CancellationTokenSource())
             {
                 const int delay = 100;
-                var population = MockingObject.CreatePopulation(10);
+                var population = MockingObject.CreatePopulation();
                 var result = MockingObject.CreateStates();
                 var genetic = MockingObject.CreateGeneticAlgorithm(delay: 500);
                 var evolution = genetic.TryEvolveOnce(population, result, cts.Token);
@@ -39,7 +39,7 @@ namespace Bunnypro.GeneticAlgorithm.Extensions.Test
             using (var cts = new CancellationTokenSource())
             {
                 var genetic = MockingObject.CreateGeneticAlgorithm();
-                var population = MockingObject.CreatePopulation(10);
+                var population = MockingObject.CreatePopulation();
                 var states = MockingObject.CreateStates();
                 states.Extend(genetic.States);
                 var result = MockingObject.CreateStates();
@@ -61,7 +61,7 @@ namespace Bunnypro.GeneticAlgorithm.Extensions.Test
             using (var cts = new CancellationTokenSource())
             {
                 var genetic = MockingObject.CreateGeneticAlgorithm();
-                var population = MockingObject.CreatePopulation(10);
+                var population = MockingObject.CreatePopulation();
                 var states = MockingObject.CreateStates();
                 states.Extend(genetic.States);
                 var result = MockingObject.CreateStates();
@@ -88,7 +88,7 @@ namespace Bunnypro.GeneticAlgorithm.Extensions.Test
                     return states.EvolutionTime >= TimeSpan.FromMilliseconds(time);
                 }
                 var genetic = MockingObject.CreateGeneticAlgorithm();
-                var population = MockingObject.CreatePopulation(10);
+                var population = MockingObject.CreatePopulation();
                 {
                     var result = MockingObject.CreateStates();
                     var evolution = genetic.TryEvolveUntil(population, result, Termination, cts.Token);
