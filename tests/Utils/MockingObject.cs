@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Bunnypro.GeneticAlgorithm.Abstractions;
 using Moq;
 
-namespace Bunnypro.GeneticAlgorithm.TestUtils
+namespace Bunnypro.GeneticAlgorithm.Test.Utils
 {
     public static class MockingObject
     {

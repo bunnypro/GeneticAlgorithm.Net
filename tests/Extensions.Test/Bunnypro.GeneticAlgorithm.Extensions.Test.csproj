@@ -20,7 +20,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Extensions\Bunnypro.GeneticAlgorithm.Extensions.csproj" />
     <ProjectReference Include="..\..\src\Abstractions\Bunnypro.GeneticAlgorithm.Abstractions.csproj" />
-    <ProjectReference Include="..\Utils\Bunnypro.GeneticAlgorithm.TestUtils.csproj" />
+    <ProjectReference Include="..\Utils\Bunnypro.GeneticAlgorithm.Test.Utils.csproj" />
   </ItemGroup>
 
 </Project>

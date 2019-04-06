@@ -1,7 +1,7 @@
 using System;
 using Bunnypro.GeneticAlgorithm.Abstractions;
 
-namespace Bunnypro.GeneticAlgorithm.TestUtils
+namespace Bunnypro.GeneticAlgorithm.Test.Utils
 {
     public class FakeGeneticOperationState : IGeneticOperationStates
     {

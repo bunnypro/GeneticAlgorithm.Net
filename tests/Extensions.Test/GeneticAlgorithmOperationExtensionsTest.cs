@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 using Bunnypro.GeneticAlgorithm.Abstractions;
-using Bunnypro.GeneticAlgorithm.TestUtils;
+using Bunnypro.GeneticAlgorithm.Test.Utils;
 using Moq;
 using Xunit;
 
