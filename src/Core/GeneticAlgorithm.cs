@@ -57,8 +57,9 @@ namespace Bunnypro.GeneticAlgorithm.Core
                 while (!termination.Invoke(statesHolder.States))
                 {
                     var startTime = DateTime.Now;
-                    population.Chromosomes = await _strategy.Operate(population.Chromosomes, population.Capacity, token);
+                    var offspring = await _strategy.Operate(population.Chromosomes, population.Capacity, token);
                     statesHolder.EvolutionTime += DateTime.Now - startTime;
+                    population.Chromosomes = offspring;
                     statesHolder.EvolutionCount++;
                 }
             }
