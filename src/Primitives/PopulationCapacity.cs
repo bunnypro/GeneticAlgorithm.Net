@@ -1,9 +1,9 @@
-using System;
-
-namespace Bunnypro.GeneticAlgorithm.Core
+namespace Bunnypro.GeneticAlgorithm.Primitives
 {
     public struct PopulationCapacity
     {
+        public static PopulationCapacity Default => new PopulationCapacity(2, int.MaxValue);
+
         public PopulationCapacity(int size) : this(size, size)
         {
         }
@@ -16,7 +16,5 @@ namespace Bunnypro.GeneticAlgorithm.Core
 
         public int Minimum { get; }
         public int Maximum { get; }
-
-        public static PopulationCapacity Default => new PopulationCapacity(2, int.MaxValue);
     }
 }

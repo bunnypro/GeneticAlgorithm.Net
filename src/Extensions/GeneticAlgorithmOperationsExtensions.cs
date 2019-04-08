@@ -1,7 +1,7 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Bunnypro.GeneticAlgorithm.Abstractions;
+using Bunnypro.GeneticAlgorithm.Primitives;
 
 namespace Bunnypro.GeneticAlgorithm.Extensions
 {
@@ -15,7 +15,7 @@ namespace Bunnypro.GeneticAlgorithm.Extensions
             await genetic.EvolveUntil(population, _ => false, token);
         }
 
-        public static async Task<IGeneticEvolutionStates> TryEvolve(
+        public static async Task<GeneticEvolutionStates> TryEvolve(
             this IGeneticAlgorithm genetic,
             IPopulation population,
             CancellationToken token)

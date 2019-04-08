@@ -1,6 +1,7 @@
 using System.Collections.Immutable;
 using Bunnypro.GeneticAlgorithm.Abstractions;
 using Bunnypro.GeneticAlgorithm.Core.Exceptions;
+using Bunnypro.GeneticAlgorithm.Primitives;
 
 namespace Bunnypro.GeneticAlgorithm.Core
 {

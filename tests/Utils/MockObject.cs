@@ -4,6 +4,7 @@ using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 using Bunnypro.GeneticAlgorithm.Abstractions;
+using Bunnypro.GeneticAlgorithm.Primitives;
 using Moq;
 
 namespace Bunnypro.GeneticAlgorithm.Test.Utils
@@ -21,12 +22,15 @@ namespace Bunnypro.GeneticAlgorithm.Test.Utils
         public static IGeneticOperation CreateOperationStrategy(int delay = 1)
         {
             var mock = new Mock<IGeneticOperation>();
-            mock.Setup(s => s.Operate(It.IsAny<ImmutableHashSet<IChromosome>>(), It.IsAny<CancellationToken>()))
-                .Returns<ImmutableHashSet<IChromosome>, CancellationToken>(async (c, t) =>
-                {
-                    await Task.Delay(delay, t);
-                    return CreateChromosomes(c.Count).ToImmutableHashSet();
-                });
+            mock.Setup(s => s.Operate(
+                It.IsAny<ImmutableHashSet<IChromosome>>(),
+                It.IsAny<PopulationCapacity>(),
+                It.IsAny<CancellationToken>())
+            ).Returns<ImmutableHashSet<IChromosome>, PopulationCapacity, CancellationToken>(async (c, s, t) =>
+            {
+                await Task.Delay(delay, t);
+                return CreateChromosomes(s.Minimum).ToImmutableHashSet();
+            });
             return mock.Object;
         }
 

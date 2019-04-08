@@ -1,21 +1,22 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Bunnypro.GeneticAlgorithm.Primitives;
 
 namespace Bunnypro.GeneticAlgorithm.Abstractions
 {
     public interface IGeneticAlgorithm
     {
-        IGeneticEvolutionStates EvolutionStates { get; }
+        GeneticEvolutionStates EvolutionStates { get; }
 
-        Task<IGeneticEvolutionStates> EvolveUntil(
+        Task<GeneticEvolutionStates> EvolveUntil(
             IPopulation population,
-            Func<IGeneticEvolutionStates, bool> termination,
+            Func<GeneticEvolutionStates, bool> termination,
             CancellationToken token = default);
 
-        Task<(IGeneticEvolutionStates, bool)> TryEvolveUntil(
+        Task<(GeneticEvolutionStates, bool)> TryEvolveUntil(
             IPopulation population,
-            Func<IGeneticEvolutionStates, bool> termination,
+            Func<GeneticEvolutionStates, bool> termination,
             CancellationToken token);
     }
 }

@@ -1,8 +1,8 @@
-using System;
 using System.Collections.Immutable;
 using System.Threading.Tasks;
 using Bunnypro.GeneticAlgorithm.Abstractions;
 using Bunnypro.GeneticAlgorithm.Core.Exceptions;
+using Bunnypro.GeneticAlgorithm.Primitives;
 using Bunnypro.GeneticAlgorithm.Test.Utils;
 using Xunit;
 
@@ -20,7 +20,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             Assert.Equal(0, population.GenerationNumber);
 
             IGeneticAlgorithm genetic = new GeneticAlgorithm(MockObject.CreateOperationStrategy());
-            int number = population.GenerationNumber;
+            var number = population.GenerationNumber;
             var result = await genetic.EvolveUntil(population, s => s.EvolutionCount >= 5);
             Assert.Equal(result.EvolutionCount, population.GenerationNumber - number);
         }
@@ -40,7 +40,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             {
                 var population = new Population
                 {
-                    Capacity = new Core.PopulationCapacity(10)
+                    Capacity = new PopulationCapacity(10)
                 };
                 var number = population.GenerationNumber;
                 Assert.Throws<SizeOutOfCapacityException>(() =>
@@ -55,7 +55,7 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             {
                 var population = new Population
                 {
-                    Capacity = new Core.PopulationCapacity(5, 10)
+                    Capacity = new PopulationCapacity(5, 10)
                 };
                 var number = population.GenerationNumber;
                 Assert.Throws<SizeOutOfCapacityException>(() =>

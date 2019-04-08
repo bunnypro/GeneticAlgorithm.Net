@@ -1,86 +1,83 @@
 using System;
-using System.Collections.Immutable;
 using System.Threading;
 using System.Threading.Tasks;
 using Bunnypro.GeneticAlgorithm.Abstractions;
+using Bunnypro.GeneticAlgorithm.Primitives;
 
 namespace Bunnypro.GeneticAlgorithm.Core
 {
     public sealed class GeneticAlgorithm : IGeneticAlgorithm
     {
+        private readonly StatesHolder _statesHolder = new StatesHolder();
         private readonly IGeneticOperation _strategy;
-        private GeneticEvolutionStates _states = new GeneticEvolutionStates();
 
         public GeneticAlgorithm(IGeneticOperation strategy)
         {
             _strategy = strategy;
         }
 
-        public IGeneticEvolutionStates EvolutionStates => _states.Clone();
+        public GeneticEvolutionStates EvolutionStates => _statesHolder.States;
 
-        public async Task<IGeneticEvolutionStates> EvolveUntil(
+        public async Task<GeneticEvolutionStates> EvolveUntil(
             IPopulation population,
-            Func<IGeneticEvolutionStates, bool> termination,
+            Func<GeneticEvolutionStates, bool> termination,
             CancellationToken token = default)
         {
-            GeneticEvolutionStates states = new GeneticEvolutionStates();
-            await Evolve(population, termination, token, states);
-            return states;
+            var statesHolder = new StatesHolder();
+            await Evolve(population, termination, token, statesHolder);
+            return statesHolder.States;
         }
 
-        public async Task<(IGeneticEvolutionStates, bool)> TryEvolveUntil(
+        public async Task<(GeneticEvolutionStates, bool)> TryEvolveUntil(
             IPopulation population,
-            Func<IGeneticEvolutionStates, bool> termination,
+            Func<GeneticEvolutionStates, bool> termination,
             CancellationToken token)
         {
-            GeneticEvolutionStates states = new GeneticEvolutionStates();
+            var statesHolder = new StatesHolder();
             try
             {
-                await Evolve(population, termination, token, states);
+                await Evolve(population, termination, token, statesHolder);
             }
             catch (OperationCanceledException)
             {
-                return (states, false);
+                return (statesHolder.States, false);
             }
-            return (states, true);
+
+            return (statesHolder.States, true);
         }
 
         private async Task Evolve(
             IPopulation population,
-            Func<IGeneticEvolutionStates, bool> termination,
+            Func<GeneticEvolutionStates, bool> termination,
             CancellationToken token,
-            GeneticEvolutionStates states)
+            StatesHolder statesHolder)
         {
             try
             {
-                while (!termination.Invoke(states))
+                while (!termination.Invoke(statesHolder.States))
                 {
                     var startTime = DateTime.Now;
-                    population.Chromosomes = await _strategy.Operate(population.Chromosomes, token);
-                    states.EvolutionTime += DateTime.Now - startTime;
-                    states.EvolutionCount++;
+                    population.Chromosomes = await _strategy.Operate(population.Chromosomes, population.Capacity, token);
+                    statesHolder.EvolutionTime += DateTime.Now - startTime;
+                    statesHolder.EvolutionCount++;
                 }
             }
             finally
             {
-                _states.Extend(states);
+                _statesHolder.Extend(statesHolder.States);
             }
         }
 
-        private class GeneticEvolutionStates : IGeneticEvolutionStates
+        private class StatesHolder
         {
             public int EvolutionCount { get; set; }
-            public TimeSpan EvolutionTime { get; set; }
+            public TimeSpan EvolutionTime { get; set; } = TimeSpan.Zero;
+            public GeneticEvolutionStates States => new GeneticEvolutionStates(EvolutionCount, EvolutionTime);
 
-            public void Extend(GeneticEvolutionStates states)
+            public void Extend(GeneticEvolutionStates source)
             {
-                EvolutionCount += states.EvolutionCount;
-                EvolutionTime += states.EvolutionTime;
-            }
-
-            public GeneticEvolutionStates Clone()
-            {
-                return (GeneticEvolutionStates)MemberwiseClone();
+                EvolutionCount += source.EvolutionCount;
+                EvolutionTime += source.EvolutionTime;
             }
         }
     }
