@@ -58,7 +58,8 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
             using (var cts = new CancellationTokenSource())
             {
                 const int time = 50;
-                var evolution = genetic.EvolveUntil(population, s => s.EvolutionTime >= TimeSpan.FromMilliseconds(time), cts.Token);
+                var evolution = genetic.EvolveUntil(population, s => s.EvolutionTime >= TimeSpan.FromMilliseconds(time),
+                    cts.Token);
                 await Task.Delay(delay);
                 cts.Cancel();
                 var result = await evolution;
@@ -87,8 +88,10 @@ namespace Bunnypro.GeneticAlgorithm.Core.Test
                 Assert.True(afterEvolutionStates.EvolutionTime > preEvolutionStates.EvolutionTime);
                 var differentTime = afterEvolutionStates.EvolutionTime - preEvolutionStates.EvolutionTime;
                 Assert.True(differentTime >= MockObject.CreateProximateAccuracyTimeSpan(delay));
-                Assert.Equal(afterEvolutionStates.EvolutionCount - preEvolutionStates.EvolutionCount, result.EvolutionCount);
-                Assert.Equal(afterEvolutionStates.EvolutionTime - preEvolutionStates.EvolutionTime, result.EvolutionTime);
+                Assert.Equal(afterEvolutionStates.EvolutionCount - preEvolutionStates.EvolutionCount,
+                    result.EvolutionCount);
+                Assert.Equal(afterEvolutionStates.EvolutionTime - preEvolutionStates.EvolutionTime,
+                    result.EvolutionTime);
             }
 
             using (var cts = new CancellationTokenSource())
