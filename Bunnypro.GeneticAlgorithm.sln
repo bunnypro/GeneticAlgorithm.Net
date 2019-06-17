@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bunnypro.GeneticAlgorithm.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bunnypro.GeneticAlgorithm.MultiObjective", "src\MultiObjective\Bunnypro.GeneticAlgorithm.MultiObjective.csproj", "{C78CD34B-2044-44B7-8B3D-B689B4579266}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bunnypro.GeneticAlgorithm.MultiObjective.Test", "tests\MultiObjective.Test\Bunnypro.GeneticAlgorithm.MultiObjective.Test.csproj", "{16F69ABE-CE67-4E30-B209-F7BC99AFFEED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -132,6 +134,18 @@ Global
 		{C78CD34B-2044-44B7-8B3D-B689B4579266}.Release|x64.Build.0 = Release|Any CPU
 		{C78CD34B-2044-44B7-8B3D-B689B4579266}.Release|x86.ActiveCfg = Release|Any CPU
 		{C78CD34B-2044-44B7-8B3D-B689B4579266}.Release|x86.Build.0 = Release|Any CPU
+		{16F69ABE-CE67-4E30-B209-F7BC99AFFEED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16F69ABE-CE67-4E30-B209-F7BC99AFFEED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16F69ABE-CE67-4E30-B209-F7BC99AFFEED}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{16F69ABE-CE67-4E30-B209-F7BC99AFFEED}.Debug|x64.Build.0 = Debug|Any CPU
+		{16F69ABE-CE67-4E30-B209-F7BC99AFFEED}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{16F69ABE-CE67-4E30-B209-F7BC99AFFEED}.Debug|x86.Build.0 = Debug|Any CPU
+		{16F69ABE-CE67-4E30-B209-F7BC99AFFEED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16F69ABE-CE67-4E30-B209-F7BC99AFFEED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{16F69ABE-CE67-4E30-B209-F7BC99AFFEED}.Release|x64.ActiveCfg = Release|Any CPU
+		{16F69ABE-CE67-4E30-B209-F7BC99AFFEED}.Release|x64.Build.0 = Release|Any CPU
+		{16F69ABE-CE67-4E30-B209-F7BC99AFFEED}.Release|x86.ActiveCfg = Release|Any CPU
+		{16F69ABE-CE67-4E30-B209-F7BC99AFFEED}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{A79EED19-4290-49D1-A90A-AA397B3C8A2A} = {C53C800D-EBCB-4DCC-B84E-AA206FC5E930}
@@ -142,5 +156,6 @@ Global
 		{51346C35-0743-4A20-A68A-7B62C58735BB} = {CA9A30C4-0141-4953-B794-53761C7EF6B1}
 		{47DCAD7E-6972-4842-95A8-579D96991489} = {C53C800D-EBCB-4DCC-B84E-AA206FC5E930}
 		{C78CD34B-2044-44B7-8B3D-B689B4579266} = {C53C800D-EBCB-4DCC-B84E-AA206FC5E930}
+		{16F69ABE-CE67-4E30-B209-F7BC99AFFEED} = {CA9A30C4-0141-4953-B794-53761C7EF6B1}
 	EndGlobalSection
 EndGlobal
