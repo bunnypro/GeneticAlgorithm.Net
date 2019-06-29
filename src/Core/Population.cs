@@ -11,6 +11,8 @@ namespace Bunnypro.GeneticAlgorithm.Core
         public int GenerationNumber { get; private set; } = -1;
         public PopulationCapacity Capacity { get; set; } = PopulationCapacity.Default;
 
+        public bool IsInitialized => GenerationNumber >= 0;
+
         public virtual ImmutableHashSet<IChromosome> Chromosomes
         {
             get => _chromosomes;

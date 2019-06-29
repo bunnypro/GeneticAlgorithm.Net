@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Bunnypro.GeneticAlgorithm.Abstractions;
+using Bunnypro.GeneticAlgorithm.Core.Exceptions;
 using Bunnypro.GeneticAlgorithm.Primitives;
 
 namespace Bunnypro.GeneticAlgorithm.Core
@@ -52,6 +53,9 @@ namespace Bunnypro.GeneticAlgorithm.Core
             CancellationToken token,
             StatesHolder statesHolder)
         {
+            if (population.IsInitialized)
+                throw new UninitializedPopulationException();
+            
             try
             {
                 while (!termination.Invoke(statesHolder.States))
