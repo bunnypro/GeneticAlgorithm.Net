@@ -7,6 +7,5 @@ namespace Bunnypro.GeneticAlgorithm.Abstractions
     {
         PopulationCapacity Capacity { get; }
         ImmutableHashSet<IChromosome> Chromosomes { get; set; }
-        bool IsInitialized { get; }
     }
 }
