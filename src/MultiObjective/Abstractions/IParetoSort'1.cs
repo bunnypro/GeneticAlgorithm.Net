@@ -4,7 +4,7 @@ using System.Collections.Immutable;
 
 namespace Bunnypro.GeneticAlgorithm.MultiObjective.Abstractions
 {
-    public interface IParetoSortingAlgorithm<T> where T : Enum
+    public interface IParetoSort<T> where T : Enum
     {
         IEnumerable<ImmutableArray<IChromosome<T>>> Sort(IEnumerable<IChromosome<T>> chromosomes);
     }

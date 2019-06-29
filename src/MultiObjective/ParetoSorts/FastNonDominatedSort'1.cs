@@ -5,9 +5,9 @@ using System.Linq;
 using Bunnypro.GeneticAlgorithm.MultiObjective.Abstractions;
 using Bunnypro.GeneticAlgorithm.MultiObjective.Primitives;
 
-namespace Bunnypro.GeneticAlgorithm.MultiObjective.SortingAlgorithms
+namespace Bunnypro.GeneticAlgorithm.MultiObjective.ParetoSorts
 {
-    public class FastNonDominatedSort<T> : IParetoSortingAlgorithm<T> where T : Enum
+    public class FastNonDominatedSort<T> : IParetoSort<T> where T : Enum
     {
         public IEnumerable<ImmutableArray<IChromosome<T>>> Sort(IEnumerable<IChromosome<T>> chromosomes)
         {
