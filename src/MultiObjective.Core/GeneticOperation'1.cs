@@ -8,7 +8,7 @@ using Bunnypro.GeneticAlgorithm.Abstractions;
 using Bunnypro.GeneticAlgorithm.MultiObjective.Abstractions;
 using Bunnypro.GeneticAlgorithm.Primitives;
 
-namespace Bunnypro.GeneticAlgorithm.MultiObjective.GeneticOperations
+namespace Bunnypro.GeneticAlgorithm.MultiObjective.Core
 {
     public abstract class GeneticOperation<T> : IGeneticOperation where T : Enum
     {
