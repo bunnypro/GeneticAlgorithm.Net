@@ -18,6 +18,6 @@ namespace Bunnypro.GeneticAlgorithm.MultiObjective.Core
             return offspring.Cast<IChromosome>().ToImmutableHashSet();
         }
 
-        protected abstract Task<HashSet<IChromosome<T>>> Operate(ImmutableHashSet<IChromosome<T>> chromosomes, PopulationCapacity capacity, CancellationToken token);
+        public abstract Task<HashSet<IChromosome<T>>> Operate(ImmutableHashSet<IChromosome<T>> chromosomes, PopulationCapacity capacity, CancellationToken token);
     }
 }
