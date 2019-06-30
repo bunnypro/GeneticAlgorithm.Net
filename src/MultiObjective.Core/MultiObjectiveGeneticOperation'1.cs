@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -10,7 +9,7 @@ using Bunnypro.GeneticAlgorithm.Primitives;
 
 namespace Bunnypro.GeneticAlgorithm.MultiObjective.Core
 {
-    public abstract class GeneticOperation<T> : IGeneticOperation where T : Enum
+    public abstract class MultiObjectiveGeneticOperation<T> : IGeneticOperation, IMultiObjectiveGeneticOperation<T> where T : Enum
     {
         public async Task<ImmutableHashSet<IChromosome>> Operate(ImmutableHashSet<IChromosome> chromosomes, PopulationCapacity capacity, CancellationToken token = default)
         {
@@ -18,6 +17,6 @@ namespace Bunnypro.GeneticAlgorithm.MultiObjective.Core
             return offspring.Cast<IChromosome>().ToImmutableHashSet();
         }
 
-        public abstract Task<HashSet<IChromosome<T>>> Operate(ImmutableHashSet<IChromosome<T>> chromosomes, PopulationCapacity capacity, CancellationToken token);
+        public abstract Task<ImmutableHashSet<IChromosome<T>>> Operate(ImmutableHashSet<IChromosome<T>> chromosomes, PopulationCapacity capacity, CancellationToken token = default);
     }
 }
