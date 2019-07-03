@@ -35,7 +35,7 @@ namespace Bunnypro.GeneticAlgorithm.MultiObjective.NSGA2
             token.ThrowIfCancellationRequested();
 
             var remains = capacity.Minimum - elite.Count;
-            var crowdingDistance = lastFront.ToDictionary(c => c, c => .0);
+            var crowdingDistance = lastFront.ToDictionary(c => c, c => 0d);
 
             void AddDistance(IChromosome<T> chromosome, double value)
             {
