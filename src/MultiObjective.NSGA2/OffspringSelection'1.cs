@@ -17,7 +17,6 @@ namespace Bunnypro.GeneticAlgorithm.MultiObjective.NSGA2
         public Task<ImmutableHashSet<IChromosome<T>>> Operate(IEnumerable<IChromosome<T>> parents,
             PopulationCapacity capacity, CancellationToken token = default)
         {
-            //    TODO: Take Front by Front
             var elite = ImmutableHashSet.CreateBuilder<IChromosome<T>>();
             ImmutableArray<IChromosome<T>> lastFront;
             using (var enumerator = _sorter.Sort(parents).GetEnumerator())
@@ -35,7 +34,6 @@ namespace Bunnypro.GeneticAlgorithm.MultiObjective.NSGA2
 
             token.ThrowIfCancellationRequested();
 
-            //    TODO: Use Crowding Distance Diversity Selection to The Last Over-Capacity Front
             var remains = capacity.Minimum - elite.Count;
             var crowdingDistance = lastFront.ToDictionary(c => c, c => .0);
 
