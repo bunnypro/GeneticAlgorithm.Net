@@ -18,6 +18,14 @@ namespace Bunnypro.GeneticAlgorithm.MultiObjective.NSGA2
         private readonly IDistinctMultiObjectiveGeneticOperation<T> _offspringSelection = new OffspringSelection<T>();
 
         public NSGA2(IMultiObjectiveGeneticOperation<T> reproduction,
+            IObjectiveValuesEvaluator<T> objectiveEvaluator)
+        {
+            _reproduction = reproduction;
+            _objectiveEvaluator = objectiveEvaluator;
+            _fitnessEvaluator = new NormalizedObjectiveValuesFitnessEvaluator<T>();
+        }
+        
+        public NSGA2(IMultiObjectiveGeneticOperation<T> reproduction,
             IObjectiveValuesEvaluator<T> objectiveEvaluator,
             IFitnessEvaluator<T> fitnessEvaluator)
         {
