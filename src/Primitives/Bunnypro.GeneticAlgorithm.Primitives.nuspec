@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Bunnypro.GeneticAlgorithm.Primitives</id>
+    <version>0.1.0</version>
+    <title>Bunnypro.GeneticAlgorithm.Primitives</title>
+    <authors>Mubarrid Albar</authors>
+    <owners>albar</owners>
+    <licenseUrl>https://github.com/bunnypro/GeneticAlgorithm.Net/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/bunnypro/GeneticAlgorithm.Net</projectUrl>
+    <repository type="git" url="https://github.com/bunnypro/GeneticAlgorithm.Net"/>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Privitives data type for Bunnypro.GeneticAlgorithm</description>
+  </metadata>
+</package>
