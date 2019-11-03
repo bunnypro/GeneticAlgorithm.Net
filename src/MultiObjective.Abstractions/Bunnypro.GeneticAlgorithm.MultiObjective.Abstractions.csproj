@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <ItemGroup>
     <ProjectReference Include="..\MultiObjective.Primitives\Bunnypro.GeneticAlgorithm.MultiObjective.Primitives.csproj" />
     <ProjectReference Include="..\Abstractions\Bunnypro.GeneticAlgorithm.Abstractions.csproj" />
@@ -9,4 +8,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageVersion>0.1.0</PackageVersion>
+    <PackageDescription>Multi Objective Genetic Algorithm Abstractions</PackageDescription>
+    <Authors>Mubarrid Albar</Authors>
+    <Owners>albar</Owners>
+    <PackageLicenseUrl>https://github.com/bunnypro/GeneticAlgorithm.Net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/bunnypro/GeneticAlgorithm.Net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/bunnypro/GeneticAlgorithm.Net</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
 </Project>

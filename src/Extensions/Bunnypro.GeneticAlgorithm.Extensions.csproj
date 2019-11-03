@@ -9,4 +9,14 @@
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <PackageVersion>0.1.0</PackageVersion>
+    <PackageDescription>Genetic Algorithm Extensions</PackageDescription>
+    <Authors>Mubarrid Albar</Authors>
+    <Owners>albar</Owners>
+    <PackageLicenseUrl>https://github.com/bunnypro/GeneticAlgorithm.Net/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/bunnypro/GeneticAlgorithm.Net</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/bunnypro/GeneticAlgorithm.Net</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>
 </Project>
