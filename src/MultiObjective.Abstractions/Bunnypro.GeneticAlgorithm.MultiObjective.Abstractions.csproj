@@ -9,7 +9,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageVersion>0.1.0</PackageVersion>
     <PackageDescription>Multi Objective Genetic Algorithm Abstractions</PackageDescription>
     <Authors>Mubarrid Albar</Authors>
     <Owners>albar</Owners>

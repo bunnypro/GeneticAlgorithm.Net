@@ -4,7 +4,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageVersion>0.1.0</PackageVersion>
     <PackageDescription>Multi Objective Genetic Algorithm Primitive Data Types</PackageDescription>
     <Authors>Mubarrid Albar</Authors>
     <Owners>albar</Owners>

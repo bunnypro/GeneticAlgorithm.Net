@@ -13,7 +13,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageVersion>0.1.0</PackageVersion>
     <PackageDescription>Basic implementation of Genetic Algorithm</PackageDescription>
     <Authors>Mubarrid Albar</Authors>
     <Owners>albar</Owners>

@@ -13,7 +13,6 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <PackageVersion>0.1.0</PackageVersion>
     <PackageDescription>Genetic Algorithm Abstractions</PackageDescription>
     <Authors>Mubarrid Albar</Authors>
     <Owners>albar</Owners>

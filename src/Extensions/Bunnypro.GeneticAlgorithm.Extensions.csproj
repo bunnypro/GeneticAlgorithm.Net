@@ -10,7 +10,6 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageVersion>0.1.0</PackageVersion>
     <PackageDescription>Genetic Algorithm Extensions</PackageDescription>
     <Authors>Mubarrid Albar</Authors>
     <Owners>albar</Owners>
