@@ -24,8 +24,8 @@ namespace Bunnypro.GeneticAlgorithm.MultiObjective.Core
         public async Task EvaluateAll(IEnumerable<IChromosome<T>> chromosomes, CancellationToken token = default)
         {
             var chromosomesArray = chromosomes.ToArray();
-            var fitnessEvaluableChromosomes = await EvaluateObjectiveValuesAll(chromosomesArray, token);
-            await EvaluateFitnessValueAll(fitnessEvaluableChromosomes);
+            await EvaluateObjectiveValuesAll(chromosomesArray, token);
+            await EvaluateFitnessValueAll(chromosomesArray);
         }
 
         private async Task EvaluateFitnessValueAll(IEnumerable<IChromosome<T>> chromosomes)
@@ -49,27 +49,22 @@ namespace Bunnypro.GeneticAlgorithm.MultiObjective.Core
 
                         var range = Math.Abs(boundary.Max - boundary.Min);
 
-                        return value =>
-                        {
-                            if (range <= 0) return 1;
-                            return Math.Abs(
-                                       (value - boundary.Min) * _coefficients[objective]
-                                   ) / range;
-                        };
+                        return value => range <= 0 ? 1 : (Math.Abs(value - boundary.Min) / range);
                     });
 
-            var coefficientSum = _coefficients.Sum(coefficient => Math.Abs(coefficient.Value));
+            var coefficients = _coefficients.ToDictionary(c => c.Key, c => Math.Abs(c.Value));
+            var totalCoefficient = coefficients.Values.Sum();
             var fitnessEvaluationTasks = chromosomeArray.Select(chromosome => Task.Run(() =>
             {
-                chromosome.Fitness = chromosome.ObjectiveValues.Sum(objective =>
-                                         objectivesNormalizer[objective.Key].Invoke(objective.Value)
-                                     ) / coefficientSum;
+                chromosome.Fitness = chromosome.ObjectiveValues.Sum(
+                    objective => objectivesNormalizer[objective.Key].Invoke(objective.Value) * coefficients[objective.Key]
+                ) / totalCoefficient;
             }));
 
             await Task.WhenAll(fitnessEvaluationTasks);
         }
 
-        protected abstract Task<IEnumerable<IChromosome<T>>> EvaluateObjectiveValuesAll(
+        protected abstract Task EvaluateObjectiveValuesAll(
             IEnumerable<IChromosome<T>> chromosomes,
             CancellationToken token = default);
     }
