@@ -49,11 +49,13 @@ namespace Bunnypro.GeneticAlgorithm.MultiObjective.NSGA2
             foreach (var objective in Enum.GetValues(typeof(T)).Cast<T>())
             {
                 var sorted = normalizedComparable.OrderBy(c => c.Value[objective]).ToArray();
-                for (var i = 0; i < sorted.Length; i++)
+                if (crowdingDistance.ContainsKey(sorted[0].Key)) crowdingDistance[sorted[0].Key] += 1;
+                if (crowdingDistance.ContainsKey(sorted[sorted.Length - 1].Key)) crowdingDistance[sorted[sorted.Length - 1].Key] += 1;
+                for (var i = 1; i < sorted.Length - 1; i++)
                 {
                     if (!crowdingDistance.ContainsKey(sorted[i].Key)) continue;
-                    var lowerValue = i == 0 ? sorted[i].Value[objective] : sorted[i - 1].Value[objective];
-                    var upperValue = i == sorted.Length - 1 ? sorted[i].Value[objective] : sorted[i + 1].Value[objective];
+                    var lowerValue = sorted[i - 1].Value[objective];
+                    var upperValue = sorted[i + 1].Value[objective];
                     var distance = Math.Abs(upperValue - lowerValue);
                     crowdingDistance[sorted[i].Key] += distance;
                 }
